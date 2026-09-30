@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bloquear Páginas</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <main class="page">
+    <header class="header">
+      <h1>Bloquear Páginas</h1>
+      <p class="subtitle">Bloquea los sitios que te distraen para que no vuelta a entrar.</p>
+    </header>
+
+    <section class="card">
+      <label class="switch">
+        <input type="checkbox" id="enabled">
+        <span class="slider"></span>
+        <span class="switch-label">Bloqueo activado</span>
+      </label>
+      <p class="hint">Desactívalo para suspender el bloqueo sin borrar tu lista.</p>
+    </section>
+
+    <section class="card">
+      <h2>Añadir sitio</h2>
+      <form id="add-form">
+        <div class="input-row">
+          <input type="text" id="new-value" placeholder="Ej: youtube.com" autocomplete="off" spellcheck="false">
+          <button type="submit" class="btn primary">Bloquear</button>
+        </div>
+        <div class="type-row">
+          <label><input type="radio" name="type" value="domain" checked> Dominio completo (+ subdominios)</label>
+          <label><input type="radio" name="type" value="url"> URL específica</label>
+        </div>
+        <p class="error" id="error" hidden></p>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Sitios bloqueados <span id="count" class="count"></span></h2>
+      <ul id="list" class="list"></ul>
+      <p id="empty" class="empty" hidden>No has bloqueado ningún sitio todavía.</p>
+    </section>
+  </main>
+  <script src="options.js"></script>
+</body>
+</html>
