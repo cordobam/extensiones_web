@@ -1,0 +1,11 @@
+{# Fila de skill precargada. El índice lo inyecta perfiles.js según el orden. #}
+<div class="fila">
+  <input type="text" name="skills__IDX__nombre" placeholder="Nombre (ej. Python)" value="{{ skill.nombre }}" data-validar="requerido">
+  <input type="text" name="skills__IDX__alias" placeholder="Alias, separados por coma" value="{{ skill.alias | join(', ') if skill.alias else '' }}">
+  <input type="text" name="skills__IDX__anios" placeholder="Años" class="corto" value="{{ skill.anios if skill.anios is not none else '' }}">
+  <input type="text" name="skills__IDX__evidencia" placeholder="Evidencia (cita de tu experiencia)" value="{{ skill.evidencia or '' }}">
+  <label class="check">
+    <input type="checkbox" name="skills__IDX__obligatorio" value="1" {% if skill.obligatorio %}checked{% endif %}> Obligatoria
+  </label>
+  <button class="btn-peligro btn-chico" type="button" data-quitar>Quitar</button>
+</div>

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block titulo %}{{ super() }} · Perfiles{% endblock %}
+
+{% block contenido %}
+<h1>Perfiles</h1>
+
+{% if importacion %}
+<p class="aviso">Importación: {{ importacion }}</p>
+{% endif %}
+
+{% if activo %}
+<p class="muted">Perfil activo: <strong>{{ activo }}</strong></p>
+{% else %}
+<p class="muted">No hay ningún perfil activo. Usá "Activar" en uno de tus perfiles.</p>
+{% endif %}
+
+{% if faltan %}
+<form method="post" action="/perfiles/importar" class="acciones-principales">
+  <p class="muted">
+    Hay {{ faltan | length }} YAML en <code>perfiles/</code> sin cargar:
+    {{ faltan | join(', ') }}.
+  </p>
+  <button class="btn" type="submit">Importar desde perfiles/</button>
+</form>
+{% endif %}
+
+{% if not perfiles %}
+<p class="vacio">
+  Todavía no cargaste ningún perfil.
+  <a href="/perfiles/nuevo">Creá el primero</a>
+  o copiá <code>perfiles/data-engineer.yml.example</code> a
+  <code>perfiles/data-engineer.yml</code> y volvé a esta página para importarlo.
+</p>
+{% else %}
+<ul class="lista-perfiles">
+  {% for perfil in perfiles %}
+  <li class="perfil {% if perfil.id == activo %}es-activo{% endif %}">
+    <div>
+      <a href="/perfiles/{{ perfil.id }}"><strong>{{ perfil.nombre }}</strong></a>
+      <span class="id">{{ perfil.id }}</span>
+      {% if perfil.id == activo %}<span class="badge">activo</span>{% endif %}
+    </div>
+    <div class="acciones">
+      {% if perfil.id != activo %}
+      <form method="post" action="/perfiles/{{ perfil.id }}/activar">
+        <button class="btn-secundario" type="submit">Activar</button>
+      </form>
+      {% endif %}
+      <a class="btn-secundario" href="/perfiles/{{ perfil.id }}">Editar</a>
+      <a class="btn-peligro" href="/perfiles/{{ perfil.id }}/borrar">Borrar</a>
+    </div>
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}
+
+<p><a class="btn" href="/perfiles/nuevo">Nuevo perfil</a></p>
+{% endblock %}

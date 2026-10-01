@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block titulo %}Radar Laboral{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', path='estilos.css') }}">
+</head>
+<body>
+  <header class="cabecera">
+    <a class="marca" href="/perfiles">Radar Laboral</a>
+    <nav>
+      <a href="/perfiles">Perfiles</a>
+    </nav>
+  </header>
+
+  <main class="contenido">
+    {% block contenido %}{% endblock %}
+  </main>
+
+  <script src="{{ url_for('static', path='perfiles.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

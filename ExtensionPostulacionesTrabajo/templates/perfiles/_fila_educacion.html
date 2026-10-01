@@ -1,0 +1,7 @@
+{# Fila de educación precargada. `IDX` se reemplaza por perfiles.js. #}
+<div class="fila">
+  <input type="text" name="educacion__IDX__estudio" placeholder="Estudio" value="{{ educacion.estudio }}" data-validar="requerido">
+  <input type="text" name="educacion__IDX__institucion" placeholder="Institución" value="{{ educacion.institucion or '' }}">
+  <input type="number" name="educacion__IDX__anio" placeholder="Año" class="corto" value="{{ educacion.anio if educacion.anio is not none else '' }}">
+  <button class="btn-peligro btn-chico" type="button" data-quitar>Quitar</button>
+</div>

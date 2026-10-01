@@ -1,0 +1,10 @@
+{# Fila de experiencia precargada. `IDX` se reemplaza por perfiles.js. #}
+<div class="fila">
+  <input type="text" name="experiencia__IDX__puesto" placeholder="Puesto" value="{{ experiencia.puesto }}" data-validar="requerido">
+  <input type="text" name="experiencia__IDX__empresa" placeholder="Empresa" value="{{ experiencia.empresa or '' }}">
+  <input type="date" name="experiencia__IDX__desde" class="corto" value="{{ experiencia.desde.isoformat() if experiencia.desde else '' }}">
+  <input type="date" name="experiencia__IDX__hasta" class="corto" value="{{ experiencia.hasta.isoformat() if experiencia.hasta else '' }}">
+  <textarea name="experiencia__IDX__descripcion" rows="2" placeholder="Responsabilidades y logros">{{ experiencia.descripcion or '' }}</textarea>
+  <input type="text" name="experiencia__IDX__skills" placeholder="Skills usadas, separadas por coma" value="{{ experiencia.skills | join(', ') if experiencia.skills else '' }}">
+  <button class="btn-peligro btn-chico" type="button" data-quitar>Quitar</button>
+</div>

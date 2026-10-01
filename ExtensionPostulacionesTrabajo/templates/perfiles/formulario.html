@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block titulo %}{{ super() }} · {{ modo }}{% endblock %}
+
+{% block contenido %}
+<h1>{{ modo }} perfil</h1>
+
+{% if aviso %}
+<p class="aviso">{{ aviso.detalle }}</p>
+<form method="post" action="{{ accion }}">
+  <input type="hidden" name="confirmar_sobrescritura" value="1">
+  {% include "perfiles/_campos.html" %}
+  <div class="acciones-principales">
+    <button class="btn-peligro" type="submit">Guardar igual, pisando el archivo</button>
+    <a class="btn-secundario" href="/perfiles/{{ perfil.id if perfil else '' }}">Volver sin guardar</a>
+  </div>
+</form>
+
+{% else %}
+{% if errores %}
+<div class="errores">
+  <p><strong>No se pudo guardar. Revisá:</strong></p>
+  <ul>
+    {% for error in errores %}
+    <li>{{ error }}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+
+<form method="post" action="{{ accion }}" novalidate>
+  {% include "perfiles/_campos.html" %}
+  <div class="acciones-principales">
+    <button class="btn" type="submit">Guardar</button>
+    <a class="btn-secundario" href="/perfiles">Cancelar</a>
+  </div>
+</form>
+{% endif %}
+{% endblock %}

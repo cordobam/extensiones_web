@@ -1,0 +1,6 @@
+{# Fila de idioma precargada. `IDX` se reemplaza por perfiles.js. #}
+<div class="fila">
+  <input type="text" name="idiomas__IDX__idioma" placeholder="Idioma" value="{{ idioma.idioma }}" data-validar="requerido">
+  <input type="text" name="idiomas__IDX__nivel" placeholder="Nivel (B2, nativo...)" value="{{ idioma.nivel or '' }}">
+  <button class="btn-peligro btn-chico" type="button" data-quitar>Quitar</button>
+</div>

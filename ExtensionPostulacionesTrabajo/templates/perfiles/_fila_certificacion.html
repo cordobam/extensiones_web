@@ -1,0 +1,7 @@
+{# Fila de certificación precargada. `IDX` se reemplaza por perfiles.js. #}
+<div class="fila">
+  <input type="text" name="certificaciones__IDX__nombre" placeholder="Certificación" value="{{ certificacion.nombre }}" data-validar="requerido">
+  <input type="text" name="certificaciones__IDX__emisor" placeholder="Emisor" value="{{ certificacion.emisor or '' }}">
+  <input type="date" name="certificaciones__IDX__fecha" class="corto" value="{{ certificacion.fecha.isoformat() if certificacion.fecha else '' }}">
+  <button class="btn-peligro btn-chico" type="button" data-quitar>Quitar</button>
+</div>
