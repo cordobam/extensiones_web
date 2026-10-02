@@ -236,7 +236,7 @@ def raiz() -> RedirectResponse:
 
 @app.get("/perfiles")
 def listar_perfiles(request: Request, sesion: Session = Depends(get_session)):
-    perfiles, activo = servicio.listar_con_activo(sesion)
+    perfiles, activos = servicio.listar_con_activo(sesion)
     directorio = get_settings().perfiles_dir
     en_base = {p.id for p in perfiles}
     faltan = (
@@ -249,7 +249,7 @@ def listar_perfiles(request: Request, sesion: Session = Depends(get_session)):
         name="perfiles/lista.html",
         context={
             "perfiles": perfiles,
-            "activo": activo,
+            "activos": activos,
             "importacion": request.query_params.get("importacion"),
             "faltan": faltan,
         },
@@ -333,6 +333,15 @@ async def actualizar_perfil(
 def activar_perfil(id_perfil: str, sesion: Session = Depends(get_session)) -> RedirectResponse:
     try:
         servicio.activar(sesion, id_perfil)
+    except servicio.PerfilNoEncontrado:
+        pass
+    return RedirectResponse("/perfiles", status_code=303)
+
+
+@app.post("/perfiles/{id_perfil}/desactivar")
+def desactivar_perfil(id_perfil: str, sesion: Session = Depends(get_session)) -> RedirectResponse:
+    try:
+        servicio.desactivar(sesion, id_perfil)
     except servicio.PerfilNoEncontrado:
         pass
     return RedirectResponse("/perfiles", status_code=303)

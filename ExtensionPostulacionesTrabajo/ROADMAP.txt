@@ -1,0 +1,361 @@
+================================================================================
+RADAR LABORAL — HOJA DE RUTA
+================================================================================
+
+Objetivo del proyecto
+---------------------
+Un radar que busca ofertas de empleo en portales, las filtra contra tu CV, te
+las ordena por relevancia, te ayuda a redactar la postulación y termina
+completando los formularios por vos. Todo con tu CV en tu propia máquina.
+
+Estado al escribir este documento: fases 1 a 3 completas, 96 tests en verde.
+Al día de hoy: fases 1 a 4 completas, 205 tests en verde.
+
+
+================================================================================
+LO YA HECHO (fases 1 a 3)
+================================================================================
+
+Fase 1 — Andamiaje
+    Estructura del proyecto, configuración por variables de entorno, venv,
+    dependencias. pyproject.toml, .env.example, .gitignore, README.
+
+Fase 2 — Modelo de datos
+    PostgreSQL con SQLAlchemy, 5 tablas (ofertas, ofertas_skills, perfiles,
+    matches, postulaciones), Alembic configurado con migración 0001 aplicada.
+    Contrato Offer de la capa de fuentes definido en radar/schema.py.
+
+Fase 3 — Perfiles y UI
+    Un perfil = una búsqueda (keywords, ubicaciones, modalidades) + un CV
+    (contacto, skills con alias y evidencia, experiencia, educación, idiomas,
+    certificaciones).
+      - Alta, edición, activación y borrado desde la web. Varios perfiles
+        pueden estar activos a la vez (ver "perfiles activos" más abajo).
+      - PostgreSQL es la fuente de verdad; la UI escribe un YAML por perfil en
+        perfiles/{id}.yml, que es el artefacto que se comparte.
+      - Si editás un YAML a mano, la app avisa comparando el mtime del archivo
+        contra el último guardado en base (tolerancia de 2 s) y no lo pisa
+        hasta que confirmes.
+      - Importación inversa: botón "Importar desde perfiles/" para cargar YAMLs
+        compartidos. Un archivo roto se saltea sin frenar al resto.
+
+
+================================================================================
+BLOQUE 1 — CONSEGUIR OFERTAS
+================================================================================
+
+FASE 4 — Catálogo de skills [HECHA]
+---------------------------
+Qué es
+    Una lista canónica de skills con sus alias y su categoría. Sirve para
+    llevar el texto libre de una oferta ("Spark", "apache spark", "pyspark")
+    a un nombre único, y para saber qué skills son parecidas entre sí.
+
+Por qué va primero
+    Es el insumo de todas las fases siguientes. El matching (fase 8) compara
+    skills del CV contra skills de la oferta; si los nombres no están
+    normalizados, el matching no sirve.
+
+Decisión tomada: opción A
+    YAML versionado en catalogo/skills.yml, sin tabla. El matching funciona sin
+    tocar la base porque ya existía Cv.skill_por_nombre(). La tabla
+    skills + skill_aliases queda para el día en que queramos estadísticas del
+    tipo "estas 3 skills son las que más filtran ofertas".
+
+Qué quedó hecho
+    - 219 skills en 12 categorías: lenguaje, datos, orquestacion, bi,
+      automatizacion_ml, cloud, infraestructura, web, analisis, gestion,
+      soporte_it, atencion_cliente.
+    - soporte_it con 55 skills y atencion_cliente con 26, para cubrir los dos
+      rubros que la persona quiere seguir además de data.
+    - Cobertura total de las skills de los cuatro perfiles, sin desconocidas y
+      sin renombres pendientes (test_perfiles_catalogo.py).
+    - radar/catalogo.py con: normalizar(), Catalogo (buscar_nombre, resolver,
+      detectar, por_categoria, sin_conocer, normalizar_lista).
+    - 205 tests en total, sin regresiones.
+
+Criterio de terminado: CUMPLIDO
+    Un texto libre con alias se resuelve a su skill canónica, con tests que lo
+    cubran. Incluidos los falsos positivos, que son el riesgo real de esta fase:
+    "spark" no matchea dentro de "pyspark", "js" no dentro de "node.js", y una
+    letra suelta ("R") no se indexa.
+
+Lo que aprendimos implementándola
+    - Los límites de palabra importan más que los alias. El detalle que costó
+      más fue el punto: tiene que bloquear por delante (para no partir
+      "node.js") pero no por detrás (porque "Kafka." es Kafka, con punto de fin
+      de oración).
+    - El cargador valida dos reglas al arrancar: una forma no puede pertenecer a
+      dos skills, y la categoría tiene que estar declarada. Es preferible fallar
+      con un mensaje claro que devolver un puntaje raro tres fases después.
+    - Ampliar el catálogo es agregar entradas al YAML. No toca código.
+
+
+FASE 5 — Fuente Computrabajo
+---------------------------
+Qué es
+    Scraper del listado y del detalle de ofertas.
+
+Datos verificados del portal
+    - Usar ar.computrabajo.com. www.computrabajo.com/trabajo-de-X da 404.
+    - Listado: https://ar.computrabajo.com/trabajo-de-{slug}?p=N
+      20 ofertas por página. Requiere sesión y cookies persistentes.
+    - Dedupe por article.box_offer[data-id='...'], que es un hex estable.
+      Ejemplo: F5A35EBD0F7AFE7B61373E686DCF3405
+    - Detalle: /ofertas-de-trabajo/oferta-de-trabajo-de-{slug}-{id}
+    - El listado trae título, empresa, ubicación, modalidad y fecha relativa.
+      El detalle trae la descripción completa server-side.
+    - robots.txt prohíbe los filtros por query (?pubdate=, ?sal=, ?by=, ?emp=)
+      y /hojas-de-vida/, /curriculums/ y /Ajax/.
+      El filtro por fecha se hace del lado del cliente, en la fase 7.
+
+Criterio de terminado
+    Correr el scraper sobre un perfil y guardar ofertas sin duplicar en dos
+    corridas consecutivas.
+
+
+FASE 6 — Normalizador
+--------------------
+Qué es
+    Convertir el HTML crudo en objetos Offer, que es el contrato que ya está
+    definido en radar/schema.py. Aísla a Computrabajo del resto del sistema:
+    si mañana agregamos otro portal, sólo se escribe otra implementación.
+
+Criterio de terminado
+    Todo Offer validado con external_id, fecha y skills, guardado en la tabla
+    ofertas y ofertas_skills.
+
+
+FASE 7 — Filtro temporal
+-----------------------
+Qué es
+    Quedarse sólo con las ofertas recientes, parseando las fechas relativas del
+    listado en vez de usar los filtros del portal.
+
+Formatos a parsear (observados, no inventados)
+    Hace 35 minutos / Hace 20 horas / Ayer / Hace 5 días / Más de 30 días /
+    16 de septiembre
+
+Criterio de terminado
+    Sólo entran las ofertas dentro de la ventana de días configurada, medido
+    con casos de prueba de cada formato.
+
+
+================================================================================
+BLOQUE 2 — DECIDIR CUÁLES TE SIRVEN
+================================================================================
+
+FASE 8 — Matching por reglas
+----------------------------
+Qué es
+    Puntuar cada oferta contra el perfil: primero las skills obligatorias,
+    después las deseables. Escribe en la tabla matches, que ya tiene las
+    columnas nivel, obligatorios_ok, obligatorios_total, deseables_ok,
+    deseables_total y detalle.
+
+Criterio de terminado
+    Ofertas con una obligatoria faltante quedan descartadas. Las que tienen
+    todas las obligatorias cubiertas quedan con nivel alta. Tests con casos
+    esperados a mano.
+
+
+FASE 9 — CLI de ingesta
+-----------------------
+Qué es
+    Un comando para correr la ingesta a mano antes de automatizar:
+        python -m radar ingest --perfil data-engineer --dias 2
+    Sirve para iterar rápido y ver errores en la terminal.
+
+Criterio de terminado
+    Un comando corre el pipeline completo y reporta cuántas ofertas vio,
+    cuántas entreron y cuántas quedaron descartadas por fecha.
+
+
+================================================================================
+BLOQUE 3 — VER LOS RESULTADOS
+================================================================================
+
+FASE 10 — API y dashboard
+-------------------------
+Qué es
+    La página donde por fin se ve el trabajo: listado de ofertas ordenadas por
+    puntaje, con filtros y link a la oferta original.
+
+Criterio de terminado
+    Una pantalla donde se entra al perfil activo y se ve la lista ordenada por
+    relevancia, con el detalle de por qué cada oferta puntúa como puntúa.
+
+
+================================================================================
+BLOQUE 4 — LA IA
+================================================================================
+
+FASE 11 — Qwen / Ollama
+-----------------------
+Qué es
+    Generar la carta de presentación a partir de tu CV y de la oferta.
+
+El requisito duro, y no es de código
+    El campo SkillCv.evidencia es el grounding que evita que el modelo invente
+    experiencia. Si esa evidencia está vacía, la carta va a inventar. Hay que
+    llenar bien las evidencias antes de encender la IA.
+
+Decisión pendiente
+    - ¿Ollama local o API en la nube? Local no manda tu CV a nadie y es gratis,
+      pero necesita GPU decente y es más lento.
+
+Criterio de terminado
+    Cartas que citen evidencia real del CV y no inventen cargos ni fechas.
+
+
+FASE 14 — RAG con Qdrant
+------------------------
+Qué es
+    Indexar los fragmentos de tu CV para recuperar, por cada oferta, sólo lo
+    relevante. Sin esto la carta es genérica; con esto es específica.
+
+Nota sobre el orden
+    Esta fase quedó numerada 14 porque se pensaba que debía aprender de tus
+    postulaciones, pero en la realidad sólo depende del CV, que ya está
+    cargado. Hay dos caminos:
+      - 11 -> 14 -> 13: mejor calidad de carta desde el primer día, pero llegás
+        más valor al puesto más tarde.
+      - 11 -> 12 -> 13 -> 14: carta aceptable al principio, y el RAG mejora
+        después con feedback real de postulaciones.
+    Decidir antes de arrancar.
+
+
+================================================================================
+BLOQUE 5 — POSTULAR
+================================================================================
+
+FASE 12 — Historial y embudo
+----------------------------
+Qué es
+    Los estados de una postulación sobre la tabla postulacion, que ya existe
+    con estado, fecha_postulacion y notas. Embudo: descartada -> enviada ->
+    entrevista -> resultado -> archivada.
+
+Criterio de terminado
+    Se puede ver el historial con fecha y cambiar el estado de cada postulación.
+
+
+FASE 13 — Extensión web
+-----------------------
+Qué es
+    Extensión MV3 que abre la oferta y precarga tus datos en el formulario.
+
+Precedente útil que ya tenés
+    Tu ExtensionBloquearPaginas usa browser.* (el mismo código corre en Chrome
+    y Firefox) y ya tenés el patrón de manifest MV3 y web_accessible_resources.
+    No arrancamos de cero.
+
+Tres advertencias técnicas
+    - Tu manifest actual usa background.scripts, que es Firefox. Chrome MV3
+      exige background.service_worker. Habrá que mantener dos manifests o
+      usar un build.
+    - Esta fase necesita permisos que hoy no pedís: scripting y acceso a los
+      dominios de empleo.
+    - La extensión necesita saber contra qué perfil completar. Hoy sólo puede
+      haber un activo, así que alcanza; cuando quieras varios, hay que elegir.
+
+Criterio de terminado
+    La extensión abre una oferta de tu lista y deja los campos de contacto y
+    CV cargados.
+
+
+================================================================================
+BLOQUE 6 — AUTOMATIZAR
+================================================================================
+
+FASE 15 — n8n
+-------------
+Qué es
+    Disparar la ingesta por horario y avisarte por Telegram o email cuando
+    aparece un match alto.
+
+Criterio de terminado
+    Una corrida automática diaria que avisa sólo cuando hay algo nuevo que
+    mirar.
+
+
+================================================================================
+DEPENDENCIAS
+================================================================================
+
+    4  ->  5, 6, 7, 8          el catálogo es insumo del matching
+    5  ->  6                   el normalizador consume lo que scrappea la fuente
+    6  ->  7, 8                sin ofertas normalizadas no hay nada que filtrar
+    7  ->  8                   filtrar antes de puntuar es más barato
+    8  ->  9, 10               sin puntaje no hay lista para mostrar
+    9  ->  10                  la CLI se usa para iterar antes de la UI
+    8  ->  11                  las cartas necesitan ofertas ya puntuadas
+    11 ->  14 o 12             ver la nota de orden de la fase 14
+    12 ->  13                  la extensión puede vivir sin historial
+    10 ->  13                  la extensión abre ofertas de la lista
+    12 ->  15                  n8n avisa sobre el estado del embudo
+
+
+================================================================================
+PERFILES ACTIVOS (cambio de esta tanda)
+================================================================================
+
+Antes, activar un perfil desactivaba todos los demás: con un solo perfil
+activo la app funcionaba, pero con cuatro perfiles la ingesta sólo veía uno y
+había que estar alternando a mano.
+
+Qué cambió:
+    - radar/perfiles/servicio.py: activar() ya no desactiva el resto, y aparecen
+      desactivar() (idempotente) y activos(sesion).
+    - radar/api.py: el contexto "perfiles" lleva el set de activos, y hay una
+      ruta POST /perfiles/{id}/desactivar.
+    - templates/perfiles/lista.html: cada perfil tiene su toggle Activar o
+      Desactivar, y arriba dice cuántos hay activos.
+    - No hizo falta migración: activo ya era un booleano en perfiles.
+
+Por qué importa más adelante:
+    - La ingesta (fase 7) va a iterar sobre activos(sesion), no sobre un
+      perfil suelto. Cambiarlo ahora es más barato que cuando ya corra.
+    - El matching (fase 8) tiene que decir contra qué perfil comparó, porque
+      con varios activos un puntaje solo no significa nada.
+
+
+================================================================================
+DECISIONES PENDIENTES
+================================================================================
+
+1. ~~Catálogo de skills: ¿YAML o tabla PostgreSQL?~~ RESUELTO en la fase 4:
+   YAML versionado (opción A).
+2. Alcance del catálogo. RESUELTO por ahora en 219 skills cubriendo data,
+   analytics, cloud, soporte IT y atención al cliente. Si aparece una oferta de
+   otra disciplina (backend, web, infraestructura) y la skill no está, se
+   agrega al YAML: es una entrada más.
+3. ¿Ollama local o API en la nube? (fase 11)
+4. ¿RAG en la fase 12 o en la 14?
+5. Higiene de GitHub:
+   a. ~~Los .example con datos reales~~ HECHO en esta tanda: los cuatro .example
+      van con datos de ejemplo (Tu / Nombre, tu.email@ejemplo.com, +54 9 11
+      0000-0000, Tu Ciudad), con un test que lo verifica.
+   b. ~~Repo público~~ El repo actual es el del proyecto ExtensionBloquearPaginas,
+      que es público. Sigue PENDIENTE decidir si este proyecto pasa a ser repo
+      independiente y privado.
+   c. ~~Regla de .gitignore~~ OK: perfiles/*.yml ignorado, los .example
+      versionados.
+   d. Los datos reales quedaron en el historial (commit d501aa2). Si querés
+      sacarlos de la historia, hay que reescribirla; es una decisión aparte.
+6. Perfil que usa la extensión. PENDIENTE para cuando haya N activos (fase 13):
+   hoy la extensión usa uno.
+
+
+================================================================================
+COMANDOS DE REFERENCIA
+================================================================================
+
+    Instalar            pip install -e ".[dev]"
+    Levantar la app     uvicorn radar.api:app --reload
+    Tests               pytest
+    Migraciones         alembic upgrade head
+    Chequear migraciones alembic check
+
+    La base es radar_laboral en localhost:5432. La contraseña real vive en
+    .env, que está en .gitignore y nunca se versiona.

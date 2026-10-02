@@ -1,0 +1,931 @@
+# Catálogo canónico de skills.
+#
+# Cada entrada define un nombre canónico (como se muestra y como se guarda), una
+# categoría, y los alias por los que esa skill aparece en las ofertas reales.
+#
+# Para agregar una skill nueva: agregala al final de su categoría y nada más. No
+# hace falta tocar código, ni migración, ni la base.
+#
+# Dos reglas que el cargador valida al arrancar:
+#
+# 1. Una clave de alias no puede pertenecer a dos skills distintas. Si "spark"
+#    aparece como alias de Apache Spark y de PySpark, el catálogo no carga. Es
+#    preferible que falle al arrancar y no que el scoring más adelante devuelva
+#    puntajes raros sin explicación.
+#
+# 2. La categoría tiene que estar en la lista `categorias` de este archivo.
+#
+# Una limitación conocida: las claves de un solo carácter no se indexan, porque
+# producirían falsos positivos constantes. "R" como lenguaje está cargado con
+# alias de varias letras ("r language", "lenguaje r") para poder detectarlo.
+#
+# Sobre las categorías de soporte y atención: hay skills que sirven para las dos
+# (Zendesk, Freshdesk, Salesforce). Como `categoria` es un solo valor, cada una
+# quedó donde más se usa en el mercado argentino, y el otro rubro la sigue
+# detectando igual en las ofertas: la categoría sirve para agrupar y filtrar, no
+# para detectar.
+
+version: 1
+
+categorias:
+  - lenguaje
+  - datos
+  - orquestacion
+  - bi
+  - automatizacion_ml
+  - cloud
+  - infraestructura
+  - web
+  - analisis
+  - gestion
+  - soporte_it
+  - atencion_cliente
+
+skills:
+
+  # ---------------------------------------------------------------- lenguaje
+  - nombre: Python
+    categoria: lenguaje
+    alias: [python3, python 3, py]
+
+  - nombre: SQL
+    categoria: lenguaje
+    alias: [ansi sql, sql92]
+
+  - nombre: R
+    categoria: lenguaje
+    alias: [r language, lenguaje r]
+
+  - nombre: Java
+    categoria: lenguaje
+
+  - nombre: Scala
+    categoria: lenguaje
+
+  - nombre: Bash
+    categoria: lenguaje
+    alias: [shell, shell scripting, bash scripting]
+
+  - nombre: Julia
+    categoria: lenguaje
+
+  - nombre: JavaScript
+    categoria: lenguaje
+    alias: [js, ecmascript]
+
+  - nombre: TypeScript
+    categoria: lenguaje
+    alias: [ts]
+
+  - nombre: C++
+    categoria: lenguaje
+    alias: [cpp, c plus plus]
+
+  - nombre: C#
+    categoria: lenguaje
+    alias: [csharp, c sharp]
+
+  - nombre: .NET
+    categoria: lenguaje
+    alias: [dotnet, dot net, asp.net, vb.net]
+
+  # ------------------------------------------------------------------- datos
+  - nombre: PySpark
+    categoria: datos
+    alias: [pyspark, python spark]
+
+  - nombre: Apache Spark
+    categoria: datos
+    alias: [spark, apache spark]
+
+  - nombre: Databricks
+    categoria: datos
+    alias: [databricks lakehouse]
+
+  - nombre: Snowflake
+    categoria: datos
+    alias: [snowflake data cloud]
+
+  - nombre: Apache Hive
+    categoria: datos
+    alias: [hive, apache hive]
+
+  - nombre: Hadoop
+    categoria: datos
+    alias: [hdfs, mapreduce]
+
+  - nombre: Apache Kafka
+    categoria: datos
+    alias: [kafka, kafka streams]
+
+  - nombre: dbt
+    categoria: datos
+    alias: [dbt core, data build tool]
+
+  - nombre: Fivetran
+    categoria: datos
+
+  - nombre: Airbyte
+    categoria: datos
+
+  - nombre: Apache Beam
+    categoria: datos
+    alias: [beam]
+
+  - nombre: Trino
+    categoria: datos
+    alias: [presto, presto sql]
+
+  - nombre: DuckDB
+    categoria: datos
+    alias: [duck db]
+
+  - nombre: Dremio
+    categoria: datos
+
+  - nombre: Delta Lake
+    categoria: datos
+    alias: [delta]
+
+  - nombre: Apache Iceberg
+    categoria: datos
+    alias: [iceberg]
+
+  - nombre: Apache Hudi
+    categoria: datos
+    alias: [hudi]
+
+  - nombre: PostgreSQL
+    categoria: datos
+    alias: [postgres, postgre]
+
+  - nombre: MySQL
+    categoria: datos
+    alias: [mysql server]
+
+  - nombre: MongoDB
+    categoria: datos
+    alias: [mongo]
+
+  - nombre: Redis
+    categoria: datos
+
+  - nombre: Elasticsearch
+    categoria: datos
+    alias: [elastic search]
+
+  - nombre: ClickHouse
+    categoria: datos
+
+  # ------------------------------------------------------------ orquestacion
+  - nombre: Apache Airflow
+    categoria: orquestacion
+    alias: [airflow]
+
+  - nombre: Dagster
+    categoria: orquestacion
+
+  - nombre: Prefect
+    categoria: orquestacion
+    alias: [prefect flows]
+
+  - nombre: Argo Workflows
+    categoria: orquestacion
+    alias: [argo]
+
+  - nombre: Apache Oozie
+    categoria: orquestacion
+    alias: [oozie]
+
+  - nombre: Luigi
+    categoria: orquestacion
+
+  # ---------------------------------------------------------------------- bi
+  - nombre: Power BI
+    categoria: bi
+    alias: [powerbi, power bi desktop, pbi, ms power bi]
+
+  - nombre: Tableau
+    categoria: bi
+    alias: [tableau desktop]
+
+  - nombre: Looker
+    categoria: bi
+
+  - nombre: Metabase
+    categoria: bi
+
+  - nombre: Apache Superset
+    categoria: bi
+    alias: [superset]
+
+  - nombre: Qlik
+    categoria: bi
+    alias: [qlik sense, qliksense]
+
+  - nombre: Excel
+    categoria: bi
+    alias: [microsoft excel, excel avanzado, excel intermedio]
+
+  - nombre: DAX
+    categoria: bi
+
+  - nombre: LookML
+    categoria: bi
+
+  - nombre: Google Sheets
+    categoria: bi
+    alias: [sheets]
+
+  # -------------------------------------------------------- automatizacion_ml
+  - nombre: scikit-learn
+    categoria: automatizacion_ml
+    alias: [sklearn, scikit learn]
+
+  - nombre: TensorFlow
+    categoria: automatizacion_ml
+    alias: [tensorflow, tf]
+
+  - nombre: PyTorch
+    categoria: automatizacion_ml
+    alias: [pytorch, torch]
+
+  - nombre: Keras
+    categoria: automatizacion_ml
+
+  - nombre: XGBoost
+    categoria: automatizacion_ml
+    alias: [xgboost, xg boost]
+
+  - nombre: LightGBM
+    categoria: automatizacion_ml
+    alias: [light gbm, lgbm]
+
+  - nombre: MLflow
+    categoria: automatizacion_ml
+    alias: [ml flow]
+
+  - nombre: Hugging Face
+    categoria: automatizacion_ml
+    alias: [huggingface, transformers]
+
+  - nombre: LangChain
+    categoria: automatizacion_ml
+    alias: [lang chain]
+
+  # ------------------------------------------------------------------- cloud
+  - nombre: AWS
+    categoria: cloud
+    alias: [amazon web services]
+
+  - nombre: Amazon S3
+    categoria: cloud
+    alias: [s3, aws s3]
+
+  - nombre: Amazon EC2
+    categoria: cloud
+    alias: [ec2, aws ec2]
+
+  - nombre: Amazon EMR
+    categoria: cloud
+    alias: [emr, aws emr]
+
+  - nombre: Amazon Redshift
+    categoria: cloud
+    alias: [redshift, aws redshift]
+
+  - nombre: AWS Glue
+    categoria: cloud
+    alias: [glue, aws glue]
+
+  - nombre: AWS Lambda
+    categoria: cloud
+    alias: [lambda, aws lambda]
+
+  - nombre: Google Cloud
+    categoria: cloud
+    alias: [gcp, google cloud platform]
+
+  - nombre: BigQuery
+    categoria: cloud
+    alias: [big query, google bigquery]
+
+  - nombre: Google Cloud Storage
+    categoria: cloud
+    alias: [gcs]
+
+  - nombre: Google Cloud Dataflow
+    categoria: cloud
+    alias: [dataflow]
+
+  - nombre: Azure
+    categoria: cloud
+    alias: [microsoft azure]
+
+  - nombre: Azure Data Factory
+    categoria: cloud
+    alias: [adf, data factory]
+
+  - nombre: Azure Databricks
+    categoria: cloud
+
+  - nombre: Azure SQL
+    categoria: cloud
+    alias: [azure sql database]
+
+  # ----------------------------------------------------------- infraestructura
+  - nombre: Docker
+    categoria: infraestructura
+    alias: [contenedores, docker compose]
+
+  - nombre: Kubernetes
+    categoria: infraestructura
+    alias: [k8s]
+
+  - nombre: Terraform
+    categoria: infraestructura
+
+  - nombre: Ansible
+    categoria: infraestructura
+
+  - nombre: Jenkins
+    categoria: infraestructura
+    alias: [jenkins ci]
+
+  - nombre: GitHub Actions
+    categoria: infraestructura
+    alias: [gh actions, github action]
+
+  - nombre: GitLab CI
+    categoria: infraestructura
+    alias: [gitlab ci]
+
+  - nombre: Git
+    categoria: infraestructura
+
+  - nombre: Linux
+    categoria: infraestructura
+    alias: [ubuntu, debian, unix]
+
+  - nombre: Prometheus
+    categoria: infraestructura
+
+  - nombre: Grafana
+    categoria: infraestructura
+
+  # --------------------------------------------------------------------- web
+  - nombre: HTML
+    categoria: web
+    alias: [html5]
+
+  - nombre: CSS
+    categoria: web
+    alias: [css3, sass, scss]
+
+  - nombre: REST API
+    categoria: web
+    alias: [rest, restful, api rest, apis restful]
+
+  - nombre: JSON
+    categoria: web
+
+  - nombre: Web Scraping
+    categoria: web
+    alias: [scraping]
+
+  - nombre: Regex
+    categoria: web
+    alias: [expresiones regulares, regular expressions]
+
+  - nombre: XPath
+    categoria: web
+    alias: [xpath selectors]
+
+  - nombre: Requests
+    categoria: web
+    alias: [requests library]
+
+  - nombre: httpx
+    categoria: web
+
+  - nombre: BeautifulSoup
+    categoria: web
+    alias: [beautiful soup, bs4]
+
+  - nombre: Scrapy
+    categoria: web
+
+  - nombre: Selenium
+    categoria: web
+    alias: [selenium webdriver]
+
+  - nombre: Playwright
+    categoria: web
+
+  - nombre: FastAPI
+    categoria: web
+    alias: [fast api]
+
+  - nombre: Flask
+    categoria: web
+
+  - nombre: Django
+    categoria: web
+
+  - nombre: React
+    categoria: web
+    alias: [reactjs, react js]
+
+  - nombre: Node.js
+    categoria: web
+    alias: [nodejs, node js]
+
+  - nombre: Chrome Extension
+    categoria: web
+    alias: [chrome extensions, manifest v3, extension de chrome]
+
+  # ---------------------------------------------------------------- analisis
+  - nombre: Data Analysis
+    categoria: analisis
+    alias: [analisis de datos, data analytics]
+
+  - nombre: Analytics Engineering
+    categoria: analisis
+    alias: [data engineering, ingenieria de datos]
+
+  - nombre: Data Modeling
+    categoria: analisis
+    alias: [modelado de datos]
+
+  - nombre: Data Warehousing
+    categoria: analisis
+    alias: [data warehouse]
+
+  - nombre: ETL
+    categoria: analisis
+    alias: [elt]
+
+  - nombre: Dimensional Modeling
+    categoria: analisis
+    alias: [modelado dimensional, star schema]
+
+  - nombre: Data Pipeline
+    categoria: analisis
+    alias: [pipelines de datos, data pipelines]
+
+  - nombre: Data Cleaning
+    categoria: analisis
+    alias: [limpieza de datos]
+
+  - nombre: Data Governance
+    categoria: analisis
+    alias: [gobernanza de datos, gobierno de datos]
+
+  - nombre: Data Quality
+    categoria: analisis
+    alias: [calidad de datos]
+
+  - nombre: Data Visualization
+    categoria: analisis
+    alias: [visualizacion de datos, data viz]
+
+  - nombre: Machine Learning
+    categoria: analisis
+    alias: [ml, aprendizaje automatico]
+
+  - nombre: Deep Learning
+    categoria: analisis
+    alias: [aprendizaje profundo]
+
+  - nombre: NLP
+    categoria: analisis
+    alias: [procesamiento de lenguaje natural, natural language processing]
+
+  - nombre: Computer Vision
+    categoria: analisis
+    alias: [vision por computadora]
+
+  - nombre: Time Series
+    categoria: analisis
+    alias: [series temporales]
+
+  - nombre: Forecasting
+    categoria: analisis
+    alias: [pronostico, prevision]
+
+  - nombre: Statistical Analysis
+    categoria: analisis
+    alias: [estadistica, analisis estadistico]
+
+  - nombre: Regression
+    categoria: analisis
+    alias: [regresion, regresion lineal]
+
+  - nombre: A/B Testing
+    categoria: analisis
+    alias: [ab testing, test a b, experimentacion]
+
+  - nombre: Root Cause Analysis
+    categoria: analisis
+    alias: [analisis causa raiz]
+
+  # ----------------------------------------------------------------- gestion
+  - nombre: Agile
+    categoria: gestion
+    alias: [metodologias agiles, agile methodologies]
+
+  - nombre: Scrum
+    categoria: gestion
+
+  - nombre: Kanban
+    categoria: gestion
+
+  - nombre: Jira
+    categoria: gestion
+    alias: [atlassian jira]
+
+  - nombre: Confluence
+    categoria: gestion
+    alias: [atlassian confluence]
+
+  - nombre: Stakeholder Management
+    categoria: gestion
+    alias: [gestion de interesados, stakeholders]
+
+  - nombre: Project Management
+    categoria: gestion
+    alias: [gestion de proyectos]
+
+  - nombre: Team Leadership
+    categoria: gestion
+    alias: [liderazgo de equipo, liderazgo de equipos, leadership]
+
+  - nombre: Mentoring
+    categoria: gestion
+    alias: [mentoria]
+
+  - nombre: Code Review
+    categoria: gestion
+    alias: [revision de codigo, code reviews]
+
+  - nombre: Technical Documentation
+    categoria: gestion
+    alias: [documentacion tecnica]
+
+  - nombre: Communication
+    categoria: gestion
+    alias: [comunicacion, comunicacion efectiva]
+
+  # --------------------------------------------------------------- soporte_it
+  # Rol y alcance
+  - nombre: Mesa de Ayuda
+    categoria: soporte_it
+    alias: [helpdesk, help desk, service desk, mesa de soporte, mesa de ayuda ti]
+
+  - nombre: Soporte Técnico
+    categoria: soporte_it
+    alias: [soporte tecnico, soporte tecnico informatico, soporte it, soporte ti,
+            soporte informatico, tecnico de soporte, soporte de sistemas]
+
+  - nombre: Soporte Nivel 1
+    categoria: soporte_it
+    alias: [n1, l1, nivel 1, primer nivel, primer nivel de soporte, soporte de primer nivel]
+
+  - nombre: Soporte Nivel 2
+    categoria: soporte_it
+    alias: [n2, l2, nivel 2, segundo nivel, segundo nivel de soporte]
+
+  - nombre: Soporte Nivel 3
+    categoria: soporte_it
+    alias: [n3, l3, nivel 3, tercer nivel, tercer nivel de soporte]
+
+  - nombre: ITIL
+    categoria: soporte_it
+    alias: [information technology infrastructure library, itil 4, itil v4]
+
+  - nombre: Troubleshooting
+    categoria: soporte_it
+    alias: [diagnostico, diagnostico de incidentes, resolucion de problemas,
+            troubleshooting de hardware]
+
+  - nombre: Gestión de Tickets
+    categoria: soporte_it
+    alias: [ticketing, ticket management, sistema de tickets, gestion de incidentes]
+
+  # Sistemas y entorno Microsoft
+  - nombre: Windows
+    categoria: soporte_it
+    alias: [windows 10, windows 11, windows 7, ms windows, sistema operativo windows,
+            entorno windows]
+
+  - nombre: Windows Server
+    categoria: soporte_it
+    alias: [server 2012, server 2016, server 2019, server 2022,
+            windows server 2016, windows server 2019]
+
+  - nombre: Active Directory
+    categoria: soporte_it
+    alias: [azure active directory, azure ad, entra id, microsoft entra,
+            dominio active directory, administracion de active directory]
+
+  - nombre: Microsoft 365
+    categoria: soporte_it
+    alias: [office 365, o365, m365, microsoft office 365, microsoft 365 admin]
+
+  - nombre: Exchange
+    categoria: soporte_it
+    alias: [exchange server, microsoft exchange, exchange online,
+            outlook web access, owa]
+
+  - nombre: Outlook
+    categoria: soporte_it
+    alias: [microsoft outlook, outlook web app, outlook para web]
+
+  - nombre: Group Policy
+    categoria: soporte_it
+    alias: [gpo, directivas de grupo]
+
+  - nombre: Intune
+    categoria: soporte_it
+    alias: [microsoft intune, intune]
+
+  - nombre: Windows Defender
+    categoria: soporte_it
+    alias: [microsoft defender, defender antivirus, antivirus defender]
+
+  - nombre: macOS
+    categoria: soporte_it
+    alias: [mac os, os x, mac, sistema operativo mac]
+
+  # Redes
+  - nombre: TCP/IP
+    categoria: soporte_it
+    alias: [tcp ip, protocolo tcp ip, tcpip, pila tcp ip]
+
+  - nombre: DNS
+    categoria: soporte_it
+    alias: [domain name system, resolucion de nombres, dns interno, dns corporativo]
+
+  - nombre: DHCP
+    categoria: soporte_it
+    alias: [servidor dhcp, protocolo dhcp]
+
+  - nombre: VPN
+    categoria: soporte_it
+    alias: [vpn site to site, conexion vpn, acceso remoto vpn]
+
+  - nombre: LAN
+    categoria: soporte_it
+    alias: [red local, local area network, red lan, lan corporativa]
+
+  - nombre: WAN
+    categoria: soporte_it
+    alias: [wide area network, red wan, red de area amplia]
+
+  - nombre: VLAN
+    categoria: soporte_it
+    alias: [vlans, segmentacion de vlans, redes vlan]
+
+  - nombre: Switching
+    categoria: soporte_it
+    alias: [conmutacion, switch de red, switching de red, switches]
+
+  - nombre: Routing
+    categoria: soporte_it
+    alias: [enrutamiento, routeo, routing estatico, rutas estaticas]
+
+  - nombre: Redes Inalámbricas
+    categoria: soporte_it
+    alias: [wireless, wifi, wi fi, access point, puntos de acceso, redes wifi]
+
+  - nombre: Cisco
+    categoria: soporte_it
+    alias: [cisco ios, cisco networking, ccna, ccnp, routing de cisco]
+
+  - nombre: Fortinet
+    categoria: soporte_it
+    alias: [fortigate, fortios, fortinet fortigate, firewall fortinet]
+
+  # Sólo en plural y en formas calificadas: "firewall" a secas matchearía la
+  # palabra inglesa "firewall" (ver test_detectar_no_inventa_skills).
+  - nombre: Firewalls
+    categoria: soporte_it
+    alias: [firewall perimetral, administracion de firewalls, firewalls perimetrales]
+
+  - nombre: Cableado Estructurado
+    categoria: soporte_it
+    alias: [structured cabling, cableado de red, cableado de datos, networking fisico]
+
+  # Infraestructura y virtualización
+  - nombre: VMware
+    categoria: soporte_it
+    alias: [vsphere, esxi, vmware esxi, vcenter, virtualizacion vmware]
+
+  - nombre: Hyper-V
+    categoria: soporte_it
+    alias: [hyper v, microsoft hyper v, virtualizacion hyper v]
+
+  - nombre: VirtualBox
+    categoria: soporte_it
+    alias: [oracle virtualbox, virtual box]
+
+  - nombre: Proxmox
+    categoria: soporte_it
+    alias: [proxmox ve]
+
+  - nombre: Veeam
+    categoria: soporte_it
+    alias: [veeam backup, veeam backup replication]
+
+  - nombre: Backup
+    categoria: soporte_it
+    alias: [backups, copias de seguridad, disaster recovery, recuperacion de datos,
+            plan de contingencia]
+
+  - nombre: Administración de Sistemas
+    categoria: soporte_it
+    alias: [gestion de usuarios, administracion de usuarios, alta de usuarios,
+            cuentas de usuario, permisos, administracion de permisos,
+            gestion de accesos]
+
+  - nombre: Inventario de IT
+    categoria: soporte_it
+    alias: [inventario, asset management, gestion de activos de ti, control de activos]
+
+  - nombre: Hardware
+    categoria: soporte_it
+    alias: [mantenimiento de hardware, reemplazo de hardware, equipos de computo]
+
+  - nombre: Impresoras
+    categoria: soporte_it
+    alias: [impresora, impresion, multifuncion, printers, plotter, soporte de impresoras]
+
+  # Herramientas de la mesa de ayuda
+  - nombre: ServiceNow
+    categoria: soporte_it
+    alias: [service now, servicenow itsm]
+
+  - nombre: Jira Service Management
+    categoria: soporte_it
+    alias: [jsm, jira service desk, service management de jira]
+
+  - nombre: GLPI
+    categoria: soporte_it
+    alias: [glpi, gestion de parque informatico]
+
+  - nombre: ManageEngine
+    categoria: soporte_it
+    alias: [manageengine service desk plus, service desk plus]
+
+  - nombre: AnyDesk
+    categoria: soporte_it
+    alias: [anydesk remoto]
+
+  - nombre: TeamViewer
+    categoria: soporte_it
+    alias: [team viewer]
+
+  - nombre: PowerShell
+    categoria: soporte_it
+    alias: [power shell, powershell scripting]
+
+  - nombre: CMD
+    categoria: soporte_it
+    alias: [simbolo del sistema, command prompt, consola de comandos]
+
+  # Seguridad
+  - nombre: MFA
+    categoria: soporte_it
+    alias: [2fa, doble factor, autenticacion en dos pasos, segundo factor]
+
+  - nombre: IAM
+    categoria: soporte_it
+    alias: [identity and access management, identity access management,
+            gestion de identidades, control de acceso]
+
+  - nombre: Ciberseguridad
+    categoria: soporte_it
+    alias: [cybersecurity, seguridad informatica, seguridad de la informacion,
+            higiene de datos]
+
+  - nombre: SQL Server
+    categoria: soporte_it
+    alias: [microsoft sql server, mssql, sql server 2016, sql server 2019]
+
+  - nombre: Oracle
+    categoria: soporte_it
+    alias: [oracle database, base de datos oracle, oracle 19c]
+
+  # ---------------------------------------------------------- atencion_cliente
+  - nombre: Atención al Cliente
+    categoria: atencion_cliente
+    alias: [atencion a clientes, atencion de clientes, servicio al cliente,
+            customer service, customer care, atencion al cliente remota]
+
+  - nombre: Contact Center
+    categoria: atencion_cliente
+    alias: [call center, centro de contacto, callcenter, bpo, centro de llamadas]
+
+  - nombre: Manejo de Reclamos
+    categoria: atencion_cliente
+    alias: [gestion de reclamos, reclamos, reclamos y quejas, quejas,
+            atencion de reclamos, reclamo de clientes]
+
+  - nombre: Escalamiento
+    categoria: atencion_cliente
+    alias: [escalado de incidentes, escalamiento de casos, escalation,
+            derivacion a niveles superiores]
+
+  - nombre: Retención de Clientes
+    categoria: atencion_cliente
+    alias: [retencion, retencion de clientes, fidelizacion, reduccion de churn,
+            churn]
+
+  - nombre: Cobranzas
+    categoria: atencion_cliente
+    alias: [gestion de cobranzas, cobranza telefonica, recobro, recuperacion de deuda]
+
+  - nombre: Ventas Telefónicas
+    categoria: atencion_cliente
+    alias: [telemarketing, venta telefonica, ventas por telefono, venta consultiva]
+
+  - nombre: Cross Selling
+    categoria: atencion_cliente
+    alias: [cross selling, venta cruzada, ventas adicionales]
+
+  - nombre: Multicanalidad
+    categoria: atencion_cliente
+    alias: [atencion multicanal, canales de atencion, atencion omnicanal]
+
+  - nombre: Resolución de Conflictos
+    categoria: atencion_cliente
+    alias: [manejo de conflictos, mediacion, gestion de conflictos,
+            resolución de problemas con clientes]
+
+  - nombre: Trabajo en Equipo
+    categoria: atencion_cliente
+    alias: [teamwork, trabajo en equipo, trabajo en equipo y coordinacion]
+
+  # CRM y plataformas de contacto
+  - nombre: Salesforce
+    categoria: atencion_cliente
+    alias: [salesforce crm, sales cloud, salesforce sales cloud]
+
+  - nombre: Salesforce Service Cloud
+    categoria: atencion_cliente
+    alias: [service cloud, salesforce service, salesforce service cloud]
+
+  - nombre: Dynamics 365
+    categoria: atencion_cliente
+    alias: [microsoft dynamics, dynamics crm, dynamics 365 crm, dynamics]
+
+  - nombre: HubSpot
+    categoria: atencion_cliente
+    alias: [hubspot crm, hubspot]
+
+  - nombre: Zoho CRM
+    categoria: atencion_cliente
+    alias: [zoho, zoho crm]
+
+  - nombre: Zendesk
+    categoria: atencion_cliente
+    alias: [zendesk support, zendesk ticketing, suite de zendesk]
+
+  - nombre: Freshdesk
+    categoria: atencion_cliente
+    alias: [freshdesk support, fresh service, freshservice]
+
+  - nombre: Genesys
+    categoria: atencion_cliente
+    alias: [genesys cloud, genesys purecloud, purecloud]
+
+  - nombre: Five9
+    categoria: atencion_cliente
+    alias: [five9 cloud contact center, five9 crm]
+
+  - nombre: Avaya
+    categoria: atencion_cliente
+    alias: [avaya contact center, avaya]
+
+  - nombre: NICE Interactions
+    categoria: atencion_cliente
+    alias: [nice cxone, nice one, nice interactions platform]
+
+  # Calidad y métricas
+  - nombre: SLA
+    categoria: atencion_cliente
+    alias: [service level agreement, acuerdo de nivel de servicio, niveles de servicio,
+            cumplimiento de sla]
+
+  - nombre: NPS
+    categoria: atencion_cliente
+    alias: [net promoter score, indice de recomendacion]
+
+  - nombre: CSAT
+    categoria: atencion_cliente
+    alias: [customer satisfaction, satisfaccion del cliente, indice de satisfaccion]
+
+  - nombre: Calidad de Servicio
+    categoria: atencion_cliente
+    alias: [control de calidad, aseguramiento de calidad, calidad en atencion,
+            monitoring de calidad]

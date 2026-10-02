@@ -21,12 +21,12 @@ busqueda:
 
 cv:
   contacto:
-    nombre: Mariano
-    apellido: Pérez
-    email: mariano@ejemplo.com
-    telefono: "+54 9 11 1234-5678"
-    ciudad: Buenos Aires
-    linkedin: "https://linkedin.com/in/ejemplo"
+    nombre: Tu
+    apellido: Nombre
+    email: tu.email@ejemplo.com
+    telefono: "+54 9 11 0000-0000"
+    ciudad: Tu Ciudad
+    linkedin: "https://linkedin.com/in/tu-usuario"
 
   skills:
     - nombre: SQL

@@ -65,11 +65,24 @@ def listar(sesion: Session) -> list[PerfilCompleto]:
     return [_desde_fila(f) for f in filas]
 
 
-def listar_con_activo(sesion: Session) -> tuple[list[PerfilCompleto], str | None]:
-    """Devuelve los perfiles ordenados y el id del activo, si hay."""
+def listar_con_activo(sesion: Session) -> tuple[list[PerfilCompleto], set[str]]:
+    """Devuelve los perfiles ordenados y el conjunto de ids activos.
+
+    Hay más de un activo a propósito: con varios perfiles cargados, la ingesta
+    tiene que poder rastrear todos y no obligar a estar activando y desactivando
+    a mano uno por vez.
+    """
     filas = sesion.scalars(select(Perfil).order_by(Perfil.nombre)).all()
-    activo = next((f.id for f in filas if f.activo), None)
-    return [_desde_fila(f) for f in filas], activo
+    activos = {f.id for f in filas if f.activo}
+    return [_desde_fila(f) for f in filas], activos
+
+
+def activos(sesion: Session) -> list[PerfilCompleto]:
+    """Los perfiles activos, ordenados por nombre. Es lo que consume la ingesta."""
+    filas = sesion.scalars(
+        select(Perfil).where(Perfil.activo.is_(True)).order_by(Perfil.nombre)
+    ).all()
+    return [_desde_fila(f) for f in filas]
 
 
 def obtener(sesion: Session, id_perfil: str) -> PerfilCompleto:
@@ -107,11 +120,18 @@ def guardar(
 
 
 def activar(sesion: Session, id_perfil: str) -> None:
-    """Deja un único perfil activo."""
+    """Activa un perfil. No toca los demás: pueden convivir varios activos."""
     if not existe(sesion, id_perfil):
         raise PerfilNoEncontrado(f"No existe el perfil {id_perfil!r}")
-    sesion.execute(update(Perfil).values(activo=False))
     sesion.execute(update(Perfil).where(Perfil.id == id_perfil).values(activo=True))
+    sesion.commit()
+
+
+def desactivar(sesion: Session, id_perfil: str) -> None:
+    """Desactiva un perfil. Es idempotente: desactivar uno ya inactivo no falla."""
+    if not existe(sesion, id_perfil):
+        raise PerfilNoEncontrado(f"No existe el perfil {id_perfil!r}")
+    sesion.execute(update(Perfil).where(Perfil.id == id_perfil).values(activo=False))
     sesion.commit()
 
 

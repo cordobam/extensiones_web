@@ -9,10 +9,16 @@
 <p class="aviso">Importación: {{ importacion }}</p>
 {% endif %}
 
-{% if activo %}
-<p class="muted">Perfil activo: <strong>{{ activo }}</strong></p>
+{% if activos %}
+<p class="muted">
+  {{ activos | length }} perfil{% if activos | length != 1 %}es{% endif %} activo{% if activos | length != 1 %}s{% endif %}:
+  {% for id in activos | sort %}<strong>{{ id }}</strong>{% if not loop.last %}, {% endif %}{% endfor %}.
+  Sólo los activos se rastrean.
+</p>
 {% else %}
-<p class="muted">No hay ningún perfil activo. Usá "Activar" en uno de tus perfiles.</p>
+<p class="muted">
+  No hay ningún perfil activo. Activá al menos uno o el radar no busca nada.
+</p>
 {% endif %}
 
 {% if faltan %}
@@ -35,14 +41,18 @@
 {% else %}
 <ul class="lista-perfiles">
   {% for perfil in perfiles %}
-  <li class="perfil {% if perfil.id == activo %}es-activo{% endif %}">
+  <li class="perfil {% if perfil.id in activos %}es-activo{% endif %}">
     <div>
       <a href="/perfiles/{{ perfil.id }}"><strong>{{ perfil.nombre }}</strong></a>
       <span class="id">{{ perfil.id }}</span>
-      {% if perfil.id == activo %}<span class="badge">activo</span>{% endif %}
+      {% if perfil.id in activos %}<span class="badge">activo</span>{% endif %}
     </div>
     <div class="acciones">
-      {% if perfil.id != activo %}
+      {% if perfil.id in activos %}
+      <form method="post" action="/perfiles/{{ perfil.id }}/desactivar">
+        <button class="btn-secundario" type="submit">Desactivar</button>
+      </form>
+      {% else %}
       <form method="post" action="/perfiles/{{ perfil.id }}/activar">
         <button class="btn-secundario" type="submit">Activar</button>
       </form>

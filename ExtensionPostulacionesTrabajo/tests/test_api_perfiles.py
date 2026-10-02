@@ -213,8 +213,101 @@ def test_activar_perfil(cliente: TestClient) -> None:
     assert activos == ["otro"]
 
 
+def test_activar_no_desactiva_los_demas(cliente: TestClient) -> None:
+    """La regla del proyecto: pueden convivir varios perfiles activos.
+
+    Antes `activar` desactivaba todos los demás a propósito, así que con cuatro
+    perfiles cargados la ingesta sólo podía rastrear uno.
+    """
+    cliente.post("/perfiles", data=FORMULARIO, follow_redirects=False)
+    cliente.post("/perfiles", data={**FORMULARIO, "id": "otro"}, follow_redirects=False)
+
+    cliente.post("/perfiles/data-engineer/activar", follow_redirects=False)
+    cliente.post("/perfiles/otro/activar", follow_redirects=False)
+
+    with SessionLocal() as sesion:
+        activos = sorted(p.id for p in sesion.query(Perfil).all() if p.activo)
+    assert activos == ["data-engineer", "otro"]
+
+
+def test_desactivar_saca_solo_ese(cliente: TestClient) -> None:
+    cliente.post("/perfiles", data=FORMULARIO, follow_redirects=False)
+    cliente.post("/perfiles", data={**FORMULARIO, "id": "otro"}, follow_redirects=False)
+    cliente.post("/perfiles/data-engineer/activar", follow_redirects=False)
+    cliente.post("/perfiles/otro/activar", follow_redirects=False)
+
+    assert cliente.post("/perfiles/otro/desactivar", follow_redirects=False).status_code == 303
+
+    with SessionLocal() as sesion:
+        activos = [p.id for p in sesion.query(Perfil).all() if p.activo]
+    assert activos == ["data-engineer"]
+
+
+def test_desactivar_es_idempotente(cliente: TestClient) -> None:
+    """Desactivar dos veces no debe romper: la UI puede recibir doble clic."""
+    cliente.post("/perfiles", data=FORMULARIO, follow_redirects=False)
+    cliente.post("/perfiles/data-engineer/activar", follow_redirects=False)
+
+    for _ in range(2):
+        assert cliente.post(
+            "/perfiles/data-engineer/desactivar", follow_redirects=False
+        ).status_code == 303
+
+    with SessionLocal() as sesion:
+        assert [p for p in sesion.query(Perfil).all() if p.activo] == []
+
+
 def test_activar_perfil_inexistente_no_rompe(cliente: TestClient) -> None:
     assert cliente.post("/perfiles/no-existe/activar", follow_redirects=False).status_code == 303
+
+
+def test_desactivar_perfil_inexistente_no_rompe(cliente: TestClient) -> None:
+    assert (
+        cliente.post("/perfiles/no-existe/desactivar", follow_redirects=False).status_code
+        == 303
+    )
+
+
+def test_activos_devuelve_los_perfiles_marcados(cliente: TestClient) -> None:
+    """`servicio.activos()` es lo que va a consumir la ingesta.
+
+    Lo cubre el caso de varios perfiles activos a la vez, que es el motivo por
+    el que se cambió la regla de "un único activo".
+    """
+    from radar.perfiles import servicio
+
+    cliente.post("/perfiles", data=FORMULARIO, follow_redirects=False)
+    cliente.post("/perfiles", data={**FORMULARIO, "id": "otro"}, follow_redirects=False)
+
+    with SessionLocal() as sesion:
+        assert [p.id for p in servicio.activos(sesion)] == []
+
+        servicio.activar(sesion, "data-engineer")
+        servicio.activar(sesion, "otro")
+        assert sorted(p.id for p in servicio.activos(sesion)) == ["data-engineer", "otro"]
+
+        servicio.desactivar(sesion, "otro")
+        assert [p.id for p in servicio.activos(sesion)] == ["data-engineer"]
+
+
+def test_lista_muestra_cuantos_activos_hay(cliente: TestClient) -> None:
+    cliente.post("/perfiles", data=FORMULARIO, follow_redirects=False)
+    cliente.post("/perfiles", data={**FORMULARIO, "id": "otro"}, follow_redirects=False)
+    cliente.post("/perfiles/data-engineer/activar", follow_redirects=False)
+    cliente.post("/perfiles/otro/activar", follow_redirects=False)
+
+    respuesta = cliente.get("/perfiles")
+    assert respuesta.status_code == 200
+    cuerpo = respuesta.text
+    assert "2 perfiles activos" in cuerpo
+    # Cada perfil ofrece la acción contraria a su estado.
+    assert cuerpo.count("/desactivar") == 2
+    assert "/perfiles/data-engineer/activar" not in cuerpo
+
+    cliente.post("/perfiles/otro/desactivar", follow_redirects=False)
+    cuerpo = cliente.get("/perfiles").text
+    assert "1 perfil activo" in cuerpo
+    assert "/perfiles/otro/activar" in cuerpo
 
 
 def test_borrar_perfil_borra_base_y_yaml(cliente: TestClient, tmp_path) -> None:

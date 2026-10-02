@@ -1,0 +1,122 @@
+# Perfiles de ejemplo — COPIÁ ESTE ARCHIVO Y RENOMBRÁLO A .yml
+
+id: soporte-it
+
+nombre: Soporte IT
+
+busqueda:
+  # Keywords orientadas a los roles que Computrabajo Argentina indexa de verdad.
+  # "mesa de ayuda" y "helpdesk" son la misma búsqueda con distinto nombre.
+  keywords:
+    - mesa de ayuda
+    - soporte técnico
+    - soporte it
+    - helpdesk
+    - soporte de sistemas
+  ubicaciones: []
+    # - CABA
+  modalidades:
+    - remoto
+    - híbrido
+    - presencial
+  seniority:
+    - junior
+    - semi-senior
+    - senior
+  excluir: []
+
+cv:
+  contacto:
+    nombre: Tu
+    apellido: Nombre
+    email: tu.email@ejemplo.com
+    telefono: "+54 9 11 0000-0000"
+    ciudad: Tu Ciudad
+    linkedin: "https://linkedin.com/in/tu-usuario"
+
+  # IMPORTANTE: evidencia y anios van en null a propósito.
+  #
+  # `evidencia` es lo que va a alimentar las cartas de la IA en las fases
+  # futuras. Si la inventás, el modelo la va a usar tal cual y te va a mandar a
+  # interviews por experiencia que no tenés. Llenala con cosas reales: qué
+  # hacías, dónde, qué sistema tocabas.
+  #
+  # `obligatorio: true` marca lo que si te falta descarta la oferta en el
+  # matching. No lo pongas en todo: si no, sólo te van a entrar ofertas con las
+  # skills exactas y te vas a perder las que las dicen con otra palabra.
+  skills:
+    - nombre: Mesa de Ayuda
+      obligatorio: true
+      evidencia: null
+      anios: null
+
+    - nombre: Soporte Técnico
+      obligatorio: true
+      evidencia: null
+      anios: null
+
+    - nombre: Windows
+      obligatorio: true
+      evidencia: null
+      anios: null
+
+    - nombre: Active Directory
+      alias: ["dominio", "AD", "azure ad"]
+      obligatorio: false
+      evidencia: null
+      anios: null
+
+    - nombre: Redes Inalámbricas
+      alias: ["wifi", "redes wifi"]
+      obligatorio: false
+      evidencia: null
+      anios: null
+
+    - nombre: TCP/IP
+      obligatorio: false
+      evidencia: null
+      anios: null
+
+    - nombre: Soporte Nivel 2
+      alias: ["N2", "segundo nivel"]
+      obligatorio: false
+      evidencia: null
+      anios: null
+
+    - nombre: ITIL
+      obligatorio: false
+      evidencia: null
+      anios: null
+
+    - nombre: ServiceNow
+      alias: ["Service Now"]
+      obligatorio: false
+      evidencia: null
+      anios: null
+
+    - nombre: Zendesk
+      obligatorio: false
+      evidencia: null
+      anios: null
+
+    - nombre: SQL Server
+      obligatorio: false
+      evidencia: null
+      anios: null
+
+  experiencia: []
+    # - puesto: Analista de Soporte
+    #   empresa: Empresa Ejemplo
+    #   desde: 2023-01-01
+    #   hasta: null
+    #   descripcion: |
+    #     Mesa de ayuda interna: alta de usuarios, incidentes de red y Office.
+    #   skills: ["Windows", "Active Directory", "Mesa de Ayuda"]
+
+  educacion: []
+  idiomas:
+    - idioma: Español
+      nivel: Nativo
+    - idioma: Inglés
+      nivel: null   # Poné tu nivel real: filtrarlo por idioma te ahorra ofertas.
+  certificaciones: []
