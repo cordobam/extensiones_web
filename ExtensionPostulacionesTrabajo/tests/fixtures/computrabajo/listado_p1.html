@@ -1,0 +1,2637 @@
+<main>
+	<div class="overlay hide" data-overlay></div>
+
+	<style></style>
+
+    <div id="pop-up-webpush-background" style="position: fixed; display: none; background-color: rgba(53,62,74,0.6); top: 0; bottom: 0; left: 0; right: 0; z-index: 999999; "></div>
+    <div id="pop-up-webpush-sub" style="top: 0; position: fixed; display: none; left: 0; width: 400px; background: #fff; box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); padding: 25px; border-radius: 3px; z-index: 9999999; animation: appear .3s;">
+        <div style="flex:63px 0 0;">
+            <img alt="Argentina" width="63" height="63" src="//cp.ct-stc.com/web8/20260929.01_01.44/c/img/logos/favicon_ct.svg" srcset="//cp.ct-stc.com/web8/20260929.01_01.44/c/img/logos/favicon_ct.svg" class="logo_img" />
+        </div>
+        <div style="padding: 8px 0 0 25px;">
+            <p style="font-weight: bold;">
+                ¿Te avisamos si hay nuevas ofertas?
+            </p>
+            <p>
+                No te pierdas ni una oportunidad laboral
+                </p>
+            <div style="text-align: right;margin-top: 25px;">
+                <button onclick="webpush_subscribe_ko(event);" style="display: inline-block; color: #0D3878;">
+                    Ahora no
+                </button>
+                <button onclick="webpush_subscribe_ok(event);" style="text-align: center; color: #fff; background: #0D3878; padding: 7px 25px; border-radius: 35px; display: inline-block; font-size: 14px; margin-left: 15px; font-weight: bold; text-decoration: none; ">
+                    Permitir
+                </button>
+            </div>
+        </div>
+    </div>
+
+	    <input type="hidden" id="gtm_targeting_categoria" value="4" />
+    <input type="hidden" id="gtm_targeting_departamento" value=" " />
+    <input type="hidden" id="gtm_afs_query" value="trabajo de soporte tecnico" />
+    <input type="hidden" id="gtm_afs_page" value="1" />
+    <input type="hidden" id="gtm_afs_elements" value="20" />
+
+
+	<div id="partial-popup-access"></div>
+	<div id="popup-apply"></div>
+	<div class="container mt10"></div>
+
+	<div class="box_border menu_top">
+		<div class="container">
+				<div class="filters">
+
+
+            <div class="field_select_links short small" data-link-facet>
+        <p>
+            Ordenar
+        </p>
+
+        <div class="box_select">
+            <div class="title">
+                <span>
+                    Ordenar por
+                </span>
+                <div class="btn_close"><span class="icon i_close"></span></div>
+            </div>
+            <ul class="list">
+                    <li>
+                        <span class="buildLink cp" data-path="?p=1&amp;by=relevance">
+                            Relevancia
+                        </span>
+                    </li>
+                    <li>
+                        <span class="buildLink cp" data-path="?p=1&amp;by=publicationtime">
+                            Fecha
+                        </span>
+                    </li>
+                    <li>
+                        <span class="buildLink cp" data-path="?p=1&amp;by=salary">
+                            Salario
+                        </span>
+                    </li>
+            </ul>
+        </div>
+    </div>
+
+        
+
+
+                    <div class="field_select_links small" data-link-facet>
+                        <p>Fecha</p>
+                        <div class="box_select">
+                            <div class="title">
+                                <span>
+                                    Fecha
+                                </span>
+                                <div class="btn_close"><span class="icon i_close"></span></div>
+                            </div>
+                            <ul class="list">
+                                    <li>
+                                            <span class="buildLink " data-path='?pubdate=99' rel=nofollow >
+                                                Urgente
+                                            </span>
+                                            <span class="tag">
+                                                215
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <span class="buildLink " data-path='?pubdate=1' rel=nofollow >
+                                                Desde ayer
+                                            </span>
+                                            <span class="tag">
+                                                10
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <span class="buildLink " data-path='?pubdate=3' rel=nofollow >
+                                                &#xDA;ltimos 3 d&#xED;as
+                                            </span>
+                                            <span class="tag">
+                                                47
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <span class="buildLink " data-path='?pubdate=7' rel=nofollow >
+                                                &#xDA;ltima semana
+                                            </span>
+                                            <span class="tag">
+                                                95
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <span class="buildLink " data-path='?pubdate=15' rel=nofollow >
+                                                &#xDA;ltimos 15 d&#xED;as
+                                            </span>
+                                            <span class="tag">
+                                                206
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <span class="buildLink " data-path='?pubdate=30' rel=nofollow >
+                                                &#xDA;ltimo mes
+                                            </span>
+                                            <span class="tag">
+                                                433
+                                            </span>
+                                    </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="field_select_links small" data-link-facet>
+                        <p>Categor&#xED;a</p>
+                        <div class="box_select">
+                            <div class="title">
+                                <span>
+                                    Categor&#xED;a
+                                </span>
+                                <div class="btn_close"><span class="icon i_close"></span></div>
+                            </div>
+                            <ul class="list">
+                                    <li>
+                                            <a class="" href='/empleos-de-informatica-y-telecom' title="Ofertas de trabajo de Informática / Telecomunicaciones " >
+                                                Inform&#xE1;tica / Telecomunicaciones
+                                            </a>
+                                            <span class="tag">
+                                                184
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <a class="" href='/empleos-de-mantenimiento-y-reparaciones-tecnicas' title="Ofertas de trabajo de Mantenimiento y Reparaciones Técnicas " >
+                                                Mantenimiento y Reparaciones T&#xE9;cnicas
+                                            </a>
+                                            <span class="tag">
+                                                176
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <a class="" href='/empleos-de-marketing-y-ventas' title="Ofertas de trabajo de Ventas " >
+                                                Ventas
+                                            </a>
+                                            <span class="tag">
+                                                74
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <a class="" href='/empleos-de-otros' title="Ofertas de trabajo de Otros " >
+                                                Otros
+                                            </a>
+                                            <span class="tag">
+                                                61
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <a class="" href='/empleos-de-atencion-a-clientes' title="Ofertas de trabajo de Atención a clientes " >
+                                                Atenci&#xF3;n a clientes
+                                            </a>
+                                            <span class="tag">
+                                                58
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <a class="" href='/empleos-de-ingenieria-y-tecnico' title="Ofertas de trabajo de Ingeniería " >
+                                                Ingenier&#xED;a
+                                            </a>
+                                            <span class="tag">
+                                                53
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <a class="" href='/empleos-de-administracion-y-oficina' title="Ofertas de trabajo de Administración / Oficina " >
+                                                Administraci&#xF3;n / Oficina
+                                            </a>
+                                            <span class="tag">
+                                                49
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <a class="" href='/empleos-de-produccion-operaciones' title="Ofertas de trabajo de Producción / Operarios / Manufactura " >
+                                                Producci&#xF3;n / Operarios / Manufactura
+                                            </a>
+                                            <span class="tag">
+                                                43
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <a class="" href='/empleos-de-callcenter-telemercadeo' title="Ofertas de trabajo de CallCenter / Telemercadeo " >
+                                                CallCenter / Telemercadeo
+                                            </a>
+                                            <span class="tag">
+                                                29
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <a class="" href='/empleos-de-almacen-logistica' title="Ofertas de trabajo de Almacén / Logística / Transporte " >
+                                                Almac&#xE9;n / Log&#xED;stica / Transporte
+                                            </a>
+                                            <span class="tag">
+                                                26
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <a class="" href='/empleos-de-construccion-y-obra' title="Ofertas de trabajo de Construcción y obra " >
+                                                Construcci&#xF3;n y obra
+                                            </a>
+                                            <span class="tag">
+                                                20
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <a class="" href='/empleos-de-economia-y-contabilidad' title="Ofertas de trabajo de Contabilidad / Finanzas " >
+                                                Contabilidad / Finanzas
+                                            </a>
+                                            <span class="tag">
+                                                17
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <a class="" href='/empleos-de-hosteleria-y-turismo' title="Ofertas de trabajo de Hostelería / Turismo " >
+                                                Hosteler&#xED;a / Turismo
+                                            </a>
+                                            <span class="tag">
+                                                14
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <a class="" href='/empleos-de-medicina-y-salud' title="Ofertas de trabajo de Medicina / Salud " >
+                                                Medicina / Salud
+                                            </a>
+                                            <span class="tag">
+                                                13
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <a class="" href='/empleos-de-cientifico-y-investigacion' title="Ofertas de trabajo de Investigación y Calidad " >
+                                                Investigaci&#xF3;n y Calidad
+                                            </a>
+                                            <span class="tag">
+                                                11
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <a class="" href='/empleos-de-arte-y-diseno-y-medios' title="Ofertas de trabajo de Diseño / Artes gráficas " >
+                                                Dise&#xF1;o / Artes gr&#xE1;ficas
+                                            </a>
+                                            <span class="tag">
+                                                9
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <a class="" href='/empleos-de-recursos-humanos' title="Ofertas de trabajo de Recursos Humanos " >
+                                                Recursos Humanos
+                                            </a>
+                                            <span class="tag">
+                                                8
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <a class="" href='/empleos-de-mercadeo-publicidad-comunicacion' title="Ofertas de trabajo de Mercadotecnia / Publicidad / Comunicación " >
+                                                Mercadotecnia / Publicidad / Comunicaci&#xF3;n
+                                            </a>
+                                            <span class="tag">
+                                                7
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <a class="" href='/empleos-de-servicios-generales-aseo-y-seguridad' title="Ofertas de trabajo de Servicios Generales, Aseo y Seguridad  " >
+                                                Servicios Generales, Aseo y Seguridad 
+                                            </a>
+                                            <span class="tag">
+                                                6
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <span class="buildLink " data-path='/empleos-de-compras-comercio-exterior' title="Ofertas de trabajo de Compras / Comercio Exterior " >
+                                                Compras / Comercio Exterior
+                                            </span>
+                                            <span class="tag">
+                                                4
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <span class="buildLink " data-path='/empleos-de-direccion-y-gerencia' title="Ofertas de trabajo de Dirección / Gerencia " >
+                                                Direcci&#xF3;n / Gerencia
+                                            </span>
+                                            <span class="tag">
+                                                3
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <span class="buildLink " data-path='/empleos-de-educacion-y-universidad' title="Ofertas de trabajo de Docencia " >
+                                                Docencia
+                                            </span>
+                                            <span class="tag">
+                                                3
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <span class="buildLink " data-path='/empleos-de-legal-y-asesoria' title="Ofertas de trabajo de Legal / Asesoría " >
+                                                Legal / Asesor&#xED;a
+                                            </span>
+                                            <span class="tag">
+                                                1
+                                            </span>
+                                    </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="field_select_links long small js_field_select_links" data-workplace-facet open-close>
+	<p open-close>
+		Lugar de trabajo
+	</p>
+	<div class="box_select" data-scroll>
+		<div class="title">
+			<span class="fwB">
+				Lugar de trabajo
+			</span>
+			<div class="btn_close"><span class="icon i_close" open-close></span></div>
+		</div>
+		<div class="js_scroll" data-scroll>
+				<input id="workplace_input" type="hidden">
+				<ul class="box_checkbox" data-event="filter" data-id="idworkplace">
+
+					<li geo-hide>
+						<div class="posRel w100">
+							<span title="Remoto">
+								Remoto
+							</span>
+							<span class="tag">
+								31
+							</span>
+						</div>
+						<div class="field_on_off mlAuto">
+							<input type="checkbox" id="remote" data-url="/trabajo-de-soporte-tecnico-en-remoto"
+								   data-sem="-en-remoto" workplace-option 
+							>
+							<label class="switch" for="remote" style="width: 35px">
+								<span class="disc"></span>
+								<span class="on"></span>
+								<span class="off"></span>
+							</label>
+						</div>
+					</li>
+					<li geo-hide>
+						<div class="posRel w100">
+							<span title="Presencial y remoto">
+								Presencial y remoto
+							</span>
+							<span class="tag">
+								129
+							</span>
+						</div>
+						<div class="field_on_off mlAuto">
+							<input type="checkbox" id="hybrid" data-url="/trabajo-de-soporte-tecnico-hibrido"
+								   data-sem="-hibrido" workplace-option 
+							>
+							<label class="switch" for="hybrid" style="width: 35px">
+								<span class="disc"></span>
+								<span class="on"></span>
+								<span class="off"></span>
+							</label>
+						</div>
+					</li>
+
+				</ul>
+
+			<div id="geo" class="dFlex mt15">
+				<div class="w49 br1">
+					<p id="location" class="pl25 fwB mb10">
+						Provincia
+					</p>
+					<input id="location_input" type="hidden">
+					<ul class="list" data-event="filter" data-id="idlocation" location data-scroll>
+								<li class="">
+										<a id="option_3_location" class="" href='/trabajo-de-soporte-tecnico-en-capital-federal' data-sem="-en-capital-federal" title="Ofertas de empleo en Capital Federal"  geo-option>Capital Federal</a>
+										<span class="tag">247</span>
+								</li>
+								<li class="">
+										<a id="option_26_location" class="" href='/trabajo-de-soporte-tecnico-en-buenos-aires-gba' data-sem="-en-buenos-aires-gba" title="Ofertas de empleo en Buenos Aires-GBA"  geo-option>Buenos Aires-GBA</a>
+										<span class="tag">204</span>
+								</li>
+								<li class="">
+										<a id="option_5_location" class="" href='/trabajo-de-soporte-tecnico-en-cordoba' data-sem="-en-cordoba" title="Ofertas de empleo en Córdoba"  geo-option>C&#xF3;rdoba</a>
+										<span class="tag">122</span>
+								</li>
+								<li class="">
+										<a id="option_2_location" class="" href='/trabajo-de-soporte-tecnico-en-buenos-aires' data-sem="-en-buenos-aires" title="Ofertas de empleo en Buenos Aires"  geo-option>Buenos Aires</a>
+										<span class="tag">93</span>
+								</li>
+								<li class="">
+										<a id="option_22_location" class="" href='/trabajo-de-soporte-tecnico-en-santa-fe' data-sem="-en-santa-fe" title="Ofertas de empleo en Santa Fe"  geo-option>Santa Fe</a>
+										<span class="tag">58</span>
+								</li>
+								<li class="">
+										<a id="option_16_location" class="" href='/trabajo-de-soporte-tecnico-en-neuquen' data-sem="-en-neuquen" title="Ofertas de empleo en Neuquén"  geo-option>Neuqu&#xE9;n</a>
+										<span class="tag">36</span>
+								</li>
+								<li class="">
+										<a id="option_14_location" class="" href='/trabajo-de-soporte-tecnico-en-mendoza' data-sem="-en-mendoza" title="Ofertas de empleo en Mendoza"  geo-option>Mendoza</a>
+										<span class="tag">16</span>
+								</li>
+								<li class="">
+										<a id="option_19_location" class="" href='/trabajo-de-soporte-tecnico-en-san-juan' data-sem="-en-san-juan" title="Ofertas de empleo en San Juan"  geo-option>San Juan</a>
+										<span class="tag">15</span>
+								</li>
+								<li class="">
+										<a id="option_17_location" class="" href='/trabajo-de-soporte-tecnico-en-rio-negro' data-sem="-en-rio-negro" title="Ofertas de empleo en Río Negro"  geo-option>R&#xED;o Negro</a>
+										<span class="tag">14</span>
+								</li>
+								<li class="">
+										<a id="option_25_location" class="" href='/trabajo-de-soporte-tecnico-en-tucuman' data-sem="-en-tucuman" title="Ofertas de empleo en Tucumán"  geo-option>Tucum&#xE1;n</a>
+										<span class="tag">13</span>
+								</li>
+								<li class="">
+										<a id="option_18_location" class="" href='/trabajo-de-soporte-tecnico-en-salta' data-sem="-en-salta" title="Ofertas de empleo en Salta"  geo-option>Salta</a>
+										<span class="tag">9</span>
+								</li>
+								<li class="">
+										<a id="option_20_location" class="" href='/trabajo-de-soporte-tecnico-en-san-luis' data-sem="-en-san-luis" title="Ofertas de empleo en San Luis"  geo-option>San Luis</a>
+										<span class="tag">8</span>
+								</li>
+								<li class="">
+										<a id="option_7_location" class="" href='/trabajo-de-soporte-tecnico-en-chaco' data-sem="-en-chaco" title="Ofertas de empleo en Chaco"  geo-option>Chaco</a>
+										<span class="tag">6</span>
+								</li>
+								<li class="">
+										<span id="option_11_location" class="buildLink " data-path='/trabajo-de-soporte-tecnico-en-jujuy' data-sem="-en-jujuy" title="Ofertas de empleo en Jujuy"  geo-option>Jujuy</span>
+										<span class="tag">5</span>
+								</li>
+								<li class="">
+										<span id="option_8_location" class="buildLink " data-path='/trabajo-de-soporte-tecnico-en-chubut' data-sem="-en-chubut" title="Ofertas de empleo en Chubut"  geo-option>Chubut</span>
+										<span class="tag">4</span>
+								</li>
+								<li class="">
+										<span id="option_9_location" class="buildLink " data-path='/trabajo-de-soporte-tecnico-en-entre-rios' data-sem="-en-entre-rios" title="Ofertas de empleo en Entre Ríos"  geo-option>Entre R&#xED;os</span>
+										<span class="tag">4</span>
+								</li>
+								<li class="">
+										<span id="option_4_location" class="buildLink " data-path='/trabajo-de-soporte-tecnico-en-catamarca' data-sem="-en-catamarca" title="Ofertas de empleo en Catamarca"  geo-option>Catamarca</span>
+										<span class="tag">3</span>
+								</li>
+								<li class="">
+										<span id="option_15_location" class="buildLink " data-path='/trabajo-de-soporte-tecnico-en-misiones' data-sem="-en-misiones" title="Ofertas de empleo en Misiones"  geo-option>Misiones</span>
+										<span class="tag">3</span>
+								</li>
+								<li class="">
+										<span id="option_1_location" class="buildLink " data-path='/trabajo-de-soporte-tecnico-en-extranjero' data-sem="-en-extranjero" title="Ofertas de empleo en Extranjero"  geo-option>Extranjero</span>
+										<span class="tag">2</span>
+								</li>
+								<li class="">
+										<span id="option_6_location" class="buildLink " data-path='/trabajo-de-soporte-tecnico-en-corrientes' data-sem="-en-corrientes" title="Ofertas de empleo en Corrientes"  geo-option>Corrientes</span>
+										<span class="tag">2</span>
+								</li>
+								<li class="">
+										<span id="option_10_location" class="buildLink " data-path='/trabajo-de-soporte-tecnico-en-formosa' data-sem="-en-formosa" title="Ofertas de empleo en Formosa"  geo-option>Formosa</span>
+										<span class="tag">2</span>
+								</li>
+								<li class="">
+										<span id="option_23_location" class="buildLink " data-path='/trabajo-de-soporte-tecnico-en-santiago-del-estero' data-sem="-en-santiago-del-estero" title="Ofertas de empleo en Santiago del Estero"  geo-option>Santiago del Estero</span>
+										<span class="tag">2</span>
+								</li>
+					</ul>
+				</div>
+				<div class="w50">
+					<p id="city" class="pl25 fwB mb10">Ciudad</p>
+					<input id="city_input" type="hidden">
+					<ul class="list" data-event="filter" data-id="idcity" city data-scroll>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="footer" geo-hide>
+			<button type="button" id="restore" class="b_primary_inv small w30 mlAuto">
+				Limpiar
+			</button>
+			<button type="submit" id="filter-button" class="b_primary small w30 ml15">
+				Filtrar
+			</button>
+		</div>
+	</div>
+</div>
+                    <div class="field_select_links small" data-link-facet>
+                        <p>Experiencia</p>
+                        <div class="box_select">
+                            <div class="title">
+                                <span>
+                                    Experiencia
+                                </span>
+                                <div class="btn_close"><span class="icon i_close"></span></div>
+                            </div>
+                            <ul class="list">
+                                    <li>
+                                            <a class="" href='/trabajo-de-soporte-tecnico-sin-experiencia' title="Ofertas de trabajo sin experiencia" >
+                                                Sin Experiencia
+                                            </a>
+                                            <span class="tag">
+                                                253
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <span class="buildLink " data-path='?iex=4' rel=nofollow >
+                                                1 a&#xF1;o
+                                            </span>
+                                            <span class="tag">
+                                                122
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <span class="buildLink " data-path='?iex=5' rel=nofollow >
+                                                2 a&#xF1;os
+                                            </span>
+                                            <span class="tag">
+                                                191
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <span class="buildLink " data-path='?iex=6' rel=nofollow >
+                                                3-4 a&#xF1;os
+                                            </span>
+                                            <span class="tag">
+                                                206
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <span class="buildLink " data-path='?iex=7' rel=nofollow >
+                                                5-10 a&#xF1;os
+                                            </span>
+                                            <span class="tag">
+                                                79
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <span class="buildLink " data-path='?iex=8' rel=nofollow >
+                                                M&#xE1;s de 10 a&#xF1;os
+                                            </span>
+                                            <span class="tag">
+                                                6
+                                            </span>
+                                    </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="field_select_links small" data-link-facet>
+                        <p>Salario</p>
+                        <div class="box_select">
+                            <div class="title">
+                                <span>
+                                    Salario
+                                </span>
+                                <div class="btn_close"><span class="icon i_close"></span></div>
+                            </div>
+                            <ul class="list">
+                                    <li>
+                                            <span class="buildLink " data-path='?sal=1' rel=nofollow >
+                                                Hasta $ 250.000
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <span class="buildLink " data-path='?sal=2' rel=nofollow >
+                                                M&#xE1;s de $250.000
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <span class="buildLink " data-path='?sal=3' rel=nofollow >
+                                                M&#xE1;s de $500.000
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <span class="buildLink " data-path='?sal=4' rel=nofollow >
+                                                M&#xE1;s de $700.000
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <span class="buildLink " data-path='?sal=5' rel=nofollow >
+                                                M&#xE1;s de $900.000
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <span class="buildLink " data-path='?sal=6' rel=nofollow >
+                                                M&#xE1;s de $1.200.000
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <span class="buildLink " data-path='?sal=7' rel=nofollow >
+                                                M&#xE1;s de $2.000.000
+                                            </span>
+                                    </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="field_select_links small" data-link-facet>
+                        <p>Jornada</p>
+                        <div class="box_select">
+                            <div class="title">
+                                <span>
+                                    Jornada
+                                </span>
+                                <div class="btn_close"><span class="icon i_close"></span></div>
+                            </div>
+                            <ul class="list">
+                                    <li>
+                                            <span class="buildLink " data-path='/trabajo-de-soporte-tecnico-jornada-completa' rel=nofollow >
+                                                Jornada completa
+                                            </span>
+                                            <span class="tag">
+                                                787
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <a class="" href='/trabajo-de-soporte-tecnico-jornada-partida' title="" >
+                                                Jornada part time
+                                            </a>
+                                            <span class="tag">
+                                                50
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <a class="" href='/trabajo-de-soporte-tecnico-jornada-turnos' title="" >
+                                                Trabajo a turnos
+                                            </a>
+                                            <span class="tag">
+                                                22
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <a class="" href='/trabajo-de-soporte-tecnico-jornada-reducida' title="" >
+                                                Jornada reducida
+                                            </a>
+                                            <span class="tag">
+                                                9
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <span class="buildLink " data-path='/trabajo-de-soporte-tecnico-jornada-nocturna' title="" >
+                                                Trabajo nocturno
+                                            </span>
+                                            <span class="tag">
+                                                1
+                                            </span>
+                                    </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="field_select_links small" data-link-facet>
+                        <p>Contrato</p>
+                        <div class="box_select">
+                            <div class="title">
+                                <span>
+                                    Contrato
+                                </span>
+                                <div class="btn_close"><span class="icon i_close"></span></div>
+                            </div>
+                            <ul class="list">
+                                    <li>
+                                            <span class="buildLink " data-path='?cont=6' rel=nofollow >
+                                                Contrato por tiempo indeterminado
+                                            </span>
+                                            <span class="tag">
+                                                589
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <span class="buildLink " data-path='?cont=5' rel=nofollow >
+                                                otro tipo de contrato
+                                            </span>
+                                            <span class="tag">
+                                                145
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <span class="buildLink " data-path='?cont=3' rel=nofollow >
+                                                contrato eventual
+                                            </span>
+                                            <span class="tag">
+                                                73
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <span class="buildLink " data-path='?cont=1' rel=nofollow >
+                                                contrato a plazo fijo
+                                            </span>
+                                            <span class="tag">
+                                                59
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <span class="buildLink " data-path='?cont=2' rel=nofollow >
+                                                contrato de temporada
+                                            </span>
+                                            <span class="tag">
+                                                3
+                                            </span>
+                                    </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="field_select_links small" data-link-facet>
+                        <p>Discapacidad</p>
+                        <div class="box_select">
+                            <div class="title">
+                                <span>
+                                    Discapacidad
+                                </span>
+                                <div class="btn_close"><span class="icon i_close"></span></div>
+                            </div>
+                            <ul class="list">
+                                    <li>
+                                            <span class="buildLink " data-path='?dis=1' title="" >
+                                                S&#xED;
+                                            </span>
+                                    </li>
+                                    <li>
+                                            <span class="buildLink " data-path='?dis=0' title="" >
+                                                No
+                                            </span>
+                                    </li>
+                            </ul>
+                        </div>
+                    </div>
+</div>
+
+
+
+				<div class="dFlex dIB_m w100_m">
+					
+ <div id="offersGridOfferContainer" class="box_grid parrilla_oferta">
+        <div class="box_title">
+            <h1 class="title_page" style="z-index: 0;">
+                <span class="fwB">
+                    869
+                </span>
+                Ofertas de trabajo de soporte tecnico
+            </h1>
+
+                <div class="box_btn_alert"  fix_menu_bottom>
+        <div class="btn_alert shadow_off" data-create-alert-icon>
+            <span id="b_alert_txt" class="descrip" data-create-alert=filter>
+                Crear alerta
+            </span>
+            <span class="icon i_alert small"></span>
+        </div>
+    </div>
+<span class="tag save hide" style="opacity: 0;" id="createAlert_ok">
+    Genial
+</span>
+<div data-emailconfirm-modal-container></div>
+<div class="popup w30 hide" data-alert-container>
+    <div>
+        <div>
+            <div id="createAlert_error_message" class="hide">
+                <p class="fc_info"></p>
+            </div>
+                <div id="createAlert_candidate" class="hide">
+                    <p class="fwB mb10 fs18">
+                        ¡No te pierdas ninguna oportunidad!
+                    </p>
+                    <p class="mb10">
+                        Recibe las nuevas ofertas por e-mail.
+                    </p>
+                    <input id="createAlertLoggedCandidateButton" type="button" class="b_primary w100 fs16" value="Crear alerta">
+                </div>
+                <div id="alertForm" class="hide">
+                    <div>
+                        <div id="insertEmailPromoTexts" class="hide">
+                            <p class="fwB mb5 fs18">
+                                ¡No te pierdas ninguna oportunidad!
+                            </p>
+                            <p class="mb10">
+                                Escribe tu correo y te enviaremos <strong>nuevas ofertas</strong> por e-mail.
+                            </p>
+                        </div>
+                        <div>
+                            <div id="passwordSummaryText" class="hide">
+                                <p class="fwB mb5 fs18 fc_ok">
+                                    Parece que ya estas registrado
+                                </p>
+                                <p class="mb5">
+                                    Escribe tu contraseña para <strong>activar la alerta.</strong>
+                                </p>
+                            </div>
+                            <div id="passwordErrorText" class="hide">
+                                <p class="fwB mb5 fs18 fc_info">
+                                    Vaya, el correo y la contraseña no coinciden
+                                </p>
+                                <p class="mb5">
+                                    Prueba de nuevo para <strong>activar la alerta</strong>.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="field_input mb10">
+                            <input id="em" type="email" placeholder="Email">
+                            <span id="em-error" class="hide field-validation-error" data-valmsg-for="em" data-valmsg-replace="true" data-val-text="Obligatorio"></span>
+                        </div>
+                        <div id="passwordContainer" class="field_input mb10 hide">
+                            <input id="pwd" type="password" placeholder="Password" autocomplete="new-password" class="mb10">
+                            <span id="pwd-error" class="hide field-validation-error" data-valmsg-for="em" data-valmsg-replace="true" data-val-text="Obligatorio"></span>
+                            <a class="mt10" href="https://candidato.ar.computrabajo.com/acceso/">
+                                ¿Has olvidado la contraseña?
+                            </a>
+                        </div>
+                    </div>
+                    <input id="createAlertFormButton" type="button" class="b_primary w100 fs16 mb15 mt15" value="Crear alerta">
+                    <div class="field_checkbox fs12 mb10">
+                        <label class="checkbox">
+                            <input type="checkbox" id="legalNotice">
+                            <span class="input"></span>
+                            <span>He leído y acepto las Condiciones Legales incluidas en el <a href="https://ar.computrabajo.com/avisolegal/">aviso legal</a> y la <a href="https://ar.computrabajo.com/privacidad/">política de privacidad</a></span>
+                        </label>
+                        <span id="legalNotice-error" class="field-validation-error hide" data-valmsg-for="legalNotice" data-valmsg-replace="true" data-val-text="Obligatorio"></span>
+                    </div>
+                </div>
+                <div id="createAlert_verificationSent" class="hide">
+                    <p class="mr10">
+                        Te hemos enviado un correo de verificación. Revísalo y <strong>confirma la alerta</strong> para activarla.
+                    </p>
+                </div>
+                <div id="createAlert_alreadyExists" class="hide">
+                    <p class="prB">
+                        Ya tienes una alerta guardada similar a esta búsqueda
+                    </p>
+                </div>
+        </div>
+        <span id="js_close_box_alert" class="icon i_close cp"></span>
+    </div>
+</div>
+    </div>
+
+            <article class="box_offer sel outstanding" data-id='EAD844F035268B1B61373E686DCF3405' data-blind="false" id="EAD844F035268B1B61373E686DCF3405" data-lc="ListOffers-Score4-0" data-offers-grid-offer-item-container>
+        <div class="list_dot mb15">
+                <span class="fc_dest">
+                    Empleo destacado
+                </span>
+        </div>
+    <h2 class="fs18 fwB prB">
+        <a class="js-o-link fc_base" href="/ofertas-de-trabajo/oferta-de-trabajo-de-soporte-tecnico-it-villa-maria-en-villa-maria-EAD844F035268B1B61373E686DCF3405#lc=ListOffers-Score4-0">
+            Soporte Tecnico IT
+        </a>
+        <div class="tags">
+            <span class="tag postulated hide" applied-offer-tag>
+                <span class="icon i_check_circle_full mr5"></span>
+                Postulado
+            </span>
+            <span class="tag hide" viewed-offer-tag>
+                Vista
+            </span>
+        </div>
+    </h2>
+    <p class="dFlex vm_fx fs16 fc_base mt5">
+            <span class="fx_none mr10">
+                <span class="fwB">
+                    4,5
+                </span>
+                <span class="star"></span>
+            </span>
+            <a class="fc_base t_ellipsis" href="https://ar.computrabajo.com/edu21" target='_blank' offer-grid-article-company-url>
+                Universidad Siglo 21
+            </a>
+    </p>
+    <p class="fs16 fc_base mt5">
+        <span class="mr10">
+            Villa Mar&#xED;a, C&#xF3;rdoba
+        </span>
+    </p>
+        <div class="fs13 mt15">
+                <span class="dIB mr10">
+                    <span class="icon i_salary"></span>
+                    $ 111.111,00 (Mensual)
+                </span>
+        </div>
+    <p class="fs13 fc_aux mt15">
+        Hace  19  horas
+    </p>
+    <div class="opt_dots" shortcut-show>
+        <div class="opt_bubble" shortcut-child>
+            <span data-href-access="https://candidato.ar.computrabajo.com/acceso/" data-href-offer-apply="https://candidato.ar.computrabajo.com/candidate/apply/?oi=EAD844F035268B1B61373E686DCF3405&amp;p=280&amp;idb=1&amp;d=32" class="dB fc_base it-blank mb5" shortcut-apply-ac oi="EAD844F035268B1B61373E686DCF3405" event-ga label-ga="Shortcuts_postular">
+                <span class="icon i_postular mr5"></span>
+                Postular
+            </span>
+            <span class="dB fc_base it-blank cp mb5" shortcut-favorite oi="EAD844F035268B1B61373E686DCF3405" event-ga label-ga="Shortcuts_favoritos">
+                <span class="icon i_fav mr5"></span>
+                Guardar en Mis favoritos
+            </span>
+            <span class="dB fc_base it-blank cp mb5" shortcut-report oi="EAD844F035268B1B61373E686DCF3405" pc="7A02BC8BFD169A2F" event-ga label-ga="Shortcuts_denunciar">
+                <span class="icon i_report mr5"></span>
+                Denunciar empleo
+            </span>
+            <span class="dB fc_base it-blank cp" shortcut-hide data-oi="EAD844F035268B1B61373E686DCF3405" event-ga label-ga="Shortcuts_hide">
+                <span class="icon i_ocultar mr5"></span>
+                Ocultar aviso
+            </span>
+        </div>
+    </div>
+    <div class="box_show_offer hide" remove-hide-div>
+        <p>
+            Oferta oculta
+        </p>
+        <div class="b_primary_inv" remove-hide>
+            <span class="icon i_ocultar mr5"></span>
+            Mostrar oferta
+        </div>
+    </div>
+</article>
+        <article class="box_offer  " data-id='BFF8BFB119841A0A61373E686DCF3405' data-blind="false" id="BFF8BFB119841A0A61373E686DCF3405" data-lc="ListOffers-Score4-1" data-offers-grid-offer-item-container>
+        <div class="list_dot mb15">
+                <span class="fc_urgent">
+                    Se precisa Urgente
+                </span>
+        </div>
+    <h2 class="fs18 fwB prB">
+        <a class="js-o-link fc_base" href="/ofertas-de-trabajo/oferta-de-trabajo-de-tecnico-de-soporte-it-mendoza-en-mendoza-BFF8BFB119841A0A61373E686DCF3405#lc=ListOffers-Score4-1">
+            T&#xE9;cnico de Soporte IT
+        </a>
+        <div class="tags">
+            <span class="tag postulated hide" applied-offer-tag>
+                <span class="icon i_check_circle_full mr5"></span>
+                Postulado
+            </span>
+            <span class="tag hide" viewed-offer-tag>
+                Vista
+            </span>
+        </div>
+    </h2>
+    <p class="dFlex vm_fx fs16 fc_base mt5">
+            <span class="icon i_verificada mr5"></span>
+            <a class="fc_base t_ellipsis" href="https://ar.computrabajo.com/empresas/ofertas-de-trabajo-de-mh-consultora-84C95E7DCCA9F108" target='_blank' offer-grid-article-company-url>
+                Melina Hidalgo Selecci&#xF3;n de Talentos
+            </a>
+    </p>
+    <p class="fs16 fc_base mt5">
+        <span class="mr10">
+            Mendoza, Mendoza
+        </span>
+    </p>
+    <p class="fs13 fc_aux mt15">
+        Hace  20  horas
+    </p>
+    <div class="opt_dots" shortcut-show>
+        <div class="opt_bubble" shortcut-child>
+            <span data-href-access="https://candidato.ar.computrabajo.com/acceso/" data-href-offer-apply="https://candidato.ar.computrabajo.com/candidate/apply/?oi=BFF8BFB119841A0A61373E686DCF3405&amp;p=280&amp;idb=1&amp;d=32" class="dB fc_base it-blank mb5" shortcut-apply-ac oi="BFF8BFB119841A0A61373E686DCF3405" event-ga label-ga="Shortcuts_postular">
+                <span class="icon i_postular mr5"></span>
+                Postular
+            </span>
+            <span class="dB fc_base it-blank cp mb5" shortcut-favorite oi="BFF8BFB119841A0A61373E686DCF3405" event-ga label-ga="Shortcuts_favoritos">
+                <span class="icon i_fav mr5"></span>
+                Guardar en Mis favoritos
+            </span>
+            <span class="dB fc_base it-blank cp mb5" shortcut-report oi="BFF8BFB119841A0A61373E686DCF3405" pc="96D1C1E18881EABE" event-ga label-ga="Shortcuts_denunciar">
+                <span class="icon i_report mr5"></span>
+                Denunciar empleo
+            </span>
+            <span class="dB fc_base it-blank cp" shortcut-hide data-oi="BFF8BFB119841A0A61373E686DCF3405" event-ga label-ga="Shortcuts_hide">
+                <span class="icon i_ocultar mr5"></span>
+                Ocultar aviso
+            </span>
+        </div>
+    </div>
+    <div class="box_show_offer hide" remove-hide-div>
+        <p>
+            Oferta oculta
+        </p>
+        <div class="b_primary_inv" remove-hide>
+            <span class="icon i_ocultar mr5"></span>
+            Mostrar oferta
+        </div>
+    </div>
+</article>
+        <article class="box_offer  outstanding" data-id='781B8C3175BD0B4B61373E686DCF3405' data-blind="false" id="781B8C3175BD0B4B61373E686DCF3405" data-lc="ListOffers-Score4-2" data-offers-grid-offer-item-container>
+        <div class="list_dot mb15">
+                <span class="fc_urgent">
+                    Se precisa Urgente
+                </span>
+                <span class="fc_dest">
+                    Empleo destacado
+                </span>
+        </div>
+    <h2 class="fs18 fwB prB">
+        <a class="js-o-link fc_base" href="/ofertas-de-trabajo/oferta-de-trabajo-de-ingenieroa-de-soporte-tecnico-de-campo-proyecto-minero-turno-14x14-en-san-juan-781B8C3175BD0B4B61373E686DCF3405#lc=ListOffers-Score4-2">
+            Ingeniero/a de Soporte T&#xE9;cnico de Campo
+        </a>
+        <div class="tags">
+            <span class="tag postulated hide" applied-offer-tag>
+                <span class="icon i_check_circle_full mr5"></span>
+                Postulado
+            </span>
+            <span class="tag hide" viewed-offer-tag>
+                Vista
+            </span>
+        </div>
+    </h2>
+    <p class="dFlex vm_fx fs16 fc_base mt5">
+            <a class="fc_base t_ellipsis" href="https://ar.computrabajo.com/empresas/ofertas-de-trabajo-de-cummins-argentina-sa-369AAC6DB100E1FD" target='_blank' offer-grid-article-company-url>
+                Cummins Argentina SA
+            </a>
+    </p>
+    <p class="fs16 fc_base mt5">
+        <span class="mr10">
+            San Juan, San Juan
+        </span>
+    </p>
+    <p class="fs13 fc_aux mt15">
+        Hace  21  horas
+    </p>
+    <div class="opt_dots" shortcut-show>
+        <div class="opt_bubble" shortcut-child>
+            <span data-href-access="https://candidato.ar.computrabajo.com/acceso/" data-href-offer-apply="https://candidato.ar.computrabajo.com/candidate/apply/?oi=781B8C3175BD0B4B61373E686DCF3405&amp;p=280&amp;idb=1&amp;d=32" class="dB fc_base it-blank mb5" shortcut-apply-ac oi="781B8C3175BD0B4B61373E686DCF3405" event-ga label-ga="Shortcuts_postular">
+                <span class="icon i_postular mr5"></span>
+                Postular
+            </span>
+            <span class="dB fc_base it-blank cp mb5" shortcut-favorite oi="781B8C3175BD0B4B61373E686DCF3405" event-ga label-ga="Shortcuts_favoritos">
+                <span class="icon i_fav mr5"></span>
+                Guardar en Mis favoritos
+            </span>
+            <span class="dB fc_base it-blank cp mb5" shortcut-report oi="781B8C3175BD0B4B61373E686DCF3405" pc="7A02BC8BFD169A2F" event-ga label-ga="Shortcuts_denunciar">
+                <span class="icon i_report mr5"></span>
+                Denunciar empleo
+            </span>
+            <span class="dB fc_base it-blank cp" shortcut-hide data-oi="781B8C3175BD0B4B61373E686DCF3405" event-ga label-ga="Shortcuts_hide">
+                <span class="icon i_ocultar mr5"></span>
+                Ocultar aviso
+            </span>
+        </div>
+    </div>
+    <div class="box_show_offer hide" remove-hide-div>
+        <p>
+            Oferta oculta
+        </p>
+        <div class="b_primary_inv" remove-hide>
+            <span class="icon i_ocultar mr5"></span>
+            Mostrar oferta
+        </div>
+    </div>
+</article>
+            <div id="dfpgrid27"></div>
+            <div id="dfpgrid1_1" class="mb10"></div>
+        <article class="box_offer  outstanding" data-id='8A4D2BDD8CA6858061373E686DCF3405' data-blind="false" id="8A4D2BDD8CA6858061373E686DCF3405" data-lc="ListOffers-Score4-3" data-offers-grid-offer-item-container>
+        <div class="list_dot mb15">
+                <span class="fc_urgent">
+                    Se precisa Urgente
+                </span>
+                <span class="fc_dest">
+                    Empleo destacado
+                </span>
+        </div>
+    <h2 class="fs18 fwB prB">
+        <a class="js-o-link fc_base" href="/ofertas-de-trabajo/oferta-de-trabajo-de-tecnico-informatico-soporte-tecnico-y-administracion-de-servidores-en-neuquen-8A4D2BDD8CA6858061373E686DCF3405#lc=ListOffers-Score4-3">
+            T&#xE9;cnico inform&#xE1;tico
+        </a>
+        <div class="tags">
+            <span class="tag postulated hide" applied-offer-tag>
+                <span class="icon i_check_circle_full mr5"></span>
+                Postulado
+            </span>
+            <span class="tag hide" viewed-offer-tag>
+                Vista
+            </span>
+        </div>
+    </h2>
+    <p class="dFlex vm_fx fs16 fc_base mt5">
+            <a class="fc_base t_ellipsis" href="https://ar.computrabajo.com/empresas/ofertas-de-trabajo-de-itsur-D9CD602D4B1B5FD8" target='_blank' offer-grid-article-company-url>
+                ITSur
+            </a>
+    </p>
+    <p class="fs16 fc_base mt5">
+        <span class="mr10">
+            Neuquen, Neuqu&#xE9;n
+        </span>
+    </p>
+        <div class="fs13 mt15">
+                <span class="dIB mr10">
+                    <span class="icon i_salary"></span>
+                    $ 1.200.000,00 (Mensual)
+                </span>
+        </div>
+    <p class="fs13 fc_aux mt15">
+        Hace  21  horas
+    </p>
+    <div class="opt_dots" shortcut-show>
+        <div class="opt_bubble" shortcut-child>
+            <span data-href-access="https://candidato.ar.computrabajo.com/acceso/" data-href-offer-apply="https://candidato.ar.computrabajo.com/candidate/apply/?oi=8A4D2BDD8CA6858061373E686DCF3405&amp;p=280&amp;idb=1&amp;d=32" class="dB fc_base it-blank mb5" shortcut-apply-ac oi="8A4D2BDD8CA6858061373E686DCF3405" event-ga label-ga="Shortcuts_postular">
+                <span class="icon i_postular mr5"></span>
+                Postular
+            </span>
+            <span class="dB fc_base it-blank cp mb5" shortcut-favorite oi="8A4D2BDD8CA6858061373E686DCF3405" event-ga label-ga="Shortcuts_favoritos">
+                <span class="icon i_fav mr5"></span>
+                Guardar en Mis favoritos
+            </span>
+            <span class="dB fc_base it-blank cp mb5" shortcut-report oi="8A4D2BDD8CA6858061373E686DCF3405" pc="7A02BC8BFD169A2F" event-ga label-ga="Shortcuts_denunciar">
+                <span class="icon i_report mr5"></span>
+                Denunciar empleo
+            </span>
+            <span class="dB fc_base it-blank cp" shortcut-hide data-oi="8A4D2BDD8CA6858061373E686DCF3405" event-ga label-ga="Shortcuts_hide">
+                <span class="icon i_ocultar mr5"></span>
+                Ocultar aviso
+            </span>
+        </div>
+    </div>
+    <div class="box_show_offer hide" remove-hide-div>
+        <p>
+            Oferta oculta
+        </p>
+        <div class="b_primary_inv" remove-hide>
+            <span class="icon i_ocultar mr5"></span>
+            Mostrar oferta
+        </div>
+    </div>
+</article>
+        <article class="box_offer  " data-id='93AD7825ED8F7D9661373E686DCF3405' data-blind="false" id="93AD7825ED8F7D9661373E686DCF3405" data-lc="ListOffers-Score4-4" data-offers-grid-offer-item-container>
+    <h2 class="fs18 fwB prB">
+        <a class="js-o-link fc_base" href="/ofertas-de-trabajo/oferta-de-trabajo-de-soporte-tecnico-digital-en-recoleta-93AD7825ED8F7D9661373E686DCF3405#lc=ListOffers-Score4-4">
+            Soporte t&#xE9;cnico digital
+        </a>
+        <div class="tags">
+            <span class="tag postulated hide" applied-offer-tag>
+                <span class="icon i_check_circle_full mr5"></span>
+                Postulado
+            </span>
+            <span class="tag hide" viewed-offer-tag>
+                Vista
+            </span>
+        </div>
+    </h2>
+    <p class="dFlex vm_fx fs16 fc_base mt5">
+            <span class="fx_none mr10">
+                <span class="fwB">
+                    4,1
+                </span>
+                <span class="star"></span>
+            </span>
+            <span class="icon i_verificada mr5"></span>
+            <a class="fc_base t_ellipsis" href="https://ar.computrabajo.com/grupogestion" target='_blank' offer-grid-article-company-url>
+                Grupo Gesti&#xF3;n
+            </a>
+    </p>
+    <p class="fs16 fc_base mt5">
+        <span class="mr10">
+            Recoleta, Capital Federal
+        </span>
+    </p>
+    <p class="fs13 fc_aux mt15">
+        Ayer
+    </p>
+    <div class="opt_dots" shortcut-show>
+        <div class="opt_bubble" shortcut-child>
+            <span data-href-access="https://candidato.ar.computrabajo.com/acceso/" data-href-offer-apply="https://candidato.ar.computrabajo.com/candidate/apply/?oi=93AD7825ED8F7D9661373E686DCF3405&amp;p=280&amp;idb=1&amp;d=32" class="dB fc_base it-blank mb5" shortcut-apply-ac oi="93AD7825ED8F7D9661373E686DCF3405" event-ga label-ga="Shortcuts_postular">
+                <span class="icon i_postular mr5"></span>
+                Postular
+            </span>
+            <span class="dB fc_base it-blank cp mb5" shortcut-favorite oi="93AD7825ED8F7D9661373E686DCF3405" event-ga label-ga="Shortcuts_favoritos">
+                <span class="icon i_fav mr5"></span>
+                Guardar en Mis favoritos
+            </span>
+            <span class="dB fc_base it-blank cp mb5" shortcut-report oi="93AD7825ED8F7D9661373E686DCF3405" pc="96D1C1E18881EABE" event-ga label-ga="Shortcuts_denunciar">
+                <span class="icon i_report mr5"></span>
+                Denunciar empleo
+            </span>
+            <span class="dB fc_base it-blank cp" shortcut-hide data-oi="93AD7825ED8F7D9661373E686DCF3405" event-ga label-ga="Shortcuts_hide">
+                <span class="icon i_ocultar mr5"></span>
+                Ocultar aviso
+            </span>
+        </div>
+    </div>
+    <div class="box_show_offer hide" remove-hide-div>
+        <p>
+            Oferta oculta
+        </p>
+        <div class="b_primary_inv" remove-hide>
+            <span class="icon i_ocultar mr5"></span>
+            Mostrar oferta
+        </div>
+    </div>
+</article>
+        <article class="box_offer  " data-id='468135FE5211CF0E61373E686DCF3405' data-blind="false" id="468135FE5211CF0E61373E686DCF3405" data-lc="ListOffers-Score4-5" data-offers-grid-offer-item-container>
+    <h2 class="fs18 fwB prB">
+        <a class="js-o-link fc_base" href="/ofertas-de-trabajo/oferta-de-trabajo-de-coordinador-soporte-tecnico-it-roster-14-x-14-san-juan-en-san-juan-468135FE5211CF0E61373E686DCF3405#lc=ListOffers-Score4-5">
+            Coordinador Soporte T&#xE9;cnico IT / Roster / 14 x 14 / San Juan
+        </a>
+        <div class="tags">
+            <span class="tag postulated hide" applied-offer-tag>
+                <span class="icon i_check_circle_full mr5"></span>
+                Postulado
+            </span>
+            <span class="tag hide" viewed-offer-tag>
+                Vista
+            </span>
+        </div>
+    </h2>
+    <p class="dFlex vm_fx fs16 fc_base mt5">
+            <span class="fx_none mr10">
+                <span class="fwB">
+                    4,1
+                </span>
+                <span class="star"></span>
+            </span>
+            <span class="icon i_verificada mr5"></span>
+            <a class="fc_base t_ellipsis" href="https://ar.computrabajo.com/yelsolutions" target='_blank' offer-grid-article-company-url>
+                Yel 
+            </a>
+    </p>
+    <p class="fs16 fc_base mt5">
+        <span class="mr10">
+            San Juan, San Juan
+        </span>
+    </p>
+    <p class="fs13 fc_aux mt15">
+        Hace  2  d&#xED;as
+    </p>
+    <div class="opt_dots" shortcut-show>
+        <div class="opt_bubble" shortcut-child>
+            <span data-href-access="https://candidato.ar.computrabajo.com/acceso/" data-href-offer-apply="https://candidato.ar.computrabajo.com/candidate/apply/?oi=468135FE5211CF0E61373E686DCF3405&amp;p=280&amp;idb=1&amp;d=32" class="dB fc_base it-blank mb5" shortcut-apply-ac oi="468135FE5211CF0E61373E686DCF3405" event-ga label-ga="Shortcuts_postular">
+                <span class="icon i_postular mr5"></span>
+                Postular
+            </span>
+            <span class="dB fc_base it-blank cp mb5" shortcut-favorite oi="468135FE5211CF0E61373E686DCF3405" event-ga label-ga="Shortcuts_favoritos">
+                <span class="icon i_fav mr5"></span>
+                Guardar en Mis favoritos
+            </span>
+            <span class="dB fc_base it-blank cp mb5" shortcut-report oi="468135FE5211CF0E61373E686DCF3405" pc="96D1C1E18881EABE" event-ga label-ga="Shortcuts_denunciar">
+                <span class="icon i_report mr5"></span>
+                Denunciar empleo
+            </span>
+            <span class="dB fc_base it-blank cp" shortcut-hide data-oi="468135FE5211CF0E61373E686DCF3405" event-ga label-ga="Shortcuts_hide">
+                <span class="icon i_ocultar mr5"></span>
+                Ocultar aviso
+            </span>
+        </div>
+    </div>
+    <div class="box_show_offer hide" remove-hide-div>
+        <p>
+            Oferta oculta
+        </p>
+        <div class="b_primary_inv" remove-hide>
+            <span class="icon i_ocultar mr5"></span>
+            Mostrar oferta
+        </div>
+    </div>
+</article>
+        <article class="box_offer  " data-id='284A61647A0AE7FD61373E686DCF3405' data-blind="false" id="284A61647A0AE7FD61373E686DCF3405" data-lc="ListOffers-Score4-6" data-offers-grid-offer-item-container>
+    <h2 class="fs18 fwB prB">
+        <a class="js-o-link fc_base" href="/ofertas-de-trabajo/oferta-de-trabajo-de-coordinador-soporte-tecnico-it-roster-14-x-14-san-juan-en-barracas-284A61647A0AE7FD61373E686DCF3405#lc=ListOffers-Score4-6">
+            Coordinador Soporte T&#xE9;cnico IT / Roster / 14 x 14 / San Juan
+        </a>
+        <div class="tags">
+            <span class="tag postulated hide" applied-offer-tag>
+                <span class="icon i_check_circle_full mr5"></span>
+                Postulado
+            </span>
+            <span class="tag hide" viewed-offer-tag>
+                Vista
+            </span>
+        </div>
+    </h2>
+    <p class="dFlex vm_fx fs16 fc_base mt5">
+            <span class="fx_none mr10">
+                <span class="fwB">
+                    4,1
+                </span>
+                <span class="star"></span>
+            </span>
+            <span class="icon i_verificada mr5"></span>
+            <a class="fc_base t_ellipsis" href="https://ar.computrabajo.com/yelsolutions" target='_blank' offer-grid-article-company-url>
+                Yel 
+            </a>
+    </p>
+    <p class="fs16 fc_base mt5">
+        <span class="mr10">
+            Barracas, Capital Federal
+        </span>
+    </p>
+    <p class="fs13 fc_aux mt15">
+        Hace  2  d&#xED;as
+    </p>
+    <div class="opt_dots" shortcut-show>
+        <div class="opt_bubble" shortcut-child>
+            <span data-href-access="https://candidato.ar.computrabajo.com/acceso/" data-href-offer-apply="https://candidato.ar.computrabajo.com/candidate/apply/?oi=284A61647A0AE7FD61373E686DCF3405&amp;p=280&amp;idb=1&amp;d=32" class="dB fc_base it-blank mb5" shortcut-apply-ac oi="284A61647A0AE7FD61373E686DCF3405" event-ga label-ga="Shortcuts_postular">
+                <span class="icon i_postular mr5"></span>
+                Postular
+            </span>
+            <span class="dB fc_base it-blank cp mb5" shortcut-favorite oi="284A61647A0AE7FD61373E686DCF3405" event-ga label-ga="Shortcuts_favoritos">
+                <span class="icon i_fav mr5"></span>
+                Guardar en Mis favoritos
+            </span>
+            <span class="dB fc_base it-blank cp mb5" shortcut-report oi="284A61647A0AE7FD61373E686DCF3405" pc="96D1C1E18881EABE" event-ga label-ga="Shortcuts_denunciar">
+                <span class="icon i_report mr5"></span>
+                Denunciar empleo
+            </span>
+            <span class="dB fc_base it-blank cp" shortcut-hide data-oi="284A61647A0AE7FD61373E686DCF3405" event-ga label-ga="Shortcuts_hide">
+                <span class="icon i_ocultar mr5"></span>
+                Ocultar aviso
+            </span>
+        </div>
+    </div>
+    <div class="box_show_offer hide" remove-hide-div>
+        <p>
+            Oferta oculta
+        </p>
+        <div class="b_primary_inv" remove-hide>
+            <span class="icon i_ocultar mr5"></span>
+            Mostrar oferta
+        </div>
+    </div>
+</article>
+        <article class="box_offer  " data-id='095DAC7302232CCD61373E686DCF3405' data-blind="false" id="095DAC7302232CCD61373E686DCF3405" data-lc="ListOffers-Score4-7" data-offers-grid-offer-item-container>
+    <h2 class="fs18 fwB prB">
+        <a class="js-o-link fc_base" href="/ofertas-de-trabajo/oferta-de-trabajo-de-soporte-tecnico-it-en-colegiales-095DAC7302232CCD61373E686DCF3405#lc=ListOffers-Score4-7">
+            Soporte t&#xE9;cnico IT
+        </a>
+        <div class="tags">
+            <span class="tag postulated hide" applied-offer-tag>
+                <span class="icon i_check_circle_full mr5"></span>
+                Postulado
+            </span>
+            <span class="tag hide" viewed-offer-tag>
+                Vista
+            </span>
+        </div>
+    </h2>
+    <p class="dFlex vm_fx fs16 fc_base mt5">
+Importante empresa del sector salud    </p>
+    <p class="fs16 fc_base mt5">
+        <span class="mr10">
+            Colegiales, Capital Federal
+        </span>
+    </p>
+    <p class="fs13 fc_aux mt15">
+        Ayer
+    </p>
+    <div class="opt_dots" shortcut-show>
+        <div class="opt_bubble" shortcut-child>
+            <span data-href-access="https://candidato.ar.computrabajo.com/acceso/" data-href-offer-apply="https://candidato.ar.computrabajo.com/candidate/apply/?oi=095DAC7302232CCD61373E686DCF3405&amp;p=280&amp;idb=1&amp;d=32" class="dB fc_base it-blank mb5" shortcut-apply-ac oi="095DAC7302232CCD61373E686DCF3405" event-ga label-ga="Shortcuts_postular">
+                <span class="icon i_postular mr5"></span>
+                Postular
+            </span>
+            <span class="dB fc_base it-blank cp mb5" shortcut-favorite oi="095DAC7302232CCD61373E686DCF3405" event-ga label-ga="Shortcuts_favoritos">
+                <span class="icon i_fav mr5"></span>
+                Guardar en Mis favoritos
+            </span>
+            <span class="dB fc_base it-blank cp mb5" shortcut-report oi="095DAC7302232CCD61373E686DCF3405" pc="96D1C1E18881EABE" event-ga label-ga="Shortcuts_denunciar">
+                <span class="icon i_report mr5"></span>
+                Denunciar empleo
+            </span>
+            <span class="dB fc_base it-blank cp" shortcut-hide data-oi="095DAC7302232CCD61373E686DCF3405" event-ga label-ga="Shortcuts_hide">
+                <span class="icon i_ocultar mr5"></span>
+                Ocultar aviso
+            </span>
+        </div>
+    </div>
+    <div class="box_show_offer hide" remove-hide-div>
+        <p>
+            Oferta oculta
+        </p>
+        <div class="b_primary_inv" remove-hide>
+            <span class="icon i_ocultar mr5"></span>
+            Mostrar oferta
+        </div>
+    </div>
+</article>
+            <div id="dfpgrid1_2" class="mb10"></div>
+        <article class="box_offer  " data-id='71FFBC857FCFC46061373E686DCF3405' data-blind="false" id="71FFBC857FCFC46061373E686DCF3405" data-lc="ListOffers-Score4-8" data-offers-grid-offer-item-container>
+    <h2 class="fs18 fwB prB">
+        <a class="js-o-link fc_base" href="/ofertas-de-trabajo/oferta-de-trabajo-de-field-support-it-soporte-tecnico-informatico-ssr-pilar-presencial-lunes-a-viernes-de-8-a-17hs-en-pilar-71FFBC857FCFC46061373E686DCF3405#lc=ListOffers-Score4-8">
+            Field Support IT Soporte Tecnico Informatico Ssr Pilar Presencial
+        </a>
+        <div class="tags">
+            <span class="tag postulated hide" applied-offer-tag>
+                <span class="icon i_check_circle_full mr5"></span>
+                Postulado
+            </span>
+            <span class="tag hide" viewed-offer-tag>
+                Vista
+            </span>
+        </div>
+    </h2>
+    <p class="dFlex vm_fx fs16 fc_base mt5">
+            <span class="fx_none mr10">
+                <span class="fwB">
+                    4,1
+                </span>
+                <span class="star"></span>
+            </span>
+            <span class="icon i_verificada mr5"></span>
+            <a class="fc_base t_ellipsis" href="https://ar.computrabajo.com/yelsolutions" target='_blank' offer-grid-article-company-url>
+                Yel 
+            </a>
+    </p>
+    <p class="fs16 fc_base mt5">
+        <span class="mr10">
+            Pilar, Buenos Aires
+        </span>
+    </p>
+    <p class="fs13 fc_aux mt15">
+        Hace  2  d&#xED;as
+    </p>
+    <div class="opt_dots" shortcut-show>
+        <div class="opt_bubble" shortcut-child>
+            <span data-href-access="https://candidato.ar.computrabajo.com/acceso/" data-href-offer-apply="https://candidato.ar.computrabajo.com/candidate/apply/?oi=71FFBC857FCFC46061373E686DCF3405&amp;p=280&amp;idb=1&amp;d=32" class="dB fc_base it-blank mb5" shortcut-apply-ac oi="71FFBC857FCFC46061373E686DCF3405" event-ga label-ga="Shortcuts_postular">
+                <span class="icon i_postular mr5"></span>
+                Postular
+            </span>
+            <span class="dB fc_base it-blank cp mb5" shortcut-favorite oi="71FFBC857FCFC46061373E686DCF3405" event-ga label-ga="Shortcuts_favoritos">
+                <span class="icon i_fav mr5"></span>
+                Guardar en Mis favoritos
+            </span>
+            <span class="dB fc_base it-blank cp mb5" shortcut-report oi="71FFBC857FCFC46061373E686DCF3405" pc="96D1C1E18881EABE" event-ga label-ga="Shortcuts_denunciar">
+                <span class="icon i_report mr5"></span>
+                Denunciar empleo
+            </span>
+            <span class="dB fc_base it-blank cp" shortcut-hide data-oi="71FFBC857FCFC46061373E686DCF3405" event-ga label-ga="Shortcuts_hide">
+                <span class="icon i_ocultar mr5"></span>
+                Ocultar aviso
+            </span>
+        </div>
+    </div>
+    <div class="box_show_offer hide" remove-hide-div>
+        <p>
+            Oferta oculta
+        </p>
+        <div class="b_primary_inv" remove-hide>
+            <span class="icon i_ocultar mr5"></span>
+            Mostrar oferta
+        </div>
+    </div>
+</article>
+        <article class="box_offer  outstanding" data-id='7AD6C0DC79D0802C61373E686DCF3405' data-blind="false" id="7AD6C0DC79D0802C61373E686DCF3405" data-lc="ListOffers-Score4-9" data-offers-grid-offer-item-container>
+        <div class="list_dot mb15">
+                <span class="fc_dest">
+                    Empleo destacado
+                </span>
+        </div>
+    <h2 class="fs18 fwB prB">
+        <a class="js-o-link fc_base" href="/ofertas-de-trabajo/oferta-de-trabajo-de-representante-de-customer-experience-para-soporte-tecnico-en-cordoba-7AD6C0DC79D0802C61373E686DCF3405#lc=ListOffers-Score4-9">
+            Representante de Customer Experience para Soporte T&#xE9;cnico
+        </a>
+        <div class="tags">
+            <span class="tag postulated hide" applied-offer-tag>
+                <span class="icon i_check_circle_full mr5"></span>
+                Postulado
+            </span>
+            <span class="tag hide" viewed-offer-tag>
+                Vista
+            </span>
+        </div>
+    </h2>
+    <p class="dFlex vm_fx fs16 fc_base mt5">
+            <span class="fx_none mr10">
+                <span class="fwB">
+                    4,5
+                </span>
+                <span class="star"></span>
+            </span>
+            <span class="icon i_verificada mr5"></span>
+            <a class="fc_base t_ellipsis" href="https://ar.computrabajo.com/apexamerica" target='_blank' offer-grid-article-company-url>
+                APEX America
+            </a>
+    </p>
+    <p class="fs16 fc_base mt5">
+        <span class="mr10">
+            C&#xF3;rdoba, C&#xF3;rdoba
+        </span>
+    </p>
+    <p class="fs13 fc_aux mt15">
+        Ayer
+    </p>
+    <div class="opt_dots" shortcut-show>
+        <div class="opt_bubble" shortcut-child>
+            <span data-href-access="https://candidato.ar.computrabajo.com/acceso/" data-href-offer-apply="https://candidato.ar.computrabajo.com/candidate/apply/?oi=7AD6C0DC79D0802C61373E686DCF3405&amp;p=280&amp;idb=1&amp;d=32" class="dB fc_base it-blank mb5" shortcut-apply-ac oi="7AD6C0DC79D0802C61373E686DCF3405" event-ga label-ga="Shortcuts_postular">
+                <span class="icon i_postular mr5"></span>
+                Postular
+            </span>
+            <span class="dB fc_base it-blank cp mb5" shortcut-favorite oi="7AD6C0DC79D0802C61373E686DCF3405" event-ga label-ga="Shortcuts_favoritos">
+                <span class="icon i_fav mr5"></span>
+                Guardar en Mis favoritos
+            </span>
+            <span class="dB fc_base it-blank cp mb5" shortcut-report oi="7AD6C0DC79D0802C61373E686DCF3405" pc="96D1C1E18881EABE" event-ga label-ga="Shortcuts_denunciar">
+                <span class="icon i_report mr5"></span>
+                Denunciar empleo
+            </span>
+            <span class="dB fc_base it-blank cp" shortcut-hide data-oi="7AD6C0DC79D0802C61373E686DCF3405" event-ga label-ga="Shortcuts_hide">
+                <span class="icon i_ocultar mr5"></span>
+                Ocultar aviso
+            </span>
+        </div>
+    </div>
+    <div class="box_show_offer hide" remove-hide-div>
+        <p>
+            Oferta oculta
+        </p>
+        <div class="b_primary_inv" remove-hide>
+            <span class="icon i_ocultar mr5"></span>
+            Mostrar oferta
+        </div>
+    </div>
+</article>
+        <article class="box_offer  " data-id='86CE5C33BF17A1B761373E686DCF3405' data-blind="false" id="86CE5C33BF17A1B761373E686DCF3405" data-lc="ListOffers-Score4-10" data-offers-grid-offer-item-container>
+        <div class="list_dot mb15">
+                <span class="fc_urgent">
+                    Se precisa Urgente
+                </span>
+        </div>
+    <h2 class="fs18 fwB prB">
+        <a class="js-o-link fc_base" href="/ofertas-de-trabajo/oferta-de-trabajo-de-asesor-telefonico-soporte-tecnico-mesa-de-ayuda-en-cordoba-86CE5C33BF17A1B761373E686DCF3405#lc=ListOffers-Score4-10">
+            Asesor Telef&#xF3;nico Soporte T&#xE9;cnico / Mesa de Ayuda
+        </a>
+        <div class="tags">
+            <span class="tag postulated hide" applied-offer-tag>
+                <span class="icon i_check_circle_full mr5"></span>
+                Postulado
+            </span>
+            <span class="tag hide" viewed-offer-tag>
+                Vista
+            </span>
+        </div>
+    </h2>
+    <p class="dFlex vm_fx fs16 fc_base mt5">
+Importante empresa del sector    </p>
+    <p class="fs16 fc_base mt5">
+        <span class="mr10">
+            C&#xF3;rdoba, C&#xF3;rdoba
+        </span>
+    </p>
+    <p class="fs13 fc_aux mt15">
+        Ayer
+    </p>
+    <div class="opt_dots" shortcut-show>
+        <div class="opt_bubble" shortcut-child>
+            <span data-href-access="https://candidato.ar.computrabajo.com/acceso/" data-href-offer-apply="https://candidato.ar.computrabajo.com/candidate/apply/?oi=86CE5C33BF17A1B761373E686DCF3405&amp;p=280&amp;idb=1&amp;d=32" class="dB fc_base it-blank mb5" shortcut-apply-ac oi="86CE5C33BF17A1B761373E686DCF3405" event-ga label-ga="Shortcuts_postular">
+                <span class="icon i_postular mr5"></span>
+                Postular
+            </span>
+            <span class="dB fc_base it-blank cp mb5" shortcut-favorite oi="86CE5C33BF17A1B761373E686DCF3405" event-ga label-ga="Shortcuts_favoritos">
+                <span class="icon i_fav mr5"></span>
+                Guardar en Mis favoritos
+            </span>
+            <span class="dB fc_base it-blank cp mb5" shortcut-report oi="86CE5C33BF17A1B761373E686DCF3405" pc="96D1C1E18881EABE" event-ga label-ga="Shortcuts_denunciar">
+                <span class="icon i_report mr5"></span>
+                Denunciar empleo
+            </span>
+            <span class="dB fc_base it-blank cp" shortcut-hide data-oi="86CE5C33BF17A1B761373E686DCF3405" event-ga label-ga="Shortcuts_hide">
+                <span class="icon i_ocultar mr5"></span>
+                Ocultar aviso
+            </span>
+        </div>
+    </div>
+    <div class="box_show_offer hide" remove-hide-div>
+        <p>
+            Oferta oculta
+        </p>
+        <div class="b_primary_inv" remove-hide>
+            <span class="icon i_ocultar mr5"></span>
+            Mostrar oferta
+        </div>
+    </div>
+</article>
+        <article class="box_offer  " data-id='0AC33AAF30B1C92661373E686DCF3405' data-blind="false" id="0AC33AAF30B1C92661373E686DCF3405" data-lc="ListOffers-Score4-11" data-offers-grid-offer-item-container>
+        <div class="list_dot mb15">
+                <span class="fc_urgent">
+                    Se precisa Urgente
+                </span>
+        </div>
+    <h2 class="fs18 fwB prB">
+        <a class="js-o-link fc_base" href="/ofertas-de-trabajo/oferta-de-trabajo-de-representante-de-atencion-tecnica-cordoba-perfil-soporte-tecnico-en-cordoba-0AC33AAF30B1C92661373E686DCF3405#lc=ListOffers-Score4-11">
+            Representante de atenci&#xF3;n t&#xE9;cnica C&#xF3;rdoba Perfil soporte t&#xE9;cnico
+        </a>
+        <div class="tags">
+            <span class="tag postulated hide" applied-offer-tag>
+                <span class="icon i_check_circle_full mr5"></span>
+                Postulado
+            </span>
+            <span class="tag hide" viewed-offer-tag>
+                Vista
+            </span>
+        </div>
+    </h2>
+    <p class="dFlex vm_fx fs16 fc_base mt5">
+            <span class="fx_none mr10">
+                <span class="fwB">
+                    4,4
+                </span>
+                <span class="star"></span>
+            </span>
+            <span class="icon i_verificada mr5"></span>
+            <a class="fc_base t_ellipsis" href="https://ar.computrabajo.com/allusahoraeskonecta" target='_blank' offer-grid-article-company-url>
+                Konecta
+            </a>
+    </p>
+    <p class="fs16 fc_base mt5">
+        <span class="mr10">
+            C&#xF3;rdoba, C&#xF3;rdoba
+        </span>
+    </p>
+    <p class="fs13 fc_aux mt15">
+        Ayer
+    </p>
+    <div class="opt_dots" shortcut-show>
+        <div class="opt_bubble" shortcut-child>
+            <span data-href-access="https://candidato.ar.computrabajo.com/acceso/" data-href-offer-apply="https://candidato.ar.computrabajo.com/candidate/apply/?oi=0AC33AAF30B1C92661373E686DCF3405&amp;p=280&amp;idb=1&amp;d=32" class="dB fc_base it-blank mb5" shortcut-apply-ac oi="0AC33AAF30B1C92661373E686DCF3405" event-ga label-ga="Shortcuts_postular">
+                <span class="icon i_postular mr5"></span>
+                Postular
+            </span>
+            <span class="dB fc_base it-blank cp mb5" shortcut-favorite oi="0AC33AAF30B1C92661373E686DCF3405" event-ga label-ga="Shortcuts_favoritos">
+                <span class="icon i_fav mr5"></span>
+                Guardar en Mis favoritos
+            </span>
+            <span class="dB fc_base it-blank cp mb5" shortcut-report oi="0AC33AAF30B1C92661373E686DCF3405" pc="96D1C1E18881EABE" event-ga label-ga="Shortcuts_denunciar">
+                <span class="icon i_report mr5"></span>
+                Denunciar empleo
+            </span>
+            <span class="dB fc_base it-blank cp" shortcut-hide data-oi="0AC33AAF30B1C92661373E686DCF3405" event-ga label-ga="Shortcuts_hide">
+                <span class="icon i_ocultar mr5"></span>
+                Ocultar aviso
+            </span>
+        </div>
+    </div>
+    <div class="box_show_offer hide" remove-hide-div>
+        <p>
+            Oferta oculta
+        </p>
+        <div class="b_primary_inv" remove-hide>
+            <span class="icon i_ocultar mr5"></span>
+            Mostrar oferta
+        </div>
+    </div>
+</article>
+        <article class="box_offer  " data-id='5573D752CE6DB60E61373E686DCF3405' data-blind="false" id="5573D752CE6DB60E61373E686DCF3405" data-lc="ListOffers-Score4-12" data-offers-grid-offer-item-container>
+    <h2 class="fs18 fwB prB">
+        <a class="js-o-link fc_base" href="/ofertas-de-trabajo/oferta-de-trabajo-de-soporte-tecnico-onsite-ssr-en-ezeiza-5573D752CE6DB60E61373E686DCF3405#lc=ListOffers-Score4-12">
+            Soporte T&#xE9;cnico Onsite Ssr
+        </a>
+        <div class="tags">
+            <span class="tag postulated hide" applied-offer-tag>
+                <span class="icon i_check_circle_full mr5"></span>
+                Postulado
+            </span>
+            <span class="tag hide" viewed-offer-tag>
+                Vista
+            </span>
+        </div>
+    </h2>
+    <p class="dFlex vm_fx fs16 fc_base mt5">
+            <span class="fx_none mr10">
+                <span class="fwB">
+                    4,2
+                </span>
+                <span class="star"></span>
+            </span>
+            <span class="icon i_verificada mr5"></span>
+            <a class="fc_base t_ellipsis" href="https://ar.computrabajo.com/ecosistemas" target='_blank' offer-grid-article-company-url>
+                Ecosistemas
+            </a>
+    </p>
+    <p class="fs16 fc_base mt5">
+        <span class="mr10">
+            Ezeiza, Buenos Aires-GBA
+        </span>
+    </p>
+    <p class="fs13 fc_aux mt15">
+        Ayer
+    </p>
+    <div class="opt_dots" shortcut-show>
+        <div class="opt_bubble" shortcut-child>
+            <span data-href-access="https://candidato.ar.computrabajo.com/acceso/" data-href-offer-apply="https://candidato.ar.computrabajo.com/candidate/apply/?oi=5573D752CE6DB60E61373E686DCF3405&amp;p=280&amp;idb=1&amp;d=32" class="dB fc_base it-blank mb5" shortcut-apply-ac oi="5573D752CE6DB60E61373E686DCF3405" event-ga label-ga="Shortcuts_postular">
+                <span class="icon i_postular mr5"></span>
+                Postular
+            </span>
+            <span class="dB fc_base it-blank cp mb5" shortcut-favorite oi="5573D752CE6DB60E61373E686DCF3405" event-ga label-ga="Shortcuts_favoritos">
+                <span class="icon i_fav mr5"></span>
+                Guardar en Mis favoritos
+            </span>
+            <span class="dB fc_base it-blank cp mb5" shortcut-report oi="5573D752CE6DB60E61373E686DCF3405" pc="96D1C1E18881EABE" event-ga label-ga="Shortcuts_denunciar">
+                <span class="icon i_report mr5"></span>
+                Denunciar empleo
+            </span>
+            <span class="dB fc_base it-blank cp" shortcut-hide data-oi="5573D752CE6DB60E61373E686DCF3405" event-ga label-ga="Shortcuts_hide">
+                <span class="icon i_ocultar mr5"></span>
+                Ocultar aviso
+            </span>
+        </div>
+    </div>
+    <div class="box_show_offer hide" remove-hide-div>
+        <p>
+            Oferta oculta
+        </p>
+        <div class="b_primary_inv" remove-hide>
+            <span class="icon i_ocultar mr5"></span>
+            Mostrar oferta
+        </div>
+    </div>
+</article>
+            <div id="dfpgrid1_3" class="mb10"></div>
+        <article class="box_offer  " data-id='CB481015D95A5A6761373E686DCF3405' data-blind="false" id="CB481015D95A5A6761373E686DCF3405" data-lc="ListOffers-Score4-13" data-offers-grid-offer-item-container>
+    <h2 class="fs18 fwB prB">
+        <a class="js-o-link fc_base" href="/ofertas-de-trabajo/oferta-de-trabajo-de-analista-de-soporte-tecnico-a-usuarios-vicente-lopez-parque-patricios-en-parque-patricios-CB481015D95A5A6761373E686DCF3405#lc=ListOffers-Score4-13">
+            Analista de Soporte T&#xE9;cnico a Usuarios &#x2013; Vicente L&#xF3;pez / Parque Patricios
+        </a>
+        <div class="tags">
+            <span class="tag postulated hide" applied-offer-tag>
+                <span class="icon i_check_circle_full mr5"></span>
+                Postulado
+            </span>
+            <span class="tag hide" viewed-offer-tag>
+                Vista
+            </span>
+        </div>
+    </h2>
+    <p class="dFlex vm_fx fs16 fc_base mt5">
+            <a class="fc_base t_ellipsis" href="https://ar.computrabajo.com/empresas/ofertas-de-trabajo-de-tecnosop-6913CD7703705901" target='_blank' offer-grid-article-company-url>
+                Tecnosop
+            </a>
+    </p>
+    <p class="fs16 fc_base mt5">
+        <span class="mr10">
+            Parque Patricios, Capital Federal
+        </span>
+    </p>
+        <div class="fs13 mt15">
+                <span class="dIB mr10">
+                    <span class="icon i_home_office"></span>
+                    Presencial y remoto
+                </span>
+        </div>
+    <p class="fs13 fc_aux mt15">
+        Ayer
+    </p>
+    <div class="opt_dots" shortcut-show>
+        <div class="opt_bubble" shortcut-child>
+            <span data-href-access="https://candidato.ar.computrabajo.com/acceso/" data-href-offer-apply="https://candidato.ar.computrabajo.com/candidate/apply/?oi=CB481015D95A5A6761373E686DCF3405&amp;p=280&amp;idb=1&amp;d=32" class="dB fc_base it-blank mb5" shortcut-apply-ac oi="CB481015D95A5A6761373E686DCF3405" event-ga label-ga="Shortcuts_postular">
+                <span class="icon i_postular mr5"></span>
+                Postular
+            </span>
+            <span class="dB fc_base it-blank cp mb5" shortcut-favorite oi="CB481015D95A5A6761373E686DCF3405" event-ga label-ga="Shortcuts_favoritos">
+                <span class="icon i_fav mr5"></span>
+                Guardar en Mis favoritos
+            </span>
+            <span class="dB fc_base it-blank cp mb5" shortcut-report oi="CB481015D95A5A6761373E686DCF3405" pc="7A02BC8BFD169A2F" event-ga label-ga="Shortcuts_denunciar">
+                <span class="icon i_report mr5"></span>
+                Denunciar empleo
+            </span>
+            <span class="dB fc_base it-blank cp" shortcut-hide data-oi="CB481015D95A5A6761373E686DCF3405" event-ga label-ga="Shortcuts_hide">
+                <span class="icon i_ocultar mr5"></span>
+                Ocultar aviso
+            </span>
+        </div>
+    </div>
+    <div class="box_show_offer hide" remove-hide-div>
+        <p>
+            Oferta oculta
+        </p>
+        <div class="b_primary_inv" remove-hide>
+            <span class="icon i_ocultar mr5"></span>
+            Mostrar oferta
+        </div>
+    </div>
+</article>
+        <article class="box_offer  " data-id='1964B8692B6FA09961373E686DCF3405' data-blind="false" id="1964B8692B6FA09961373E686DCF3405" data-lc="ListOffers-Score4-14" data-offers-grid-offer-item-container>
+        <div class="list_dot mb15">
+                <span class="fc_urgent">
+                    Se precisa Urgente
+                </span>
+        </div>
+    <h2 class="fs18 fwB prB">
+        <a class="js-o-link fc_base" href="/ofertas-de-trabajo/oferta-de-trabajo-de-soporte-tecnico-it-nivel-1-para-call-center-jornada-4x4-en-cordoba-1964B8692B6FA09961373E686DCF3405#lc=ListOffers-Score4-14">
+            Soporte T&#xE9;cnico IT Nivel 1 para Call Center jornada 4x4
+        </a>
+        <div class="tags">
+            <span class="tag postulated hide" applied-offer-tag>
+                <span class="icon i_check_circle_full mr5"></span>
+                Postulado
+            </span>
+            <span class="tag hide" viewed-offer-tag>
+                Vista
+            </span>
+        </div>
+    </h2>
+    <p class="dFlex vm_fx fs16 fc_base mt5">
+            <span class="icon i_verificada mr5"></span>
+            <a class="fc_base t_ellipsis" href="https://ar.computrabajo.com/in.corporate" target='_blank' offer-grid-article-company-url>
+                In.Corporate
+            </a>
+    </p>
+    <p class="fs16 fc_base mt5">
+        <span class="mr10">
+            C&#xF3;rdoba, C&#xF3;rdoba
+        </span>
+    </p>
+    <p class="fs13 fc_aux mt15">
+        Ayer
+    </p>
+    <div class="opt_dots" shortcut-show>
+        <div class="opt_bubble" shortcut-child>
+            <span data-href-access="https://candidato.ar.computrabajo.com/acceso/" data-href-offer-apply="https://candidato.ar.computrabajo.com/candidate/apply/?oi=1964B8692B6FA09961373E686DCF3405&amp;p=280&amp;idb=1&amp;d=32" class="dB fc_base it-blank mb5" shortcut-apply-ac oi="1964B8692B6FA09961373E686DCF3405" event-ga label-ga="Shortcuts_postular">
+                <span class="icon i_postular mr5"></span>
+                Postular
+            </span>
+            <span class="dB fc_base it-blank cp mb5" shortcut-favorite oi="1964B8692B6FA09961373E686DCF3405" event-ga label-ga="Shortcuts_favoritos">
+                <span class="icon i_fav mr5"></span>
+                Guardar en Mis favoritos
+            </span>
+            <span class="dB fc_base it-blank cp mb5" shortcut-report oi="1964B8692B6FA09961373E686DCF3405" pc="96D1C1E18881EABE" event-ga label-ga="Shortcuts_denunciar">
+                <span class="icon i_report mr5"></span>
+                Denunciar empleo
+            </span>
+            <span class="dB fc_base it-blank cp" shortcut-hide data-oi="1964B8692B6FA09961373E686DCF3405" event-ga label-ga="Shortcuts_hide">
+                <span class="icon i_ocultar mr5"></span>
+                Ocultar aviso
+            </span>
+        </div>
+    </div>
+    <div class="box_show_offer hide" remove-hide-div>
+        <p>
+            Oferta oculta
+        </p>
+        <div class="b_primary_inv" remove-hide>
+            <span class="icon i_ocultar mr5"></span>
+            Mostrar oferta
+        </div>
+    </div>
+</article>
+        <article class="box_offer  outstanding" data-id='C7350B7503E9236261373E686DCF3405' data-blind="false" id="C7350B7503E9236261373E686DCF3405" data-lc="ListOffers-Score4-15" data-offers-grid-offer-item-container>
+        <div class="list_dot mb15">
+                <span class="fc_urgent">
+                    Se precisa Urgente
+                </span>
+                <span class="fc_dest">
+                    Empleo destacado
+                </span>
+        </div>
+    <h2 class="fs18 fwB prB">
+        <a class="js-o-link fc_base" href="/ofertas-de-trabajo/oferta-de-trabajo-de-tecnico-soporte-postventa-en-rosario-C7350B7503E9236261373E686DCF3405#lc=ListOffers-Score4-15">
+            Tecnico Soporte Postventa
+        </a>
+        <div class="tags">
+            <span class="tag postulated hide" applied-offer-tag>
+                <span class="icon i_check_circle_full mr5"></span>
+                Postulado
+            </span>
+            <span class="tag hide" viewed-offer-tag>
+                Vista
+            </span>
+        </div>
+    </h2>
+    <p class="dFlex vm_fx fs16 fc_base mt5">
+Importante empresa del sector automotriz    </p>
+    <p class="fs16 fc_base mt5">
+        <span class="mr10">
+            Rosario, Santa Fe
+        </span>
+    </p>
+        <div class="fs13 mt15">
+                <span class="dIB mr10">
+                    <span class="icon i_salary"></span>
+                    $ 1.111.111,00 (Mensual)
+                </span>
+        </div>
+    <p class="fs13 fc_aux mt15">
+        Ayer
+    </p>
+    <div class="opt_dots" shortcut-show>
+        <div class="opt_bubble" shortcut-child>
+            <span data-href-access="https://candidato.ar.computrabajo.com/acceso/" data-href-offer-apply="https://candidato.ar.computrabajo.com/candidate/apply/?oi=C7350B7503E9236261373E686DCF3405&amp;p=280&amp;idb=1&amp;d=32" class="dB fc_base it-blank mb5" shortcut-apply-ac oi="C7350B7503E9236261373E686DCF3405" event-ga label-ga="Shortcuts_postular">
+                <span class="icon i_postular mr5"></span>
+                Postular
+            </span>
+            <span class="dB fc_base it-blank cp mb5" shortcut-favorite oi="C7350B7503E9236261373E686DCF3405" event-ga label-ga="Shortcuts_favoritos">
+                <span class="icon i_fav mr5"></span>
+                Guardar en Mis favoritos
+            </span>
+            <span class="dB fc_base it-blank cp mb5" shortcut-report oi="C7350B7503E9236261373E686DCF3405" pc="7A02BC8BFD169A2F" event-ga label-ga="Shortcuts_denunciar">
+                <span class="icon i_report mr5"></span>
+                Denunciar empleo
+            </span>
+            <span class="dB fc_base it-blank cp" shortcut-hide data-oi="C7350B7503E9236261373E686DCF3405" event-ga label-ga="Shortcuts_hide">
+                <span class="icon i_ocultar mr5"></span>
+                Ocultar aviso
+            </span>
+        </div>
+    </div>
+    <div class="box_show_offer hide" remove-hide-div>
+        <p>
+            Oferta oculta
+        </p>
+        <div class="b_primary_inv" remove-hide>
+            <span class="icon i_ocultar mr5"></span>
+            Mostrar oferta
+        </div>
+    </div>
+</article>
+        <article class="box_offer  " data-id='31742496DF7F135861373E686DCF3405' data-blind="false" id="31742496DF7F135861373E686DCF3405" data-lc="ListOffers-Score4-16" data-offers-grid-offer-item-container>
+    <h2 class="fs18 fwB prB">
+        <a class="js-o-link fc_base" href="/ofertas-de-trabajo/oferta-de-trabajo-de-informaticoa-soporte-tecnico-y-automatizacion-rpa-teletrabajo-se-requiere-conocimiento-de-rpa-y-adspower-en-belgrano-31742496DF7F135861373E686DCF3405#lc=ListOffers-Score4-16">
+            Inform&#xE1;tico/a &#x2013; Soporte T&#xE9;cnico y Automatizaci&#xF3;n RPA (Teletrabajo)
+        </a>
+        <div class="tags">
+            <span class="tag postulated hide" applied-offer-tag>
+                <span class="icon i_check_circle_full mr5"></span>
+                Postulado
+            </span>
+            <span class="tag hide" viewed-offer-tag>
+                Vista
+            </span>
+        </div>
+    </h2>
+    <p class="dFlex vm_fx fs16 fc_base mt5">
+            <a class="fc_base t_ellipsis" href="https://ar.computrabajo.com/tancra-systems-sl" target='_blank' offer-grid-article-company-url>
+                TANCRA Systems S.L.
+            </a>
+    </p>
+    <p class="fs16 fc_base mt5">
+        <span class="mr10">
+            Belgrano, Capital Federal
+        </span>
+    </p>
+        <div class="fs13 mt15">
+                <span class="dIB mr10">
+                    <span class="icon i_home"></span>
+                    Remoto
+                </span>
+        </div>
+    <p class="fs13 fc_aux mt15">
+        Hace  3  d&#xED;as
+    </p>
+    <div class="opt_dots" shortcut-show>
+        <div class="opt_bubble" shortcut-child>
+            <span data-href-access="https://candidato.ar.computrabajo.com/acceso/" data-href-offer-apply="https://candidato.ar.computrabajo.com/candidate/apply/?oi=31742496DF7F135861373E686DCF3405&amp;p=280&amp;idb=1&amp;d=32" class="dB fc_base it-blank mb5" shortcut-apply-ac oi="31742496DF7F135861373E686DCF3405" event-ga label-ga="Shortcuts_postular">
+                <span class="icon i_postular mr5"></span>
+                Postular
+            </span>
+            <span class="dB fc_base it-blank cp mb5" shortcut-favorite oi="31742496DF7F135861373E686DCF3405" event-ga label-ga="Shortcuts_favoritos">
+                <span class="icon i_fav mr5"></span>
+                Guardar en Mis favoritos
+            </span>
+            <span class="dB fc_base it-blank cp mb5" shortcut-report oi="31742496DF7F135861373E686DCF3405" pc="469814F59E4D6F04" event-ga label-ga="Shortcuts_denunciar">
+                <span class="icon i_report mr5"></span>
+                Denunciar empleo
+            </span>
+            <span class="dB fc_base it-blank cp" shortcut-hide data-oi="31742496DF7F135861373E686DCF3405" event-ga label-ga="Shortcuts_hide">
+                <span class="icon i_ocultar mr5"></span>
+                Ocultar aviso
+            </span>
+        </div>
+    </div>
+    <div class="box_show_offer hide" remove-hide-div>
+        <p>
+            Oferta oculta
+        </p>
+        <div class="b_primary_inv" remove-hide>
+            <span class="icon i_ocultar mr5"></span>
+            Mostrar oferta
+        </div>
+    </div>
+</article>
+        <article class="box_offer  " data-id='C1DB1BAEC10D1A3461373E686DCF3405' data-blind="false" id="C1DB1BAEC10D1A3461373E686DCF3405" data-lc="ListOffers-Score4-17" data-offers-grid-offer-item-container>
+    <h2 class="fs18 fwB prB">
+        <a class="js-o-link fc_base" href="/ofertas-de-trabajo/oferta-de-trabajo-de-field-support-it-soporte-tecnico-informatico-ssr-cabaretiro-presencial-lunes-a-viernes-9-a-18-hs-en-retiro-C1DB1BAEC10D1A3461373E686DCF3405#lc=ListOffers-Score4-17">
+            Field Support IT Soporte T&#xE9;cnico Inform&#xE1;tico SSR CABA/Retiro Presencial Lunes a Viernes 9 a 18 hs
+        </a>
+        <div class="tags">
+            <span class="tag postulated hide" applied-offer-tag>
+                <span class="icon i_check_circle_full mr5"></span>
+                Postulado
+            </span>
+            <span class="tag hide" viewed-offer-tag>
+                Vista
+            </span>
+        </div>
+    </h2>
+    <p class="dFlex vm_fx fs16 fc_base mt5">
+            <span class="fx_none mr10">
+                <span class="fwB">
+                    4,1
+                </span>
+                <span class="star"></span>
+            </span>
+            <span class="icon i_verificada mr5"></span>
+            <a class="fc_base t_ellipsis" href="https://ar.computrabajo.com/yelsolutions" target='_blank' offer-grid-article-company-url>
+                Yel 
+            </a>
+    </p>
+    <p class="fs16 fc_base mt5">
+        <span class="mr10">
+            Retiro, Capital Federal
+        </span>
+    </p>
+    <p class="fs13 fc_aux mt15">
+        Hace  2  d&#xED;as
+    </p>
+    <div class="opt_dots" shortcut-show>
+        <div class="opt_bubble" shortcut-child>
+            <span data-href-access="https://candidato.ar.computrabajo.com/acceso/" data-href-offer-apply="https://candidato.ar.computrabajo.com/candidate/apply/?oi=C1DB1BAEC10D1A3461373E686DCF3405&amp;p=280&amp;idb=1&amp;d=32" class="dB fc_base it-blank mb5" shortcut-apply-ac oi="C1DB1BAEC10D1A3461373E686DCF3405" event-ga label-ga="Shortcuts_postular">
+                <span class="icon i_postular mr5"></span>
+                Postular
+            </span>
+            <span class="dB fc_base it-blank cp mb5" shortcut-favorite oi="C1DB1BAEC10D1A3461373E686DCF3405" event-ga label-ga="Shortcuts_favoritos">
+                <span class="icon i_fav mr5"></span>
+                Guardar en Mis favoritos
+            </span>
+            <span class="dB fc_base it-blank cp mb5" shortcut-report oi="C1DB1BAEC10D1A3461373E686DCF3405" pc="96D1C1E18881EABE" event-ga label-ga="Shortcuts_denunciar">
+                <span class="icon i_report mr5"></span>
+                Denunciar empleo
+            </span>
+            <span class="dB fc_base it-blank cp" shortcut-hide data-oi="C1DB1BAEC10D1A3461373E686DCF3405" event-ga label-ga="Shortcuts_hide">
+                <span class="icon i_ocultar mr5"></span>
+                Ocultar aviso
+            </span>
+        </div>
+    </div>
+    <div class="box_show_offer hide" remove-hide-div>
+        <p>
+            Oferta oculta
+        </p>
+        <div class="b_primary_inv" remove-hide>
+            <span class="icon i_ocultar mr5"></span>
+            Mostrar oferta
+        </div>
+    </div>
+</article>
+        <article class="box_offer  " data-id='0B66AF342E9D07B161373E686DCF3405' data-blind="false" id="0B66AF342E9D07B161373E686DCF3405" data-lc="ListOffers-Score4-18" data-offers-grid-offer-item-container>
+    <h2 class="fs18 fwB prB">
+        <a class="js-o-link fc_base" href="/ofertas-de-trabajo/oferta-de-trabajo-de-soporte&#xA0;tecnico-senior-de-usuario-final-en-tortuguitas-0B66AF342E9D07B161373E686DCF3405#lc=ListOffers-Score4-18">
+            Soporte&#xA0;T&#xE9;cnico Senior de Usuario Final
+        </a>
+        <div class="tags">
+            <span class="tag postulated hide" applied-offer-tag>
+                <span class="icon i_check_circle_full mr5"></span>
+                Postulado
+            </span>
+            <span class="tag hide" viewed-offer-tag>
+                Vista
+            </span>
+        </div>
+    </h2>
+    <p class="dFlex vm_fx fs16 fc_base mt5">
+            <span class="fx_none mr10">
+                <span class="fwB">
+                    4,4
+                </span>
+                <span class="star"></span>
+            </span>
+            <span class="icon i_verificada mr5"></span>
+            <a class="fc_base t_ellipsis" href="https://ar.computrabajo.com/manpower" target='_blank' offer-grid-article-company-url>
+                ManpowerGroup
+            </a>
+    </p>
+    <p class="fs16 fc_base mt5">
+        <span class="mr10">
+            Tortuguitas, Buenos Aires-GBA
+        </span>
+    </p>
+        <div class="fs13 mt15">
+                <span class="dIB mr10">
+                    <span class="icon i_salary"></span>
+                    $ 11.112,00 (Mensual)
+                </span>
+                <span class="dIB mr10">
+                    <span class="icon i_home_office"></span>
+                    Presencial y remoto
+                </span>
+        </div>
+    <p class="fs13 fc_aux mt15">
+        Hace  3  d&#xED;as
+    </p>
+    <div class="opt_dots" shortcut-show>
+        <div class="opt_bubble" shortcut-child>
+            <span data-href-access="https://candidato.ar.computrabajo.com/acceso/" data-href-offer-apply="https://candidato.ar.computrabajo.com/candidate/apply/?oi=0B66AF342E9D07B161373E686DCF3405&amp;p=280&amp;idb=1&amp;d=32" class="dB fc_base it-blank mb5" shortcut-apply-ac oi="0B66AF342E9D07B161373E686DCF3405" event-ga label-ga="Shortcuts_postular">
+                <span class="icon i_postular mr5"></span>
+                Postular
+            </span>
+            <span class="dB fc_base it-blank cp mb5" shortcut-favorite oi="0B66AF342E9D07B161373E686DCF3405" event-ga label-ga="Shortcuts_favoritos">
+                <span class="icon i_fav mr5"></span>
+                Guardar en Mis favoritos
+            </span>
+            <span class="dB fc_base it-blank cp mb5" shortcut-report oi="0B66AF342E9D07B161373E686DCF3405" pc="96D1C1E18881EABE" event-ga label-ga="Shortcuts_denunciar">
+                <span class="icon i_report mr5"></span>
+                Denunciar empleo
+            </span>
+            <span class="dB fc_base it-blank cp" shortcut-hide data-oi="0B66AF342E9D07B161373E686DCF3405" event-ga label-ga="Shortcuts_hide">
+                <span class="icon i_ocultar mr5"></span>
+                Ocultar aviso
+            </span>
+        </div>
+    </div>
+    <div class="box_show_offer hide" remove-hide-div>
+        <p>
+            Oferta oculta
+        </p>
+        <div class="b_primary_inv" remove-hide>
+            <span class="icon i_ocultar mr5"></span>
+            Mostrar oferta
+        </div>
+    </div>
+</article>
+        <article class="box_offer  outstanding" data-id='6CA20DCAD7948D8361373E686DCF3405' data-blind="false" id="6CA20DCAD7948D8361373E686DCF3405" data-lc="ListOffers-Score4-19" data-offers-grid-offer-item-container>
+        <div class="list_dot mb15">
+                <span class="fc_urgent">
+                    Se precisa Urgente
+                </span>
+                <span class="fc_dest">
+                    Empleo destacado
+                </span>
+        </div>
+    <h2 class="fs18 fwB prB">
+        <a class="js-o-link fc_base" href="/ofertas-de-trabajo/oferta-de-trabajo-de-representante-de-soporte-tecnico-en-san-nicolas-6CA20DCAD7948D8361373E686DCF3405#lc=ListOffers-Score4-19">
+            Representante de Soporte T&#xE9;cnico
+        </a>
+        <div class="tags">
+            <span class="tag postulated hide" applied-offer-tag>
+                <span class="icon i_check_circle_full mr5"></span>
+                Postulado
+            </span>
+            <span class="tag hide" viewed-offer-tag>
+                Vista
+            </span>
+        </div>
+    </h2>
+    <p class="dFlex vm_fx fs16 fc_base mt5">
+            <span class="fx_none mr10">
+                <span class="fwB">
+                    4,0
+                </span>
+                <span class="star"></span>
+            </span>
+            <span class="icon i_verificada mr5"></span>
+            <a class="fc_base t_ellipsis" href="https://ar.computrabajo.com/cattechnologies" target='_blank' offer-grid-article-company-url>
+                Cat-Technologies
+            </a>
+    </p>
+    <p class="fs16 fc_base mt5">
+        <span class="mr10">
+            San Nicol&#xE1;s, Capital Federal
+        </span>
+    </p>
+    <p class="fs13 fc_aux mt15">
+        Hace  3  d&#xED;as
+    </p>
+    <div class="opt_dots" shortcut-show>
+        <div class="opt_bubble" shortcut-child>
+            <span data-href-access="https://candidato.ar.computrabajo.com/acceso/" data-href-offer-apply="https://candidato.ar.computrabajo.com/candidate/apply/?oi=6CA20DCAD7948D8361373E686DCF3405&amp;p=280&amp;idb=1&amp;d=32" class="dB fc_base it-blank mb5" shortcut-apply-ac oi="6CA20DCAD7948D8361373E686DCF3405" event-ga label-ga="Shortcuts_postular">
+                <span class="icon i_postular mr5"></span>
+                Postular
+            </span>
+            <span class="dB fc_base it-blank cp mb5" shortcut-favorite oi="6CA20DCAD7948D8361373E686DCF3405" event-ga label-ga="Shortcuts_favoritos">
+                <span class="icon i_fav mr5"></span>
+                Guardar en Mis favoritos
+            </span>
+            <span class="dB fc_base it-blank cp mb5" shortcut-report oi="6CA20DCAD7948D8361373E686DCF3405" pc="96D1C1E18881EABE" event-ga label-ga="Shortcuts_denunciar">
+                <span class="icon i_report mr5"></span>
+                Denunciar empleo
+            </span>
+            <span class="dB fc_base it-blank cp" shortcut-hide data-oi="6CA20DCAD7948D8361373E686DCF3405" event-ga label-ga="Shortcuts_hide">
+                <span class="icon i_ocultar mr5"></span>
+                Ocultar aviso
+            </span>
+        </div>
+    </div>
+    <div class="box_show_offer hide" remove-hide-div>
+        <p>
+            Oferta oculta
+        </p>
+        <div class="b_primary_inv" remove-hide>
+            <span class="icon i_ocultar mr5"></span>
+            Mostrar oferta
+        </div>
+    </div>
+</article>
+
+    
+            <div class="dFlex vm_fx tj_fx mtB">
+            <span class="b_primary_inv fwB disabled w48 cp">
+                Anterior
+            </span>
+            <span class="b_primary w48 buildLink cp" data-path="https://ar.computrabajo.com/trabajo-de-soporte-tecnico?p=2" title="Siguiente">
+                Siguiente
+            </span>
+    </div>
+
+    
+    
+        <div class="mbB">
+    <p class="fs16 mb10">
+        Empleos similares
+    </p>
+        <a class="mb10 tag link" href="/trabajo-de-tecnico-de-servicio">
+            <span>
+                T&#xE9;cnico/a de servicio
+            </span>
+        </a>
+        <a class="mb10 tag link" href="/trabajo-de-tecnico-soporte">
+            <span>
+                T&#xE9;cnico soporte
+            </span>
+        </a>
+        <a class="mb10 tag link" href="/trabajo-de-representante-tecnico">
+            <span>
+                Representante t&#xE9;cnico
+            </span>
+        </a>
+        <a class="mb10 tag link" href="/trabajo-de-gerente-de-mantenimiento">
+            <span>
+                Gerente de mantenimiento
+            </span>
+        </a>
+        <a class="mb10 tag link" href="/trabajo-de-tecnico-de-mantenimiento">
+            <span>
+                T&#xE9;cnico/a de mantenimiento
+            </span>
+        </a>
+        <a class="mb10 tag link" href="/trabajo-de-tecnico-electromecanico">
+            <span>
+                T&#xE9;cnico/a electromec&#xE1;nico
+            </span>
+        </a>
+        <a class="mb10 tag link" href="/trabajo-de-tecnico-de-soporte">
+            <span>
+                T&#xE9;cnico/a de soporte
+            </span>
+        </a>
+        <a class="mb10 tag link" href="/trabajo-de-analista-funcional">
+            <span>
+                Analista funcional
+            </span>
+        </a>
+        <a class="mb10 tag link" href="/trabajo-de-representante-comercial">
+            <span>
+                Representante comercial
+            </span>
+        </a>
+        <a class="mb10 tag link" href="/trabajo-de-administrativo">
+            <span>
+                Administrativo/a
+            </span>
+        </a>
+        <a class="mb10 tag link" href="/trabajo-de-asesor-de-servicio">
+            <span>
+                Asesor/a de servicio
+            </span>
+        </a>
+        <a class="mb10 tag link" href="/trabajo-de-atencion-al-cliente">
+            <span>
+                Atenci&#xF3;n al cliente
+            </span>
+        </a>
+        <a class="mb10 tag link" href="/trabajo-de-ejecutivo-comercial">
+            <span>
+                Ejecutivo/a comercial
+            </span>
+        </a>
+        <a class="mb10 tag link" href="/trabajo-de-tecnico-informatico">
+            <span>
+                T&#xE9;cnico inform&#xE1;tico
+            </span>
+        </a>
+        <a class="mb10 tag link" href="/trabajo-de-tecnico-mecanico">
+            <span>
+                T&#xE9;cnico/a mec&#xE1;nico
+            </span>
+        </a>
+</div>
+    
+    <input type="hidden" id="urlStaticContent" value="//cp.ct-stc.com/web8/20260929.01_01.44/c/img/edVal.png">
+<input type="hidden" id="url_cdn_images" value="https://ii.ct-stc.com/5/">
+<input type="hidden" id="hdCvHasIssues" value="True">
+<input type="hidden" id="hdhsbcr" value="">
+<input type="hidden" id="hdibf" value="d2f026a0-84b4-4b60-82cd-fe3681d631e1">
+<input type="hidden" id="pc_ratings_active" value="true">
+<input type="hidden" id="pc_show_tab_valuations" value="true">
+<input type="hidden" id="hdup" value="/OffersDetail/Print?oi=">
+<input type="hidden" id="hdcult" value="es-AR">
+<input type="hidden" id="hdpc" value="0">
+<input type="hidden" id="hdcur" value="$">
+<input type="hidden" id="hdci" value="ARS">
+<input type="hidden" id="hdtodayDate" value="02-10-2026">
+<input type="hidden" id="hdtodayTime" value="01:19:55">
+<input type="hidden" id="hdtemplateApply" value="https://candidato.ar.computrabajo.com/candidate/apply/?oi=[offerId]&amp;p=280&amp;idb=1&amp;d=32">
+
+
+    <footer class=" ">
+    <div class="footer_c mtB">
+        <div class="container">
+            <p>
+                Copyright 2014 - 2026  DGNET LTD.
+            </p>
+                <div class="mb10">
+                    <a class="fc_aux" href="https://ar.computrabajo.com/avisolegal/" title="Aviso legal" alt="Aviso legal" rel="nofollow">Aviso legal</a> / <a class="fc_aux" href="https://ar.computrabajo.com/privacidad/" title="privacidad" alt="privacidad" rel="nofollow">privacidad</a>
+                </div>
+        </div>
+    </div>
+</footer>
+
+</div>
+
+    <div id="bannerApp" style="box-shadow: 0 5px 10px 0 rgba(15, 23, 42, 0.039);bottom: 40px;right: 40px;position: fixed;z-index: 999;color: white;background-color: #005DA9;text-align: center;padding: 40px 20px 0px;border-radius: 15px;transform: translateY(100%);opacity: 0;transition: transform 0.5s ease, opacity 0.5s ease;">
+        <div style="background-color: #0D3878;border-radius: 15px;padding: 10px;display: inline-block;position: absolute;transform: translate(-50%, -50%);top: 0;left: 50%;">
+            <img srcset="//cp.ct-stc.com/web8/20260929.01_01.44/c/img/logos/logoct_w.svg" alt="Computrabajo" src="//cp.ct-stc.com/web8/20260929.01_01.44/c/img/logos/logoct_w.svg" />
+        </div>
+
+        <p style="font-size: 21px; margin-bottom: 5px;">
+            Sigue buscando <strong>en la app</strong>
+        </p>
+        <p style="margin-bottom: 20px;">&#xA1;Desc&#xE1;rgala ahora!</p>
+
+        <div style="position:relative;">
+
+            <img src="//cp.ct-stc.com/web8/20260929.01_01.44/c/img/mbl_blue.webp" type="image/webp" width="250" alt="Mobile CT" />
+
+            <div style="position:absolute;bottom: 37px;left: 56px;width: 140px;">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAtoAAALaAQMAAAA1IGZwAAAABlBMVEUAAAD///&#x2B;l2Z/dAAAAAnRSTlP/AOW3MEoAAAeASURBVHic7Z1djuM4DIQDzAH2SHP1OdIcYIGeRCKrSk56Bxspb18egnZslxsEy/wRSd2&#x2B;Pvf5dQMcsaAtkIh3C29FjAU2FNcCpwhfEReayIKA61WoeKvPj/tf//xbBz8vl&#x2B;rE45Kvr9&#x2B;32/jt/jXO129xL&#x2B;CIBW05RKLJxt8/CuNnXzUxHnfef7vz93GirrvTeXzdn1WPH5cEHuCIBW05RaIHJce5yfL79fOmX2FNB/0faA0ZxH58zeePs4AjFrTlQySa54a5bTLL5tZN/dTx10Cbh&#x2B;MJgCMWtOVzJDLppwl&#x2B;8nzHAx&#x2B;Oc2PY4P6V/oAjFrTlTRK1pa1zF3&#x2B;3uZ3e84hv217H2f&#x2B;IQwFHLGjLeyRyLrdi2Te//pLLBRyxoC3vkCg&#x2B;lfa1u1yhbcSy06RO/9Xx7e0ZCnDEgracIdHINo2blHdq57R&#x2B;Wy7pOHj&#x2B;5qWckVC&#x2B;GmjAEQvaskuiPOdV0ww8C3fGpn4lDPB6TKzHAo5Y0JajJJoYCTltrmodlptE/3G212Mr6mw3GXDEgracIpGuN8ZkeaE1t&#x2B;uBhVuHejlMqLgNcMSCtpwgkdOt5erOxct2emtN9aZDfemVIFPtqiXAEQvacopEyttWnYKun9UGzvcsC6thkWc5hP6T54U/wBEL2rJHojKy1wXT9qOVi7K9Lud4BK3jjig7AhyxoC3HSFRLNAOj2busn6pgt5dysoWmq4G7TuIa5AKOWNCWTRINMs98kiuP&#x2B;rC85&#x2B;nvKkes9ZlKFPupl5JCwBEL2rJJonlTlPC2We41Vbd2d8&#x2B;MMMKQ61mAIxa05SSJ2l4uWWCHpfNwmtlcdr0Gvvqfrl4u4IgFbdkh0RKoytI2WsSmOuFS38oWz0RxBbKAIxa05SyJmpxtacc5tYZO99cjVjIrVaTXU6fpBRyxoC0nSdRV9bHuUvUPObGh/d169GUp9tulHMARC9qySaKOF011jzlaGk07vxvFhTE9waVIgCMWtOUcieZKTBciddzadUlqdVlKjNapJvKe5x2AIxa05TCJokRBTaV9NiccdXVEdsNEp5vbUAFHLGjLMRINWsu0LqFtp5WGI2zwpQ5fHajVYAo4YkFbDpIo11QLJgZ85gxBrefEyo6aSfvl8FyxADhiQVt2SST2dkL3UperPFJnizs1pXYZj&#x2B;4EHLGgLedIlEX23R8aE7DV2t1Ocq&#x2B;bBtU1UlfFD4AjFrTlEImMMQzptUkmC3zd7q2ElBrFZY4BRyxoy1kSeQCKx3Vqe6U1W9y5JfWRaiCDLPdzkAs4YkFbdkjkulwFozmOIeeSxYvAzTQrAOCIBW05TKJ2flWs0GQWYZ1tWrZ2WVxo5acARyxoyzkSxQJocVVp3/mIdWeJeaf2RPQ667Dc10Qx4IgFbdkk0SVUbIusDdDGxyljDePVpjCRQfbW3YAjFrTlDIly5q6mpiStcyC2g9y4RJ&#x2B;XI1YARyxoyxaJcgyCc0yuVXL2yCN43dqmxVPtKPHtAAfAEQva8v9J5IA2ok9noNLzdR&#x2B;NjKsmrqhnBnDEgracJFEFoxrCoFl/SV1vEKwuNXXD2NYucTDgiAVtOUGi3BxtmakSdbwx77P93XmHZzf4bbAaaMARC9qyRaLu81YuV5Nzo6k0olovwDo1pXXW57pcwBEL2rJLorbDtVuLSx/W7SXmdcVa8z2r7q8lhYAjFrRlk0SV9vV8&#x2B;emcLgVLyjF5d9FlFoO3cnre&#x2B;wxwxIK27JCoTGW4xsoHL8PJ/FvEt1WP5I0RX6ehAEcsaMseicZaaXC7DWmtn67TdLXImQPL5omrCw04YkFb9kgUPWoumtcCzlJYuwwN1F6lTii/LCkEHLGgLZskWrq73RXjbtPZFB5D7ruISZUQYaWXOBRwxIK27JGoDtoOe4Rn83gB96T7ywheb&#x2B;r05OUCjljQli0SqXkt/FIljroZzVFtl/9ehhppLRVwxIK2HCSRaulzO6bONuUQlSgMVCX8ZTbvizFlgCMWtGWHREuJQs9uKEublYBukpkppKoTXFZlXsShgCMWtGWLRE/ZWvXCVM6o7eq6&#x2B;VJUIWUcrNATcMSCthwhUYywzgJBJ3QXT1kjeNtea9buWqUPOGJBWw6RyJ1pdanXQ7Pn&#x2B;jojRQPLLnNBX5QUAo5Y0Ja3SeRE0/SKY9fDy1R7ZaByO8QlrfQilws4YkFbtkjk&#x2B;ZyuqvfaTZjg2HzCbahtcLNEEHDEgracI5E94E4c6Td7uS9i2Rj04L6YpxkLgCMWtGWTRPrYo3X5/ILRy64TSIUOdfhqywnAEQvaskmiJvay95k37o4NnNSGqtme6RwvlwCOWNCWUyRyy4uWXNrctru81iV1SX0mebPxG3DEgracJFG0tazj6WVc08yOjzdb01/971zoDzhiQVvOkShrHTosVaOpWW4XWhX5CloBRyxoy4dI5B3Syj/OXdOiYMk7vei9EFllwBEL2nKURI5DY1MJzVgQo3PUtdvD/VQNSwIcsaAtB0lkCse2Z8uoXM9pMNrTDkwzBfxtLhdwxIK2vEWiz3wARyxoCyTi3cJbEWOBDcW1wCnCV8SFJrIg4LqGin8AWekCVv0j7QQAAAAASUVORK5CYII=" alt="QR Code" width="140" />
+            </div>
+        </div>
+
+        <a id="closeBanner" style="position: absolute; right: 15px; top: 15px; cursor:pointer;">
+            <span style="color: white; font-size: 14px;" class="icon i_close"></span>
+        </a>
+    </div>
+    
+
+					<div class="box_detail" data-offers-grid-box-detail>
+	<span class="dragger" close-popup-responsive><span class="icon i_close"></span></span>
+	<div class="hide" data-id data-offers-grid-detail-container></div>
+
+	<div class="tc hide" data-offers-grid-box-detail-show-applied-container>
+        <div class="tc">
+			<span class="dIB pAllB fc_link cp" show-desc-offer>Ver oferta completa</span>
+		</div>
+    </div>
+	<div class="hide" data-offers-grid-box-detail-similar-offers></div>
+    <div class="hide" data-offers-grid-apply-container>
+	</div>
+	<div class="hide" data-offers-grid-detail-container-error>
+		<div class="tc">
+    <svg class="bullet_icon infomark mtB mb10" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+        <circle class="bullet_mark infomark_circle" cx="26" cy="26" r="25" fill="none"></circle>
+        <path class="infomark_tick" fill="none" d="M26.966 34.749V22.596c0-1.243-.888-2.251-1.983-2.251S23 21.352 23 22.596V34.75c0 1.242.888 2.25 1.983 2.25s1.983-1.008 1.983-2.251zM24.983 14C23.888 14 23 14.888 23 15.983s.888 1.983 1.983 1.983 1.983-.888 1.983-1.983S26.078 14 24.983 14z"></path>
+    </svg>
+    <p class="fs24">
+        Error al realizar la postulación
+    </p>
+    <p class="mt15 mb15">
+        Ha ocurrido un error a la hora de realizar la postulación, inténtalo pasado unos minutos.
+    </p>
+</div>
+	</div>
+	<div class="animating" data-offers-grid-loading-container>
+		<div class="box_animating mt20" style="width: 55%; height: 15px;">
+    <div class="bg_animating"></div>
+</div>
+<div class="box_animating mt10" style="width: 15%; height: 15px;">
+    <div class="bg_animating"></div>
+</div>
+<div class="box_animating mt10" style="width: 35%; height: 15px;">
+    <div class="bg_animating"></div>
+</div>
+<div class="box_animating mt10" style="width: 80%; height: 20px;">
+    <div class="bg_animating"></div>
+</div>
+<div class="box_animating mt10" style="width: 80%; height: 20px;">
+    <div class="bg_animating"></div>
+</div>
+<div class="box_animating mt10" style="width: 60%; height: 15px;">
+    <div class="bg_animating"></div>
+</div>
+<div class="box_animating mt10" style="width: 60%; height: 15px;">
+    <div class="bg_animating"></div>
+</div>
+<div class="box_animating mt10" style="width: 55%; height: 15px;">
+    <div class="bg_animating"></div>
+</div>
+<div class="box_animating mt10" style="width: 40%; height: 15px;">
+    <div class="bg_animating"></div>
+</div>
+<div class="box_animating mt20" style="width: 55%; height: 15px;">
+    <div class="bg_animating"></div>
+</div>
+<div class="box_animating mt10" style="width: 15%; height: 15px;">
+    <div class="bg_animating"></div>
+</div>
+<div class="box_animating mt10" style="width: 35%; height: 15px;">
+    <div class="bg_animating"></div>
+</div>
+<div class="box_animating mt10" style="width: 80%; height: 20px;">
+    <div class="bg_animating"></div>
+</div>
+<div class="box_animating mt10" style="width: 80%; height: 20px;">
+    <div class="bg_animating"></div>
+</div>
+<div class="box_animating mt10" style="width: 60%; height: 15px;">
+    <div class="bg_animating"></div>
+</div>
+<div class="box_animating mt10" style="width: 55%; height: 15px;">
+    <div class="bg_animating"></div>
+</div>
+<div class="box_animating mt10" style="width: 40%; height: 15px;">
+    <div class="bg_animating"></div>
+</div>
+<div class="box_animating mt20" style="width: 55%; height: 15px;">
+    <div class="bg_animating"></div>
+</div>
+<div class="box_animating mt10" style="width: 15%; height: 15px;">
+    <div class="bg_animating"></div>
+</div>
+<div class="box_animating mt10" style="width: 35%; height: 15px;">
+    <div class="bg_animating"></div>
+</div>
+<div class="box_animating mt10" style="width: 50%; height: 15px;">
+    <div class="bg_animating"></div>
+</div>
+<div class="mt10" style="width: 40%; height: 40px;">
+</div>
+	</div>
+
+	<div data-complaint-overlay></div>
+	<div class="popup w40 hide" id="complaint-popup-container">
+    <input id="IdOffer" name="IdOffer" type="hidden">
+    <input id="IdReportType" name="IdReportType" type="hidden">
+    <input id="ProductClass" name="ProductClass" type="hidden">
+    <input id="IdCandidate" name="IdCandidate" type="hidden">
+    <input id="IdUser" name="IdUser" type="hidden">
+    <div>
+        <div>
+            <p class="fs21 tc mb20 mt15">¿Por qué quieres reportar este aviso?</p>
+
+            <div class="field_radio" data-val-required="Obligatorio">
+                <div class="group">
+                        <label class="radio mb10 fs15">
+                            <input type="radio" name="Reasons" value="1"  />
+                            <span class="input"></span>
+                            <span>Es ofensiva y/o discriminatoria</span>
+                        </label>
+                        <label class="radio mb10 fs15">
+                            <input type="radio" name="Reasons" value="2"  />
+                            <span class="input"></span>
+                            <span>Es un anuncio, no es un aviso</span>
+                        </label>
+                        <label class="radio mb10 fs15">
+                            <input type="radio" name="Reasons" value="3"  />
+                            <span class="input"></span>
+                            <span>Me solicitan dinero</span>
+                        </label>
+                        <label class="radio mb10 fs15">
+                            <input type="radio" name="Reasons" value="4"  />
+                            <span class="input"></span>
+                            <span>Es engañosa o falsa: parece una estafa, promueve esquemas de inversión, publican enlaces sospechosos, son bienes y servicios ilegales</span>
+                        </label>
+                        <label class="radio mb10 fs15">
+                            <input type="radio" name="Reasons" value="7" no-description-required />
+                            <span class="input"></span>
+                            <span>No me responden</span>
+                        </label>
+                        <label class="radio mb10 fs15">
+                            <input type="radio" name="Reasons" value="8" no-description-required />
+                            <span class="input"></span>
+                            <span>Pagan muy poco y mal</span>
+                        </label>
+                        <label class="radio mb10 fs15">
+                            <input type="radio" name="Reasons" value="9" no-description-required />
+                            <span class="input"></span>
+                            <span>Oferta duplicada</span>
+                        </label>
+                        <label class="radio mb10 fs15">
+                            <input type="radio" name="Reasons" value="5"  />
+                            <span class="input"></span>
+                            <span>Otro motivo</span>
+                        </label>
+                </div>
+                <span id="reason-error-span" class="field-validation-valid" data-valmsg-for="Reasons"></span>
+            </div>
+            <div class="field_textarea fs15" description-label>
+                <label>Explícanos el motivo de tu elección<span class="tag small ml10">Obligatorio</span></label>
+                <textarea data-val="true" data-val-maxlength="El m&#xE1;ximo de caracteres es de 500" data-val-maxlength-length="500" data-val-required="The Comment field is required." id="Comment" name="Comment" rows="4">
+</textarea>
+                <span id="length-error-span" class="field-validation-valid" data-valmsg-for="Comment"></span>
+            </div>
+            <div class="tc">
+                <button id="complaint-button-send" type="button" class="b_primary mbB">Denunciar</button>
+            </div>
+
+            <p class="fs13">
+                Al hacer clic en reportar, aceptas las
+                <a target='_blank' href="https://ar.computrabajo.com/avisolegal/" alt="Condiciones">
+                    Condiciones legales
+                </a>
+                y la
+                <a target='_blank' href="https://ar.computrabajo.com/privacidad/" alt="Política">
+                    Política de privacidad
+                </a>
+                 de Computrabajo para crear una cuenta, aplicar a vacantes de empleo, contactar con potenciales empleadores y recibir comunicaciones, entre otros servicios.
+                <span id="legal-tooltip-button" class="dIB cp">
+                    Ver detalle legal
+                </span>
+                <div id="legal-tooltip-conditions-container" class="box_border mt15 hide">
+                    <p class="fwB">Ver detalles legales</p>
+
+                    <p class="fwB mt10 mb5">Responsable</p>
+                    <p>DGNET LTD.</p>
+
+                    <p class="fwB mt10 mb5">Finalidad</p>
+                    <p>Atender las solicitudes de información y/o consultas efectuadas por el usuario –registrado o no- a través del portal web.</p>
+
+                    <p class="fwB mt10 mb5">Legitimación</p>
+                    <p>Tu consentimiento</p>
+
+                    <p class="fwB mt10 mb5">Destinatario</p>
+                    <p>Podrán acceder a tus datos los prestadores de servicios de DGNET Ltd, incluyendo otras empresas de su grupo. Únicamente se cederán datos por obligación legal.</p>
+
+                    <p class="fwB mt10 mb5">Derechos</p>
+                    <p>Tienes derecho a acceder, rectificar y suprimir los datos, así como otros derechos, cuyo detalle se incluye en nuestra Política de Privacidad completa.</p>
+                </div>
+            </p>
+        </div>
+        <span id="complaint-offer-closepopup-button" class="icon i_close cp"></span>
+    </div>
+</div>
+<div class="popup w30 hide" popup-complaint-value-company>
+    <div>
+        <div>
+            <p class="fs21 tc mb20 fc_ok">Gracias por tu denuncia</p>
+            <p class="mb20">
+                Para denuncias como la tuya recomendamos que dejes una valoración en la página de la empresa para que otras personas conozcan tu experiencia.Esta es la mejor forma de que la denuncia llegue a la empresa y sea de utilidad.
+            </p>
+            <div class="tc">
+                <a class="b_primary" href="#" popup-complaint-value-company-button alt="Valorar la empresa">
+                    Valorar la empresa
+                </a>
+            </div>
+        </div>
+        <span class="icon i_close js_popup js_hide_denunciar_oferta" popup-complaint-value-company-closebutton></span>
+    </div>
+</div>
+<span class="tag save js_tag_save hide" style="opacity: 0;" msg-complaints fix_menu_bottom>
+    <p>Gracias por ayudarnos a mejorar Computrabajo</p>
+    <p>Nos tomamos muy en serio tus comentarios y lo revisaremos lo antes posible.</p>
+</span>
+</div>
+
+<div class="overlay hide" overlay-skill-offer></div>
+<div class="popup hide" popup-skill-offer>
+    <div>
+        <div>
+            <div class="ptB tc">
+                <p class="fs20 fwB mbB">Competencias añadidas por la empresa</p>
+                <p class="mbB">El equipo reclutador buscará estos conocimientos y habilidades en las postulaciones. Añade las que te faltan a tu perfil para atraer su atención.</p>
+                <ul class="ptB pbB" popup-list-skill-offer></ul>
+                <p class="mtB mbB">Puedes gestionar todas tus aptitudes en tu perfil.</p>
+            </div>
+            <div class="btns_popup tc mbB">
+                <button type="button" class="b_primary w30 mrB mlB" hide-popup-skill-offer>Cerrar</button>
+            </div>
+        </div>
+        <a class="icon i_close" hide-popup-skill-offer></a>
+    </div>
+</div>
+<div class="overlay hide" overlay-popup-add-salary></div>
+<div class="popup hide" popup-add-salary>
+    <div>
+        <div>
+            <div class="ptB tc">
+                <p class="fs20 fwB mbB"></p>
+                <p class="mbB"></p>
+                <input autocomplete="off" placeholder="" type="number" add-candidate-salary>
+                <span class="field-validation-valid" add-candidate-salary-span-validate>
+                    <span class="hide" add-candidate-salary-span-validate-text></span>
+                </span>
+                <button type="submit" class="b_primary w50 w100_m mtB" add-candidate-salary-button>
+                    
+                </button>
+            </div>
+        </div>
+        <a class="icon i_close" hide-popup-add-salary></a>
+    </div>
+</div>
+				</div>
+		</div>
+	</div>
+</main>
+
+
+<input id="httr" type="hidden" value="true" />
+
+<input id="hduod" type="hidden" value="https://oferta.computrabajo.com/offer/{0}/{1}/{2}" />
+<input id="hdip" type="hidden" value="5" />
+<input id="hdiao" type="hidden" value="1" />
+<input id="hdtdev" type="hidden" value="d" />
+<input id="hdrj" type="hidden" value="true" />
+<input id="hdmf" type="hidden" value="100" />
+
+
+
+    
+    
+    
+        
+
+    
+	
+	
+		
+	
+	
+
+    
+
+    
+<style></style>
+
+
+    <mon name="8473B2EC4866954E9FB9B40B89D128FF"></mon>
+    <input type="hidden" id="useLoginSecure" value="true">
+    
+</body>
+</html>
+</main></body></html>

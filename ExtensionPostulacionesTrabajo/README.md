@@ -169,14 +169,73 @@ Los perfiles `.example` van con datos de ejemplo a propósito, porque están
 versionados en un repo público. `test_los_perfiles_ejemplo_no_traen_datos_
 personales` falla si alguien deja un nombre, un teléfono o un email reales.
 
+## Traer ofertas de Computrabajo
+
+`radar/fuentes/` es la capa que sabe de dónde vienen las ofertas. Hoy tiene una
+sola fuente: `ar.computrabajo.com`. Todo lo de más abajo (fecha, matching, base)
+recibe objetos `Offer` y no sabe de dónde salieron, así que agregar otro portal
+es escribir otra implementación, no tocar el resto.
+
+Corrida de humo (pega contra el portal real):
+
+```bat
+python scripts/ingesta_humo.py --listados            : rápido, sin detalles
+python scripts/ingesta_humo.py --dias 3              : con detalle, ~20s
+python scripts/ingesta_humo.py --perfil soporte-it
+python scripts/ingesta_humo.py --limpiar              : vacía la tabla ofertas
+```
+
+Corre la ingesta dos veces seguidas y reporta los números de cada una. Sin
+`--perfil` recorre todos los perfiles **activos**.
+
+### Tres cosas del portal que no salen de la documentación
+
+Se verificaron contra el sitio, y contradicen lo que se suponía:
+
+- **No hace falta autenticación.** El listado y el detalle responden sin cookies.
+- **La modalidad no es una clase `tag`.** Es un ícono: `icon i_home` para
+  "Remoto" y `icon i_home_office` para "Presencial y remoto". El texto está en
+  el `<span>` padre, porque el ícono va vacío. Buscar la palabra "Remoto" en el
+  ícono no devuelve nada y se pierden 2 de cada 20 ofertas.
+- **El `data-id` viene con comillas simples** (`data-id='ABC...'`), no dobles.
+  Un `re.findall` escrito a mano con comillas dobles no encuentra nada.
+
+El `robots.txt` prohíbe los filtros por query (`?pubdate=`, `?sal=`, `?by=`), así
+que el filtro de fechas va del lado nuestro. Por eso `request_delay` (2 s por
+petición) no es un detalle: es la forma de ser respetuoso.
+
+### Las fechas del listado son relativas
+
+El portal escribe "Hace 19 horas", "Ayer", "Hace 2 días". `radar/fuentes/fechas.py`
+los convierte a datetime UTC. **Si el texto no se reconoce devuelve `None`, y la
+oferta se descarta**: preferimos perder una oferta a mostrar una vieja como si
+fuera nueva. "Más de 30 días" devuelve 31 días, porque la oferta tiene 30 o
+más y asumir exactamente 30 la haría entrar en una ventana de 30 siendo vieja.
+
+### La ingesta es barata de repetir
+
+Tres decisiones hacen que una segunda corrida cueste 2 s en vez de 22:
+
+1. **El filtro de fecha corre antes de bajar los detalles.** El listado trae la
+   fecha, así que se descartan las viejas sin pedir 20 páginas que no se van a
+   usar. Con ventana de 3 días: 24 vistas, 10 guardadas, 14 descartadas.
+2. **Corta cuando una página no trae nada nuevo.** El listado viene ordenado por
+   fecha, así que una página entera de viejas es la última.
+3. **Upsert por `external_id`.** Si la oferta ya está y tiene descripción, no se
+   vuelve a bajar su detalle.
+
+Las fechas se guardan truncadas al minuto. Sin eso, "Hace 19 horas" se calcula
+contra el reloj de cada corrida y da un valor distinto cada vez, así que el
+upsert cree que todo cambió y reescribe veinte filas por pasada.
+
 ## Estado
 
-Fases 1 a 4 completas: andamiaje, modelo de datos con Alembic, perfiles con UI
-(alta, edición, activación múltiple, borrado) escribiendo YAML, y catálogo de
-219 skills en 12 categorías.
+Fases 1 a 7 completas: andamiaje, modelo de datos con Alembic, perfiles con UI
+(alta, edición, activación múltiple, borrado) escribiendo YAML, catálogo de
+219 skills en 12 categorías, y la ingesta de Computrabajo con normalizador y
+filtro temporal. 276 tests.
 
-Próximas: fuente de Computrabajo, normalizador, filtro temporal, matching, CLI de
-ingesta y dashboard.
+Próximas: matching por reglas, CLI de ingesta y dashboard.
 
 ## Estructura
 
@@ -188,19 +247,25 @@ radar/
   db.py          engine y sesión de SQLAlchemy
   models.py      Oferta, OfertaSkill, Perfil, Match, Postulacion
   schema.py      contrato Offer de la capa de fuentes
+  ingesta.py     perfil -> páginas del portal -> tabla ofertas, con upsert
   perfiles/
     validacion.py      esquemas pydantic del perfil
     serializacion.py   YAML <-> dict y aviso de edición manual
     formulario.py      parseo del formulario (filas repetibles)
     servicio.py        CRUD sobre PostgreSQL
+  fuentes/
+    computrabajo.py  cliente HTTP con pausa, y el parser del listado y el detalle
+    fechas.py        "Hace 19 horas" -> datetime UTC
 catalogo/        skills.yml, la lista canónica de skills (versionada)
 templates/       Jinja2 (base + gestión de perfiles)
 static/          CSS y JS sin build step
 perfiles/        YAML de perfiles (el .example va versionado, el .yml no)
 migrations/      Alembic
 scripts/
-  init_db.py    creación del esquema (atajo, preferí Alembic)
+  init_db.py       creación del esquema (atajo, preferí Alembic)
+  ingesta_humo.py  corrida de la ingesta contra el portal real
 tests/
+  fixtures/computrabajo/  HTML real del portal, recortado (sin style ni script)
 ```
 
 ## Tests
@@ -212,3 +277,7 @@ pytest
 Los tests de perfiles tocan la base real (`radar_laboral`) y usan directorios
 temporarios para los YAML, así que no tocan `perfiles/`. `tests/test_db.py`
 limpia sus filas al terminar.
+
+**Ningún test toca la red.** Los de Computrabajo parsean el HTML real guardado en
+`tests/fixtures/computrabajo/`, y los de ingesta usan un `httpx.MockTransport`.
+Para probar contra el portal está `scripts/ingesta_humo.py`.

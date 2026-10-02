@@ -91,54 +91,82 @@ Lo que aprendimos implementándola
     - Ampliar el catálogo es agregar entradas al YAML. No toca código.
 
 
-FASE 5 — Fuente Computrabajo
----------------------------
+FASE 5 — Fuente Computrabajo [HECHA]
+------------------------------------
 Qué es
     Scraper del listado y del detalle de ofertas.
 
-Datos verificados del portal
+Datos verificados del portal (corregidos contra el sitio)
     - Usar ar.computrabajo.com. www.computrabajo.com/trabajo-de-X da 404.
-    - Listado: https://ar.computrabajo.com/trabajo-de-{slug}?p=N
-      20 ofertas por página. Requiere sesión y cookies persistentes.
-    - Dedupe por article.box_offer[data-id='...'], que es un hex estable.
-      Ejemplo: F5A35EBD0F7AFE7B61373E686DCF3405
-    - Detalle: /ofertas-de-trabajo/oferta-de-trabajo-de-{slug}-{id}
-    - El listado trae título, empresa, ubicación, modalidad y fecha relativa.
-      El detalle trae la descripción completa server-side.
-    - robots.txt prohíbe los filtros por query (?pubdate=, ?sal=, ?by=, ?emp=)
-      y /hojas-de-vida/, /curriculums/ y /Ajax/.
-      El filtro por fecha se hace del lado del cliente, en la fase 7.
+    - Listado: https://ar.computrabajo.com/trabajo-de-{slug}?p=N, 20 por página.
+    - ~~Requiere sesión y cookies persistentes~~ FALSO: responde HTTP 200 sin
+      autenticación. Se descartó todo el manejo de cookies.
+    - Dedupe por article.box_offer[data-id='...'], hex de 32 chars.
+      OJO: el HTML real usa comillas SIMPLES, no dobles.
+    - Detalle: /ofertas-de-trabajo/oferta-de-trabajo-de-{slug}-{id}, server-side.
+    - La modalidad NO es una clase tag: es un ícono (icon i_home para remoto,
+      icon i_home_office para "presencial y remoto") y el texto está en el span
+      padre. Buscar "Remoto" en el ícono no encuentra nada.
+    - La ubicación está en p.fc_base.mt5 SIN dFlex: la misma clase con dFlex
+      trae el puntaje de la empresa ("4,5Universidad Siglo 21").
+    - El href trae un fragmento #lc=... que cambia por visita. Se quita antes de
+      guardar, si no la misma oferta acaba con URLs distintas.
+    - robots.txt prohíbe ?pubdate=, ?sal=, ?by=, ?emp=, /hojas-de-vida/,
+      /curriculums/ y /Ajax/. El filtro de fecha va del lado cliente (fase 7).
 
-Criterio de terminado
-    Correr el scraper sobre un perfil y guardar ofertas sin duplicar en dos
-    corridas consecutivas.
+Criterio de terminado: CUMPLIDO
+    Correr la ingesta dos veces: la segunda reporta 0 nuevas, 0 actualizadas y
+    tarda 2s contra los 22s de la primera. Verificado contra el portal real.
+
+Qué quedó hecho
+    - radar/fuentes/computrabajo.py: Cliente con pausa (request_delay) y
+      reintentos, parsear_listado(), parsear_detalle(), slug(), url_detalle().
+    - radar/fuentes/fechas.py: los formatos relativos del portal.
+    - tests/fixtures/computrabajo/: HTML real recortado (sin style ni script).
+    - 26 tests del parser y 20 de fechas.
 
 
-FASE 6 — Normalizador
---------------------
+FASE 6 — Normalizador [HECHA]
+-----------------------------
 Qué es
     Convertir el HTML crudo en objetos Offer, que es el contrato que ya está
-    definido en radar/schema.py. Aísla a Computrabajo del resto del sistema:
-    si mañana agregamos otro portal, sólo se escribe otra implementación.
+    definido en radar/schema.py. Aísla a Computrabajo del resto del sistema.
 
-Criterio de terminado
-    Todo Offer validado con external_id, fecha y skills, guardado en la tabla
-    ofertas y ofertas_skills.
+Criterio de terminado: CUMPLIDO
+    Todo Offer validado con external_id, fecha y skills, guardado en ofertas y
+    ofertas_skills.
+
+Qué quedó hecho
+    - OfertaCruda para el listado y Offer para lo guardado.
+    - Skills vía catalogo.detectar() sobre la descripción del detalle, que es
+      lo que ya sabe leer 219 skills. No se usan los chips del listado.
+    - Upsert por external_id: si ya está y tiene descripción, no se vuelve a
+      bajar el detalle.
+    - Las fechas se guardan truncadas al minuto. Sin eso, "Hace 19 horas" se
+      calcula contra el reloj de cada corrida, da un valor distinto siempre, y
+      el upsert cree que las 20 ofertas cambiaron en cada pasada.
 
 
-FASE 7 — Filtro temporal
------------------------
+FASE 7 — Filtro temporal [HECHA]
+--------------------------------
 Qué es
-    Quedarse sólo con las ofertas recientes, parseando las fechas relativas del
-    listado en vez de usar los filtros del portal.
+    Quedarse sólo con las ofertas recientes, parseando las fechas relativas.
 
 Formatos a parsear (observados, no inventados)
-    Hace 35 minutos / Hace 20 horas / Ayer / Hace 5 días / Más de 30 días /
-    16 de septiembre
+    Hace 35 minutos / Hace 20 horas / Ayer / Hace 2 días / Hace 3 meses /
+    Más de 30 días / 16 de septiembre
 
-Criterio de terminado
-    Sólo entran las ofertas dentro de la ventana de días configurada, medido
-    con casos de prueba de cada formato.
+Criterio de terminado: CUMPLIDO
+    Cada formato tiene su caso de prueba. Con ventana de 3 días sobre el
+    portal real: 24 vistas, 10 guardadas, 14 descartadas por fecha.
+
+Decisiones que importan
+    - Si el texto no se reconoce, se devuelve None y la oferta se descarta.
+      Preferimos perder una oferta a mostrar una vieja como si fuera nueva.
+    - "Más de 30 días" devuelve N+1 días. La oferta tiene 30 o más, así que
+      asumir exactamente 30 la haría entrar en una ventana de 30 siendo vieja.
+    - El filtro corre ANTES de bajar los detalles. El listado trae la fecha,
+      así que no se piden 20 páginas que después se descartan.
 
 
 ================================================================================
