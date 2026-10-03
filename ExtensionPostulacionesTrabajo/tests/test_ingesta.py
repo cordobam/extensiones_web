@@ -19,7 +19,7 @@ from sqlalchemy import delete
 
 from radar.db import SessionLocal
 from radar.fuentes.computrabajo import Cliente
-from radar.ingesta import ingestar, ingestar_perfil
+from radar.ingesta import _actualizar_skills, ingestar, ingestar_perfil
 from radar.models import Match, Oferta, OfertaSkill, Perfil
 from radar.config import get_settings
 from radar.perfiles import servicio
@@ -201,7 +201,31 @@ def test_sin_detalle_no_baja_ninguna_pagina_de_oferta(sesion) -> None:
     assert not any("/ofertas-de-trabajo/" in u for u in portal.peticiones)
     fila = sesion.query(Oferta).filter(Oferta.external_id == EXTERNAL_ID).one()
     assert fila.descripcion is None
-    assert fila.skills == []
+    # Sin detalle tampoco hay descripción, así que las skills salen sólo del
+    # título. Antes esta lista era vacía porque el título no se miraba; ahora
+    # aporta justo lo que el matching necesita para no descartar la oferta.
+    assert sorted(s.skill for s in fila.skills) == ["Soporte Técnico"]
+
+
+def test_sin_detalle_las_skills_salen_del_titulo(sesion) -> None:
+    """El título es la mitad de la detección, y funciona sin bajar el detalle.
+
+    Es lo que permite usar `ingest --listados` para probar el pipeline rápido y
+    todavía tener skills con las que puntuar.
+    """
+    portal = PortalFalso()
+    cliente, http = portal.cliente()
+    with http:
+        ingestar_perfil(
+            sesion,
+            _perfil(["mesa de ayuda"]),
+            cliente=cliente,
+            con_detalle=False,
+            ahora=AHORA_FIJO,
+        )
+
+    con_skills = sesion.query(Oferta).join(OfertaSkill).distinct().count()
+    assert con_skills > 0
 
 
 # ------------------------------------------------------------- fechas y dedupe
@@ -522,6 +546,76 @@ def test_dos_corridas_en_minutos_distintos_mueven_la_fecha(sesion) -> None:
 
     assert despues.nuevas == 0
     assert despues.actualizadas == 17
+
+
+def test_re_correr_no_duplica_las_skills(sesion) -> None:
+    """Regresión de un UniqueViolation sobre `uq_oferta_skill`.
+
+    Cuando la fecha se mueve, la oferta se marca "actualizada" y sus skills se
+    vuelven a escribir. Si eso se hace reemplazando la colección entera,
+    SQLAlchemy borra las filas viejas e inserta las nuevas, y en un mismo flush
+    el INSERT puede ejecutarse antes que el DELETE: `llave duplicada viola
+    restricción de unicidad`. Pasaba en la segunda corrida de cualquier oferta
+    cuya fecha se hubiera corrido.
+    """
+    portal = PortalFalso()
+    cliente, http = portal.cliente()
+    with http:
+        ingestar_perfil(
+            sesion, _perfil(["mesa de ayuda"]), cliente=cliente, ahora=AHORA_FIJO
+        )
+
+    antes = {
+        f.external_id: sorted(s.skill for s in f.skills)
+        for f in sesion.query(Oferta).all()
+    }
+    total_antes = sesion.query(OfertaSkill).count()
+
+    otro = PortalFalso()
+    cliente2, http2 = otro.cliente()
+    with http2:
+        ingestar_perfil(
+            sesion,
+            _perfil(["mesa de ayuda"]),
+            cliente=cliente2,
+            ahora=AHORA_FIJO + timedelta(minutes=40),
+        )
+
+    # Las mismas skills, la misma cantidad de filas, ni una de más.
+    despues = {
+        f.external_id: sorted(s.skill for s in f.skills)
+        for f in sesion.query(Oferta).all()
+    }
+    assert despues == antes
+    assert sesion.query(OfertaSkill).count() == total_antes
+
+    # Y ninguna oferta tiene la misma skill repetida.
+    for skills in despues.values():
+        assert len(skills) == len(set(skills))
+
+
+def test_una_skill_que_desaparece_se_borra(sesion) -> None:
+    """El diff también tiene que saber borrar, no sólo agregar.
+
+    Si el aviso se edita y ya no menciona una skill, la fila vieja tiene que
+    irse: si no, el matching seguiría diciendo que la persona tiene esa skill.
+    """
+    portal = PortalFalso()
+    cliente, http = portal.cliente()
+    with http:
+        ingestar_perfil(
+            sesion, _perfil(["mesa de ayuda"]), cliente=cliente, ahora=AHORA_FIJO
+        )
+
+    oferta = sesion.query(Oferta).filter(Oferta.external_id == EXTERNAL_ID).one()
+    # Se simula que la detección cambió: la fila guardada tenía
+    # "Soporte Técnico" y la nueva pasada sólo ve "Windows".
+    _actualizar_skills(oferta, ["Windows"])
+    sesion.commit()
+
+    # Sólo se mira esta oferta: la corrida dejó 17 ofertas y 83 filas de skills.
+    assert sorted(s.skill for s in oferta.skills) == ["Windows"]
+    assert sesion.query(OfertaSkill).filter_by(oferta_id=oferta.id).count() == 1
 
 
 def test_las_fechas_no_tienen_segundos(sesion) -> None:

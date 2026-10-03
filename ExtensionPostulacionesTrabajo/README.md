@@ -33,7 +33,54 @@ Alembic. Para tocar el esquema: `alembic revision --autogenerate -m "..."`.
 uvicorn radar.api:app --reload
 ```
 
-Queda en <http://127.0.0.1:8000>, y redirige a la gestión de perfiles.
+Queda en <http://127.0.0.1:8000>, y redirige a la lista de ofertas.
+
+## Ver las ofertas
+
+La pantalla es `/ofertas`, que es la razón de ser de la app. Muestra las
+ofertas del perfil que elijas, ordenadas por puntaje de la más relevante a la
+menos, y cada una con el "por qué" desplegable: qué obligatorias coinciden,
+cuáles te faltan, cuántas deseables hay, y por qué fue descartada.
+
+Tres cosas que conviene saber antes de mirar:
+
+1. **Traer ofertas y puntuarlas son dos pasos.** `radar ingest` llena la tabla
+   `ofertas`; `radar match` escribe los puntajes en `matches`. La pantalla
+   distingue los tres finales —no hay ofertas, hay ofertas pero no puntuadas, o
+   no hay nada— porque después de correr el primero es normal abrir la pantalla
+   y el mensaje tiene que decir qué falta correr.
+2. **Las descartadas están ocultas.** Con el perfil bien configurado son la
+   mayoría. La cabecera dice cuántas hay y el checkbox las trae.
+3. **El perfil se elige arriba.** Con varios perfiles cargados, la misma oferta
+   puntúa distinto según el CV, así que la pantalla siempre dice contra cuál
+   comparó.
+
+Filtros: nivel, texto libre sobre título y empresa, skill y provincia. El de
+skill se arma con las skills que aparecen en las ofertas de ese perfil, no con
+las 219 del catálogo: filtrar por una skill que ningún aviso menciona devuelve
+una lista vacía sin explicación. El de provincia se arma igual, y con la misma
+razón.
+
+Las tres formas que tiene el portal de decir Buenos Aires --"Capital Federal",
+"Buenos Aires" y "Buenos Aires-GBA"-- se agrupan en una sola opción, porque
+juntas son el 66% de lo que trae el portal (164 de 248 ofertas): mostrarlas
+separadas hacía que elegir "Buenos Aires" prometiese 16 ofertas y entregara 16.
+La provincia no es una columna sino una expresión sobre `ubicacion`, que se
+conserva crudo y se muestra en la tarjeta. Agregar una forma nueva al mapa es
+editar un diccionario, no escribir una migración.
+
+### Por qué `Match` tiene una columna `puntaje`
+
+El puntaje estaba dentro del JSON `detalle` y las dos consultas que lo usan lo
+saqueaban con un cast. Para la CLI está bien; para una lista paginada no,
+porque ordenar por una expresión casteada no usa índice y obliga a ordenar
+todas las filas en cada página. La migración `0002` lo saca a una columna con
+índice, con backfill desde el JSON.
+
+El backfill va antes del `NOT NULL` a propósito: si la columna naciera `NOT NULL`
+con default 0 y hubiera ofertas ya puntuadas, la migración no se aplicaría. Y
+peor que fallar: si aceptara el default, la lista arrancaría con todas las
+ofertas en puntaje 0, que es justo el orden que no se debe ver.
 
 ## Perfiles
 
@@ -228,14 +275,74 @@ Las fechas se guardan truncadas al minuto. Sin eso, "Hace 19 horas" se calcula
 contra el reloj de cada corrida y da un valor distinto cada vez, así que el
 upsert cree que todo cambió y reescribe veinte filas por pasada.
 
+Las skills se buscan en el título y en la descripción, no sólo en la
+descripción. Y al reescribir una oferta se hace un diff de las skills, no se
+reemplaza la lista entera: reemplazar la colección le dice a SQLAlchemy que
+borre las filas viejas e inserte las nuevas, y en un mismo flush el INSERT puede
+ir antes que el DELETE. Ahí salta un `UniqueViolation` sobre `uq_oferta_skill`
+justo en la segunda corrida de las ofertas cuya fecha se movió.
+
+## Puntuar ofertas
+
+```bat
+radar match --perfil soporte-it --top 10
+```
+
+`radar match` no trae ofertas: sólo puntúa las que ya están en la base, así que
+corre `radar ingest` primero. Corre sobre todos los perfiles activos salvo que
+pases `--perfil`.
+
+Cada oferta recibe un nivel y un puntaje de 0 a 100: 75% de las skills
+obligatorias y 25% de las deseables. Las dos mitades valen lo mismo para el
+cálculo, pero las obligatorias pesan más en la decisión porque si falta una, la
+oferta se descarta.
+
+| Nivel | Cuándo |
+| --- | --- |
+| `alta` | Todas las obligatorias y la mitad o más de las deseables |
+| `media` | Todas las obligatorias y al menos una deseable |
+| `baja` | Todas las obligatorias y ninguna deseable |
+| `descartada` | Falta al menos una obligatoria, o coincide con `busqueda.excluir` |
+
+Una `descartada` no baja de 49 puntos, para que ordenar por puntaje nunca ponga
+arriba algo que el filtro dejó abajo.
+
+### Calibrá las obligatorias contra ofertas reales
+
+Acá está el número que más costó aprender: **el filtro es tan fuerte como la
+obligatoria más restrictiva, y nadie la calibró contra el mercado.**
+
+Con el perfil de `soporte-it` de ejemplo en su primera versión, con `Mesa de
+Ayuda`, `Soporte Técnico` y `Windows` como obligatorias, sobre 252 avisos reales:
+
+| Obligatoria | Avisos que la nombran |
+| --- | --- |
+| `Soporte Técnico` | 60 |
+| `Windows` | 30 |
+| `Mesa de Ayuda` | 15 |
+
+Y las ocho deseables (`Active Directory`, `ITIL`, `ServiceNow`, `Zendesk`,
+`TCP/IP`...) aparecían entre 5 y 13 avisos cada una. Resultado: **246 de 252
+ofertas `descartada` y ni una sola `alta`**. Con `Mesa de Ayuda` como palabra de
+búsqueda y sólo 15 avisos nombrándola, el portal no usa las palabras que uno
+supone.
+
+Bajando a una sola obligatoria y cinco deseables que sí se repiten
+(`Atención al Cliente`, `Troubleshooting`, `Gestión de Tickets`, `Hardware`,
+`Comunicación`) la misma corrida da 12 `alta`, 36 `media`, 12 `baja` y 192
+`descartada`: 60 ofertas para mirar en vez de 6.
+
+El `.example` de `soporte-it` quedó corregido y lleva los números anotados, para
+que se entienda el método y no sólo el resultado.
+
 ## Estado
 
-Fases 1 a 7 completas: andamiaje, modelo de datos con Alembic, perfiles con UI
+Fases 1 a 10 completas: andamiaje, modelo de datos con Alembic, perfiles con UI
 (alta, edición, activación múltiple, borrado) escribiendo YAML, catálogo de
-219 skills en 12 categorías, y la ingesta de Computrabajo con normalizador y
-filtro temporal. 276 tests.
+219 skills en 12 categorías, ingesta de Computrabajo con normalizador y filtro
+temporal, matching por reglas, CLI y el dashboard de ofertas. 381 tests.
 
-Próximas: matching por reglas, CLI de ingesta y dashboard.
+Próximas: historial de postulaciones y extensión.
 
 ## Estructura
 
@@ -248,6 +355,11 @@ radar/
   models.py      Oferta, OfertaSkill, Perfil, Match, Postulacion
   schema.py      contrato Offer de la capa de fuentes
   ingesta.py     perfil -> páginas del portal -> tabla ofertas, con upsert
+  matching.py    perfil + oferta -> nivel y puntaje, con upsert en matches
+  ofertas.py     consulta del dashboard: filtros, orden y paginación
+  ubicaciones.py provincia canónica de una ubicación, en Python y en SQL
+  cli.py         comandos ingest y match
+  __main__.py    python -m radar
   perfiles/
     validacion.py      esquemas pydantic del perfil
     serializacion.py   YAML <-> dict y aviso de edición manual
@@ -257,8 +369,8 @@ radar/
     computrabajo.py  cliente HTTP con pausa, y el parser del listado y el detalle
     fechas.py        "Hace 19 horas" -> datetime UTC
 catalogo/        skills.yml, la lista canónica de skills (versionada)
-templates/       Jinja2 (base + gestión de perfiles)
-static/          CSS y JS sin build step
+templates/       Jinja2 (base + perfiles + ofertas)
+static/          CSS y JS sin build step (perfiles.js y ofertas.js)
 perfiles/        YAML de perfiles (el .example va versionado, el .yml no)
 migrations/      Alembic
 scripts/

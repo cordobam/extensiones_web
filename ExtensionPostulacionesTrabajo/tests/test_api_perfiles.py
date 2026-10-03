@@ -77,10 +77,15 @@ def _existe(cliente: TestClient, id_perfil: str) -> bool:
         return sesion.get(Perfil, id_perfil) is not None
 
 
-def test_raiz_redirige_a_perfiles(cliente: TestClient) -> None:
+def test_raiz_redirige_a_ofertas(cliente: TestClient) -> None:
+    """La raíz va al dashboard: para eso existe la app.
+
+    Cuando no había ofertas, `/perfiles` era lo más útil. Ahora es al revés, y
+    este test cambió a propósito con la fase 10.
+    """
     respuesta = cliente.get("/", follow_redirects=False)
     assert respuesta.status_code == 307
-    assert respuesta.headers["location"] == "/perfiles"
+    assert respuesta.headers["location"] == "/ofertas"
 
 
 def test_health(cliente: TestClient) -> None:

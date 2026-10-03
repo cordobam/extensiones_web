@@ -1,11 +1,13 @@
 """API y páginas del radar.
 
-Por ahora sólo hay gestión de perfiles. El radar de ofertas (fuentes,
-matching, dashboard) entra en las fases siguientes.
+Dos cosas: la gestión de perfiles y la lista de ofertas del dashboard. La
+consulta de ofertas vive en `radar/ofertas.py`, que es donde está la lógica de
+filtrar y ordenar; acá sólo se traducen los query params a filtros.
 """
 
 from __future__ import annotations
 
+from dataclasses import replace
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlencode
@@ -17,6 +19,8 @@ from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, ValidationError
 from sqlalchemy.orm import Session
 
+from radar import matching, ofertas
+from radar.catalogo import normalizar
 from radar.config import RAIZ, get_settings
 from radar.db import get_session
 from radar.models import Perfil
@@ -231,7 +235,103 @@ def _guardar(
 
 @app.get("/", include_in_schema=False)
 def raiz() -> RedirectResponse:
-    return RedirectResponse("/perfiles", status_code=307)
+    return RedirectResponse("/ofertas", status_code=307)
+
+
+@app.get("/ofertas")
+def listar_ofertas(request: Request, sesion: Session = Depends(get_session)):
+    """La pantalla que por fin muestra el trabajo.
+
+    El perfil se elige con `?perfil=`, y si no se pasa va el primero activo. La
+    pantalla siempre dice contra qué perfil comparó, porque el mismo aviso
+    puntaje distinto según el CV y sin eso la lista no se puede leer.
+    """
+    perfiles, activos = servicio.listar_con_activo(sesion)
+    pedido = request.query_params.get("perfil") or ""
+    perfil = next((p for p in perfiles if p.id == pedido), None)
+    if perfil is None:
+        perfil = next((p for p in perfiles if p.id in activos), None) or (
+            perfiles[0] if perfiles else None
+        )
+
+    filtros = _filtros_de_query(request, sesion, perfil.id if perfil else "")
+    contexto: dict[str, Any] = {
+        "perfiles": perfiles,
+        "activos": activos,
+        "perfil": perfil,
+        "filtros": filtros,
+        "listado": None,
+        "ofertas_en_base": ofertas.contar_ofertas(sesion),
+    }
+
+    if perfil is not None:
+        listado = ofertas.listar(sesion, perfil, filtros)
+        contexto["listado"] = listado
+        contexto["sin_match"] = not ofertas.esta_puntuada(sesion, perfil.id)
+        _, _, desconocidas = matching.conjuntos_perfil(perfil)
+        contexto["skills_desconocidas"] = desconocidas
+
+    return plantillas.TemplateResponse(
+        request=request,
+        name="ofertas/lista.html",
+        context=contexto,
+    )
+
+
+def _filtros_de_query(
+    request: Request, sesion: Session, perfil_id: str
+) -> ofertas.Filtros:
+    """Lee los filtros de la query string, tirando lo que no tiene sentido.
+
+    Una URL escrita a mano con `nivel=inventado` o `pagina=-3` no puede romper
+    la consulta: se ignoran y la pantalla muestra la lista entera.
+    """
+    params = request.query_params
+    niveles = tuple(n for n in params.getlist("nivel") if n in ofertas.NIVELES)
+    texto = (params.get("texto") or "").strip()[:120]
+    skill = (params.get("skill") or "").strip()[:120]
+    provincia = (params.get("provincia") or "").strip()[:120]
+    try:
+        pagina = int(params.get("pagina") or 1)
+    except ValueError:
+        pagina = 1
+    filtros = ofertas.Filtros(
+        niveles=niveles,
+        texto=texto,
+        skill=skill,
+        incluir_descartadas=params.get("descartadas") in ("1", "true", "si"),
+        pagina=pagina,
+    )
+    return replace(filtros, provincia=_provincia_valida(sesion, perfil_id, provincia))
+
+
+def _provincia_valida(sesion: Session, perfil_id: str, pedida: str) -> str:
+    """La provincia pedida, en su forma canónica, o "" si no existe.
+
+    Se valida contra las provincias que el perfil tiene de verdad y no contra
+    una lista de todas las del país, por lo mismo que el filtro de skill: elegir
+    una provincia que ningún aviso menciona es una pantalla vacía.
+
+    La comparación pasa por `catalogo.normalizar`, así que "CORDÓBA", "cordoba"
+    y "Córdoba" son la misma y vuelven como "Córdoba". Eso importa porque la
+    provincia sale de un `<select>` pero también se puede escribir a mano, y
+    además vuelve de la query string: si no se canonizara, el filtro compararía
+    con una cadena distinta de la que agrupa el dropdown y no devolvería nada.
+
+    Ante una provincia que no existe se la ignora y se muestra la lista entera,
+    como con `nivel=inventado`. La alternativa --dejar el filtro y responder
+    "ninguna oferta coincide"-- parece más honesta, pero el `<select>` no tendría
+    ninguna opción elegida y el usuario vería la lista completa sin entender por
+    qué el filtro que puso no hizo nada.
+    """
+    if not pedida:
+        return ""
+
+    por_clave = {
+        normalizar(nombre): nombre
+        for nombre, _ in ofertas.provincias_de(sesion, perfil_id)
+    }
+    return por_clave.get(normalizar(pedida), "")
 
 
 @app.get("/perfiles")

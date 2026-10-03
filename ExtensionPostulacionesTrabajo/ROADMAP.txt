@@ -9,7 +9,7 @@ las ordena por relevancia, te ayuda a redactar la postulación y termina
 completando los formularios por vos. Todo con tu CV en tu propia máquina.
 
 Estado al escribir este documento: fases 1 a 3 completas, 96 tests en verde.
-Al día de hoy: fases 1 a 4 completas, 205 tests en verde.
+Al día de hoy: fases 1 a 10 completas, 381 tests en verde.
 
 
 ================================================================================
@@ -173,8 +173,8 @@ Decisiones que importan
 BLOQUE 2 — DECIDIR CUÁLES TE SIRVEN
 ================================================================================
 
-FASE 8 — Matching por reglas
-----------------------------
+FASE 8 — Matching por reglas — COMPLETA
+-------------------------------------
 Qué es
     Puntuar cada oferta contra el perfil: primero las skills obligatorias,
     después las deseables. Escribe en la tabla matches, que ya tiene las
@@ -186,9 +186,45 @@ Criterio de terminado
     todas las obligatorias cubiertas quedan con nivel alta. Tests con casos
     esperados a mano.
 
+Cómo quedó
+    - radar/matching.py. Puntaje 75% obligatorias + 25% deseables, umbral de
+      `alta` en 0.5 de las deseables, configurable en config.py.
+    - Cuatro niveles: alta, media, baja, descartada. Una `descartada` no pasa
+      de 49 puntos, para que ordenar por puntaje no contradiga al filtro.
+    - `busqueda.excluir` es filtro duro. Modalidad y ubicación no filtran ni
+      puntúan: el filtro por pestaña de Computrabajo queda para más adelante.
+    - Corre sobre las ofertas de la base, no sobre las de la corrida: así se
+      comparan también las que trajo otra búsqueda del mismo perfil.
+    - Las skills del CV se canonicalizan contra el catálogo antes de comparar,
+      para que "mesa de ayuda" y "help desk" cuenten como lo mismo.
+    - 30 tests con los casos esperados a mano.
 
-FASE 9 — CLI de ingesta
------------------------
+Lo que no estaba en el criterio de terminado, y terminó importando más
+    La calibración de las obligatorias del perfil. El criterio decía "falta una
+    obligatoria → descartada" y el motor lo cumple perfecto. El problema era
+    otro: con el perfil de ejemplo en su primera versión, sobre 252 avisos
+    reales de Computrabajo, `Mesa de Ayuda` aparecía en 15 avisos, `Windows` en
+    30 y `Soporte Técnico` en 60. Con las tres obligatorias, 246 de 252 ofertas
+    quedaban descartadas y no había ni una `alta`: un filtro que no deja pasar
+    nada no es un filtro.
+
+    Y el otro: las ocho deseables del ejemplo eran de un puesto NOC senior
+    (ServiceNow, Zendesk, ITIL, Active Directory), entre 5 y 13 avisos cada una.
+    Como `alta` pide la mitad, nunca se alcanzaba.
+
+    El motor no se tocó. Se corrigió el perfil de ejemplo a una obligatoria y
+    cinco deseables que sí se repiten, y la misma corrida dio 12 alta, 36 media,
+    12 baja y 192 descartada: 60 ofertas para mirar en vez de 6. Los números
+    quedaron anotados en el YAML y en el README para que se aprenda el método.
+
+    Lección para las fases siguientes: un filtro no se prueba con casos
+    inventados, se prueba contra ofertas reales y se mira la distribución de
+    niveles. Si casi todo cae en `descartada`, el problema es la configuración,
+    no el motor.
+
+
+FASE 9 — CLI de ingesta — COMPLETA
+-----------------------------------
 Qué es
     Un comando para correr la ingesta a mano antes de automatizar:
         python -m radar ingest --perfil data-engineer --dias 2
@@ -198,13 +234,29 @@ Criterio de terminado
     Un comando corre el pipeline completo y reporta cuántas ofertas vio,
     cuántas entreron y cuántas quedaron descartadas por fecha.
 
+Cómo quedó
+    - Dos subcomandos: `ingest` (trae ofertas) y `match` (puntúa las que ya
+      están). Separados porque son pasos distintos: puntuar es instantáneo y
+      local, volver a traer ofertas es lo que cuesta los 9 minutos.
+    - `ingest`: --perfil, --dias, --sin-detalle, --listados, --limpiar,
+      --keyword.
+    - `match`: --perfil, --top. El --top no muestra descartadas, porque están
+      descartadas.
+    - Sin argumentos corre todos los perfiles activos, que es lo que se quiere
+      para una corrida programada.
+    - `radar match` no habla con el portal: sólo lee la base y escribe en
+      matches. Si no hay ofertas avisa, no se calla.
+    - 19 tests de CLI.
+    - scripts/ingesta_humo.py se queda: corre la ingesta dos veces seguidas y
+      borra lo que genera, que es justo lo que el comando no hace.
+
 
 ================================================================================
 BLOQUE 3 — VER LOS RESULTADOS
 ================================================================================
 
-FASE 10 — API y dashboard
--------------------------
+FASE 10 — API y dashboard — COMPLETA
+------------------------------------
 Qué es
     La página donde por fin se ve el trabajo: listado de ofertas ordenadas por
     puntaje, con filtros y link a la oferta original.
@@ -212,6 +264,56 @@ Qué es
 Criterio de terminado
     Una pantalla donde se entra al perfil activo y se ve la lista ordenada por
     relevancia, con el detalle de por qué cada oferta puntúa como puntúa.
+
+Cómo quedó
+    - GET /ofertas, y / ahora redirige ahí en vez de a /perfiles. Para eso
+      existe la app; mandar al alta de perfiles como primer pantallazo era
+      correcto cuando no había nada que mirar.
+    - El perfil se elige con ?perfil= y, sin ese parámetro, va el primero
+      activo. La pantalla siempre dice contra cuál comparó, porque con varios
+      perfiles cargados el mismo aviso puntúa distinto según el CV.
+    - Cada fila tiene el "por qué" desplegable: qué obligatorias coinciden,
+      cuáles faltan, cuántas deseables, y si se descartó por `busqueda.excluir`.
+    - Filtros: nivel, texto libre sobre título y empresa, y skill. El de skill
+      se arma con las skills que aparecen en las ofertas del perfil, no con las
+      219 del catálogo, porque filtrar por una skill que nadie pidió devuelve
+      una lista vacía sin explicación.
+    - Las descartadas están ocultas por defecto con contador y checkbox: con el
+      perfil bien configurado son el 76% del total y mostrarlas tapa justo las
+      que sirven.
+    - Tres estados vacíos distintos, porque la instrucción es distinta en cada
+      uno: no hay ofertas (correr ingest), hay ofertas sin puntuar (correr
+      match), o el filtro no deja nada. El segundo es el más importante:
+      traer y puntuar son pasos separados y es normal abrir la pantalla después
+      del primero.
+    - Banner de skills del perfil fuera del catálogo, que nunca van a matchear.
+      Sin ese aviso el usuario ve una lista corta y cree que el matching anda
+      mal, cuando el problema es una skill mal escrita en su CV.
+    - radar/ofertas.py, separado de api.py: la consulta, los filtros y la
+      paginación no van mezclados con el CRUD de perfiles.
+    - `matching.conjuntos_perfil()` expone los conjuntos canónicos del perfil
+      para que la vista no recalcule. Si la vista los calculara por su cuenta,
+      se olvidaría de deduplicar alias y explicaría un número que el motor no
+      usó.
+    - 18 tests de la pantalla.
+
+Lo que no estaba en el criterio de terminado
+    Que `Match` no tuviera columna `puntaje`: el número vivía dentro del JSON
+    `detalle`. Para la CLI eso se resolvía con un cast, y el criterio se cumplía
+    sin problema. Para una lista paginada no servía: ordenar por una expresión
+    casteada no usa índice y obliga a ordenar todas las filas en cada página.
+    La migración 0002 saca el puntaje a una columna con índice.
+
+    El backfill va antes del NOT NULL a propósito. Si la columna hubiera nacido
+    NOT NULL con default 0, la migración no se aplicaba sobre las 251 ofertas ya
+    puntuadas; y si se hubiera aceptado el default, la lista arrancaría con
+    todas en 0, que es el orden que no se debe ver. Verificado con un viaje
+    completo: downgrade a 0001 tira la columna y upgrade la recupera del JSON.
+
+    Aprovechada la migración, el --top de la CLI pasó a usar la columna y quedó
+    en el mismo orden que la pantalla, con el id de desempate. Antes los dos
+    ordenaban por el JSON y sin desempate, así que dentro de los puntajes
+    empatados cada uno mostraba un orden distinto.
 
 
 ================================================================================
@@ -380,6 +482,11 @@ COMANDOS DE REFERENCIA
 ================================================================================
 
     Instalar            pip install -e ".[dev]"
+    levantar .env
+    setear utf-8
+    copiar pefiles 
+    traer ofertas
+    priorizar ofertas
     Levantar la app     uvicorn radar.api:app --reload
     Tests               pytest
     Migraciones         alembic upgrade head
