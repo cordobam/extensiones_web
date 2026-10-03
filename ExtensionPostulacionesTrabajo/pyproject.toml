@@ -27,6 +27,9 @@ migraciones = [
     "alembic>=1.14",
 ]
 
+[project.scripts]
+radar = "radar.cli:main"
+
 [build-system]
 requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"

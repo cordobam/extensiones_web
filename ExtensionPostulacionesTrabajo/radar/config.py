@@ -24,6 +24,23 @@ class Settings(BaseSettings):
     # minutos sin encontrar nada.
     paginas_max_por_keyword: int = 5
 
+    # ---------------------------------------------------------------- matching
+    #
+    # Los pesos son porcentaje: obligatorias + deseables = 100. El reparto es
+    # 75/25 y no 50/50 a propósito. Con 50/50, una oferta a la que le falta una
+    # obligatoria de tres pero cumple todas las deseables saca 66, igual que
+    # una que cumple las tres y no menciona ninguna deseable. 75/25 hace que
+    # perder una de tres obligatorias cueste 25 puntos, que es más de lo que
+    # aportan todas las deseables juntas, así que el número nunca premia una
+    # oferta que le falta un requisito.
+    match_peso_obligatorias: int = 75
+    match_peso_deseables: int = 25
+
+    # Ratio de deseables cubiertas a partir del cual la oferta es "alta".
+    # Abajo de eso pero mayor que cero es "media", y cero es "baja".
+    # Con 0.5 alcanza con la mitad de tus deseables mencionadas en el aviso.
+    match_umbral_alta: float = 0.5
+
     perfiles_dir: Path = RAIZ / "perfiles"
 
 

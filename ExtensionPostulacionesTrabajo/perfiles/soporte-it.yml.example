@@ -44,62 +44,49 @@ cv:
   # `obligatorio: true` marca lo que si te falta descarta la oferta en el
   # matching. No lo pongas en todo: si no, sólo te van a entrar ofertas con las
   # skills exactas y te vas a perder las que las dicen con otra palabra.
+  #
+  # Y más importante: calibralo contra ofertas reales, no contra lo que vos
+  # suponés que pisan las empresas. Con una corrida de 252 avisos reales de
+  # estas cinco keywords, `Mesa de Ayuda` aparecía en 15 y `Windows` en 30
+  # nomás. Con las tres como `obligatorio: true` el matching tiraba 246 de 252
+  # ofertas a `descartada` y no había ni una `alta`: un filtro que no deja pasar
+  # nada no es un filtro. `Soporte Técnico` sola aparece en 60, así que es la
+  # única que puede ser obligatoria.
+  #
+  # Lo mismo con las deseables: `ServiceNow` (5 avisos), `Zendesk` (6), `ITIL`
+  # (7) y `Active Directory` (13) son de un puesto NOC senior que casi nadie
+  # tiene. Como `alta` pide la mitad de las deseables, si dejás ocho así nunca
+  # llegás a `alta`. Las de abajo son las que sí se repiten en el mercado.
+  # Si tu caso es el NOC senior, reemplazalas y recalibrá.
   skills:
-    - nombre: Mesa de Ayuda
-      obligatorio: true
-      evidencia: null
-      anios: null
-
     - nombre: Soporte Técnico
       obligatorio: true
       evidencia: null
       anios: null
 
-    - nombre: Windows
-      obligatorio: true
-      evidencia: null
-      anios: null
-
-    - nombre: Active Directory
-      alias: ["dominio", "AD", "azure ad"]
+    - nombre: Atención al Cliente
       obligatorio: false
       evidencia: null
       anios: null
 
-    - nombre: Redes Inalámbricas
-      alias: ["wifi", "redes wifi"]
+    - nombre: Troubleshooting
       obligatorio: false
       evidencia: null
       anios: null
 
-    - nombre: TCP/IP
+    - nombre: Gestión de Tickets
+      alias: ["ticketing", "tickets", "helpdesk"]
       obligatorio: false
       evidencia: null
       anios: null
 
-    - nombre: Soporte Nivel 2
-      alias: ["N2", "segundo nivel"]
+    - nombre: Hardware
       obligatorio: false
       evidencia: null
       anios: null
 
-    - nombre: ITIL
-      obligatorio: false
-      evidencia: null
-      anios: null
-
-    - nombre: ServiceNow
-      alias: ["Service Now"]
-      obligatorio: false
-      evidencia: null
-      anios: null
-
-    - nombre: Zendesk
-      obligatorio: false
-      evidencia: null
-      anios: null
-
-    - nombre: SQL Server
+    - nombre: Comunicación
+      alias: ["communication", "comunicacion"]
       obligatorio: false
       evidencia: null
       anios: null

@@ -290,3 +290,115 @@ code {
   padding: 1px 5px;
   border-radius: 4px;
 }
+
+
+/* ----------------------------------------------------------------- dashboard */
+
+.selector-perfil {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 16px;
+}
+.selector-perfil label { color: var(--muted); }
+
+/* Los contadores de la cabecera. El color dice lo mismo que el badge del
+   nivel, para que el conteo y cada fila se lean con la misma clave. */
+.resumen {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 16px;
+}
+.contador {
+  padding: 4px 10px;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  background: var(--superficie);
+  font-size: 13px;
+  color: var(--muted);
+}
+.contador strong { color: var(--texto); font-size: 14px; }
+
+.nivel-alta { border-left: 4px solid #1e8e3e; }
+.nivel-media { border-left: 4px solid #c9a227; }
+.nivel-baja { border-left: 4px solid #b06a1f; }
+.nivel-descartada { border-left: 4px solid var(--borde); }
+
+.badge.nivel-alta { background: #e6f4ea; color: #14622c; }
+.badge.nivel-media { background: #fdf6e3; color: #7a5c14; }
+.badge.nivel-baja { background: #fbeee0; color: #8a4f14; }
+.badge.nivel-descartada { background: #eef0f2; color: var(--muted); }
+.contador.nivel-alta { border-left: 4px solid #1e8e3e; }
+.contador.nivel-media { border-left: 4px solid #c9a227; }
+.contador.nivel-baja { border-left: 4px solid #b06a1f; }
+.contador.nivel-descartada { border-left: 4px solid var(--borde); }
+
+.filtros {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+  margin: 0 0 20px;
+}
+.filtros .campo { display: flex; flex-direction: column; gap: 4px; font-size: 13px; }
+.filtro-niveles {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+}
+.filtro-niveles label { display: flex; align-items: center; gap: 4px; font-size: 13px; }
+
+.lista-ofertas { list-style: none; margin: 0 0 20px; padding: 0; }
+.oferta {
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-left-width: 4px;
+  border-radius: var(--radio);
+  padding: 12px 14px;
+  margin-bottom: 8px;
+}
+.oferta-cabecera { display: flex; align-items: baseline; gap: 12px; }
+.oferta-titulo { flex: 1; }
+.oferta-titulo a { font-weight: 600; }
+.oferta-titulo .muted { margin-left: 8px; font-size: 13px; }
+.oferta-cabecera .badge { margin-left: 0; flex-shrink: 0; }
+
+.puntaje {
+  font-weight: 700;
+  font-size: 18px;
+  min-width: 40px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.oferta-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.por-que { margin-top: 8px; }
+.por-que summary { cursor: pointer; font-size: 13px; color: var(--primario); }
+.por-que dl { margin: 10px 0 0; display: grid; grid-template-columns: 150px 1fr; gap: 4px 12px; }
+.por-que dt { font-size: 13px; color: var(--muted); }
+.por-que dd { margin: 0; font-size: 13px; }
+.por-que .rojo { color: var(--peligro); }
+
+.descripcion {
+  margin-top: 10px;
+  padding: 10px;
+  background: var(--fondo);
+  border-radius: var(--radio);
+  font-size: 13px;
+  white-space: pre-wrap;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.paginacion { display: flex; flex-wrap: wrap; gap: 6px; margin: 16px 0; }
+.paginacion .actual { background: var(--primario); color: #fff; border-color: var(--primario); }

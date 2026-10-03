@@ -113,6 +113,13 @@ class Match(Base):
     )
 
     nivel: Mapped[str] = mapped_column(String(20), index=True)
+
+    # El puntaje vive acá y no sólo dentro de `detalle` porque la lista del
+    # dashboard ordena por él y paginatea. Ordenar por `detalle->>'puntaje'`
+    # obliga a castear el JSON, que no se indexa y obliga a ordenar todas las
+    # filas en cada página de resultados.
+    puntaje: Mapped[int] = mapped_column(Integer, default=0, index=True)
+
     obligatorios_ok: Mapped[int] = mapped_column(Integer, default=0)
     obligatorios_total: Mapped[int] = mapped_column(Integer, default=0)
     deseables_ok: Mapped[int] = mapped_column(Integer, default=0)
