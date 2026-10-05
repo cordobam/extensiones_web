@@ -1,0 +1,78 @@
+# Perfiles de ejemplo — COPIÁ ESTE ARCHIVO Y RENOMBRÁLO A .yml
+
+id: analytics-engineer
+
+nombre: Analytics Engineer
+
+busqueda:
+  keywords:
+    - analytics engineer
+    - dbt
+    - sql
+    - python
+  ubicaciones: []
+  modalidades:
+    - remoto
+    - híbrido
+  seniority:
+    - semi-senior
+    - senior
+  excluir: []
+
+cv:
+  # Texto que la extensión de Firefox escribe en el campo de presentación del
+  # formulario. Es fijo y lo escribís vos: la versión que se arma según cada
+  # oferta es la fase 14, y depende de la 11, que está trabada porque
+  # `evidencia` está vacía en los perfiles y un modelo que la inventa te manda a
+  # entrevistas por cosas que no hiciste.
+  #
+  # presentacion: |
+  #   Hola. Soy Ada y hago soporte de escritorio desde 2018.
+  contacto:
+    nombre: Tu
+    apellido: Nombre
+    email: tu.email@ejemplo.com
+    telefono: "+54 9 11 0000-0000"
+    ciudad: Tu Ciudad
+    linkedin: "https://linkedin.com/in/tu-usuario"
+
+  skills:
+    - nombre: SQL
+      obligatorio: true
+      evidencia: "Modelado de datos y reporting"
+      anios: 4
+
+    - nombre: dbt
+      alias: ["dbt core", "dbt cloud"]
+      obligatorio: true
+      evidencia: "Limpieza y transformación de datos"
+      anios: 2
+
+    - nombre: Python
+      alias: ["python3"]
+      obligatorio: false
+      evidencia: "Scripts y análisis exploratorio"
+      anios: 3
+
+    - nombre: Power BI
+      alias: ["powerbi", "power bi"]
+      obligatorio: false
+      evidencia: "Dashboards y métricas"
+      anios: 2
+
+  experiencia:
+    - puesto: Analytics Engineer
+      empresa: Empresa Ejemplo
+      desde: 2023-06-01
+      hasta: null
+      descripcion: |
+        Desarrollo de modelos en dbt, métricas y documentación para consumo analítico.
+      skills: ["SQL", "dbt", "Python"]
+
+  educacion: []
+  idiomas:
+    - idioma: Español
+      nivel: Nativo
+    - idioma: Inglés
+      nivel: B2
+  certificaciones: []

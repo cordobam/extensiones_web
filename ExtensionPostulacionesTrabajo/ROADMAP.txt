@@ -9,7 +9,19 @@ las ordena por relevancia, te ayuda a redactar la postulación y termina
 completando los formularios por vos. Todo con tu CV en tu propia máquina.
 
 Estado al escribir este documento: fases 1 a 3 completas, 96 tests en verde.
-Al día de hoy: fases 1 a 10 completas, 381 tests en verde.
+Al día de hoy: fases 1 a 12 completas, 481 tests en verde. La 13 empezado.
+
+Dónde vive cada cosa
+--------------------
+El proyecto se partió en dos carpetas y este documento las atraviesa:
+
+    aplicacion_web/    la app Python. Acá viven radar/, migrations/, tests/,
+                       templates/, static/, scripts/ y catalogo/.
+    extension_web/     la extensión de Firefox (fase 13).
+
+Por eso las rutas de archivo que aparecen más abajo, tipo `radar/ingesta.py`,
+son relativas a `aplicacion_web/`. La única excepción es `extension_web/`, que
+se nombra con la ruta completa porque no está dentro de la app.
 
 
 ================================================================================
@@ -359,19 +371,41 @@ Nota sobre el orden
 BLOQUE 5 — POSTULAR
 ================================================================================
 
-FASE 12 — Historial y embudo
-----------------------------
+FASE 12 — Historial y embudo — COMPLETA
+--------------------------------------
 Qué es
-    Los estados de una postulación sobre la tabla postulacion, que ya existe
-    con estado, fecha_postulacion y notas. Embudo: descartada -> enviada ->
-    entrevista -> resultado -> archivada.
+    Los estados de una postulación sobre la tabla postulacion, que ya existía
+    con estado, fecha_postulacion y notas.
 
 Criterio de terminado
     Se puede ver el historial con fecha y cambiar el estado de cada postulación.
 
+Qué se decidió
+    - Estados: pendiente -> enviada -> entrevista -> resultado_aceptada,
+      resultado_rechazada -> archivada. Sin "descartada": una postulación nace
+      cuando la marcás, no cuando la descartás, así que no hace falta.
+    - Aceptada y rechazada separadas. Juntos no alcanzan para el único número
+      para el que vale el embudo, que es la tasa de acierto.
+    - El embudo NO es una cadena. `enviada` va directo a `resultado_rechazada`
+      porque te rechazan sin entrevista, y con una cadena lineal hay que fingir
+      una entrevista que no pasó para registrar el rechazo.
+    - Sin retroceso. Corregir un estado equivocado es archivar o desmarcar.
+    - Dos fechas: `creado_en` (cuándo la marcaste) y `fecha_postulacion`
+      (cuándo la mandaste, que se llena sola al entrar en `enviada`). Por eso la
+      migración 0003, y por eso el default del estado pasó de "descartada" a
+      "pendiente" sin tocar la columna: no tenía server_default.
+    - Sin bitácora de transiciones. Queda pendiente si más adelante se
+      quiere saber cuánto dura cada etapa.
 
-FASE 13 — Extensión web
------------------------
+Qué quedó fuera, a propósito
+    - `actualizado_en` en postulaciones: lo trae el resto del modelo, pero
+      con `creado_en` y `fecha_postulacion` alcanza para lo que se pidió.
+    - Un log de eventos por transición: es lo que daría "cuánto tarda una
+      entrevista en llegar", y se agrega después sobre filas que ya existen.
+
+
+FASE 13 — Extensión web — EN CURSO (hecha la parte de la app)
+------------------------------------------------------
 Qué es
     Extensión MV3 que abre la oferta y precarga tus datos en el formulario.
 
@@ -380,18 +414,66 @@ Precedente útil que ya tenés
     y Firefox) y ya tenés el patrón de manifest MV3 y web_accessible_resources.
     No arrancamos de cero.
 
+Decisión tomada:Firefox solamente
+    Se descarta el manifest de Chrome. Tu ExtensionBloquearPaginas ya es
+    Firefox, y mantener dos manifests para una herramienta personal no paga.
+
+Decisión tomada:un adaptador por portal desde el día uno
+    La extensión se construye contra un portal: sus selectores y sus permisos
+    son específicos. Si se hace contra Computrabajo sola, hay que reescribirla
+    por cada portal que se agregue. La estructura que lo evita:
+
+        extension_web/
+          fondo.js                  sincroniza los datos con la app
+          portales/computrabajo.js  sólo selectores
+          portales/indeed.js  registro.js          elige por location.hostname
+
+    Son veinte líneas más hoy y salvan la reescritura después. Es la razón por
+    la que la fase de portales (16) va después y no antes.
+
 Tres advertencias técnicas
-    - Tu manifest actual usa background.scripts, que es Firefox. Chrome MV3
-      exige background.service_worker. Habrá que mantener dos manifests o
-      usar un build.
     - Esta fase necesita permisos que hoy no pedís: scripting y acceso a los
       dominios de empleo.
-    - La extensión necesita saber contra qué perfil completar. Hoy sólo puede
-      haber un activo, así que alcanza; cuando quieras varios, hay que elegir.
+    - La extensión necesita saber contra qué perfil completar. Hay un perfil
+      activo por defecto; cuando quieras varios, hay que elegir.
+    - Prellenar un formulario de Computrabajo es un SELECTOR, pero enviado es
+      la parte delicada: mandar currículum es una acción irreversible y con
+      consentimiento. La extensión no debería mandar sola; debería dejar el
+      formulario listo y que la persona apriete enviar. La postulación se
+      registra como "enviada" recién después.
 
 Criterio de terminado
     La extensión abre una oferta de tu lista y deja los campos de contacto y
     CV cargados.
+
+Lo que ya está (la mitad de la app)
+    - `cv.presentacion` en el esquema del perfil, con la migración 0004 y un
+      textarea en el editor. Es texto fijo, escrito a mano: la versión que se
+      arma según cada oferta es la fase 14 y depende de la 11, que sigue
+      trabada por `evidencia` vacía.
+    - `GET /api/extension/datos`: el CV y las postulaciones vivas del perfil, en
+      un solo request. Juntas a propósito, porque si fueran dos la extensión
+      podría rellenar un formulario con los datos de una versión y el embudo de
+      otra.
+    - `POST /api/extension/enviada`, que llama a `registrar_envio()` en el
+      servicio de postulaciones. Crea la postulación si no existía, mueve la
+      pendiente, y no toca la que ya avanzó.
+    - Las dos rutas piden la cabecera `X-Radar-Extension: 1`. No es
+      autenticación: es para que ninguna página web pueda pegarle un POST a la
+      app del localhost. Una cabecera propia obliga a un preflight que la app no
+      contesta, así que la petición nunca sale.
+
+Lo que falta (la mitad de la extensión)
+    - `manifest.json`, `fondo.js`, el panel sobre el formulario y la página de
+      opciones, en `extension_web/`.
+    - `scripts/generar_datos_extension.py`, para el `datos.json` que permite
+      autocompletar con la app caída. Va gitignored: trae nombre, email y
+      teléfono.
+    - Los selectores de Computrabajo, que necesitan mirar el formulario real.
+      El plan es en dos pasadas: primero un panel que reporte qué campos
+      encuentra, y con ese resultado escribir el mapa por defecto. Adivinar los
+      selectores a ciegas es la forma más rápida de hacer una extensión que no
+      funciona.
 
 
 ================================================================================
@@ -409,6 +491,46 @@ Criterio de terminado
     mirar.
 
 
+FASE 16 — Multi-fuente (LA QUE FALTA)
+-------------------------------------
+Qué es
+    Traer ofertas de los otros portales, no sólo de Computrabajo. Es el objetivo
+    de verdad del proyecto --"muchos portales en un solo lugar"-- y el roadmap
+    no lo tenía cubierto.
+
+El blocker real, que no es el scraper
+    radar/fuentes/__init__.py promete que "mañana se puede sumar otro portal sin
+    tocarlos", y el contrato Offer de schema.py efectivamente es agnóstico. Pero
+    ingesta.py tiene computrabajo escrito en seis lugares e instancia Cliente()
+    concreto. Agregar el portal #2 NO es escribir un scraper: primero hay que
+    refactorizar ingesta.py a un registro de fuentes. Ese refactor no estaba
+    presupuestado en ninguna fase.
+
+Criterio de terminado
+    `radar ingest` trae ofertas de al menos dos portales y la lista las muestra
+    juntas, sin que el matching ni la base se enteren del origen.
+
+Las tres preguntas antes de escribir un scraper
+    1. ¿Se puede buscar por keyword sin sesión?
+    2. ¿Cada oferta trae fecha de publicación? Sin fecha no hay filtro temporal
+       (fase 7) y el matching por puntaje deja de servir.
+    3. ¿Hay RSS o JSON en vez de HTML? Si hay, gana el feed: no es scrapear.
+
+Estado de cada portal
+    - zonajobs, indeed       Anónimos y parecidos a Computrabajo. Primer paso.
+    - bolsas de universidad  HTML sencillo, pero muchas no traen fecha o la
+                             traen como "cierra el". Ojo con eso.
+    - meli, adecco, consultoras
+                             Suelen tener API o JSON de verdad. Eso no es
+                             scrapear, es consumir un endpoint. Alto volumen y
+                             alto valor: el mejor retorno.
+    - linkedin               Distinto problema. Pide sesión, así que necesita
+                             soporte de credenciales en la capa de fuentes, y sus
+                             términos prohíben el acceso automatizado. Tratarlo
+                             como un spike con resultado honesto, no como una fase
+                             comprometida. Puede ser que no sea viable.
+
+
 ================================================================================
 DEPENDENCIAS
 ================================================================================
@@ -424,6 +546,10 @@ DEPENDENCIAS
     12 ->  13                  la extensión puede vivir sin historial
     10 ->  13                  la extensión abre ofertas de la lista
     12 ->  15                  n8n avisa sobre el estado del embudo
+    13 ->  16                  la extensión usa un adaptador por portal; sin la
+                                16 el 13 queda atada a un solo sitio
+    16 ->  14 o 15            más portales dan más material para el RAG y para
+                                los avisos
 
 
 ================================================================================

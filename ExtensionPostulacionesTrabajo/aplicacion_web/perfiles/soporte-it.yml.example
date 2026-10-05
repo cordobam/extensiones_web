@@ -1,0 +1,117 @@
+# Perfiles de ejemplo — COPIÁ ESTE ARCHIVO Y RENOMBRÁLO A .yml
+
+id: soporte-it
+
+nombre: Soporte IT
+
+busqueda:
+  # Keywords orientadas a los roles que Computrabajo Argentina indexa de verdad.
+  # "mesa de ayuda" y "helpdesk" son la misma búsqueda con distinto nombre.
+  keywords:
+    - mesa de ayuda
+    - soporte técnico
+    - soporte it
+    - helpdesk
+    - soporte de sistemas
+  ubicaciones: []
+    # - CABA
+  modalidades:
+    - remoto
+    - híbrido
+    - presencial
+  seniority:
+    - junior
+    - semi-senior
+    - senior
+  excluir: []
+
+cv:
+  # Texto que la extensión de Firefox escribe en el campo de presentación del
+  # formulario. Es fijo y lo escribís vos: la versión que se arma según cada
+  # oferta es la fase 14, y depende de la 11, que está trabada porque
+  # `evidencia` está vacía en los perfiles y un modelo que la inventa te manda a
+  # entrevistas por cosas que no hiciste.
+  #
+  # presentacion: |
+  #   Hola. Soy Ada y hago soporte de escritorio desde 2018.
+  contacto:
+    nombre: Tu
+    apellido: Nombre
+    email: tu.email@ejemplo.com
+    telefono: "+54 9 11 0000-0000"
+    ciudad: Tu Ciudad
+    linkedin: "https://linkedin.com/in/tu-usuario"
+
+  # IMPORTANTE: evidencia y anios van en null a propósito.
+  #
+  # `evidencia` es lo que va a alimentar las cartas de la IA en las fases
+  # futuras. Si la inventás, el modelo la va a usar tal cual y te va a mandar a
+  # interviews por experiencia que no tenés. Llenala con cosas reales: qué
+  # hacías, dónde, qué sistema tocabas.
+  #
+  # `obligatorio: true` marca lo que si te falta descarta la oferta en el
+  # matching. No lo pongas en todo: si no, sólo te van a entrar ofertas con las
+  # skills exactas y te vas a perder las que las dicen con otra palabra.
+  #
+  # Y más importante: calibralo contra ofertas reales, no contra lo que vos
+  # suponés que pisan las empresas. Con una corrida de 252 avisos reales de
+  # estas cinco keywords, `Mesa de Ayuda` aparecía en 15 y `Windows` en 30
+  # nomás. Con las tres como `obligatorio: true` el matching tiraba 246 de 252
+  # ofertas a `descartada` y no había ni una `alta`: un filtro que no deja pasar
+  # nada no es un filtro. `Soporte Técnico` sola aparece en 60, así que es la
+  # única que puede ser obligatoria.
+  #
+  # Lo mismo con las deseables: `ServiceNow` (5 avisos), `Zendesk` (6), `ITIL`
+  # (7) y `Active Directory` (13) son de un puesto NOC senior que casi nadie
+  # tiene. Como `alta` pide la mitad de las deseables, si dejás ocho así nunca
+  # llegás a `alta`. Las de abajo son las que sí se repiten en el mercado.
+  # Si tu caso es el NOC senior, reemplazalas y recalibrá.
+  skills:
+    - nombre: Soporte Técnico
+      obligatorio: true
+      evidencia: null
+      anios: null
+
+    - nombre: Atención al Cliente
+      obligatorio: false
+      evidencia: null
+      anios: null
+
+    - nombre: Troubleshooting
+      obligatorio: false
+      evidencia: null
+      anios: null
+
+    - nombre: Gestión de Tickets
+      alias: ["ticketing", "tickets", "helpdesk"]
+      obligatorio: false
+      evidencia: null
+      anios: null
+
+    - nombre: Hardware
+      obligatorio: false
+      evidencia: null
+      anios: null
+
+    - nombre: Comunicación
+      alias: ["communication", "comunicacion"]
+      obligatorio: false
+      evidencia: null
+      anios: null
+
+  experiencia: []
+    # - puesto: Analista de Soporte
+    #   empresa: Empresa Ejemplo
+    #   desde: 2023-01-01
+    #   hasta: null
+    #   descripcion: |
+    #     Mesa de ayuda interna: alta de usuarios, incidentes de red y Office.
+    #   skills: ["Windows", "Active Directory", "Mesa de Ayuda"]
+
+  educacion: []
+  idiomas:
+    - idioma: Español
+      nivel: Nativo
+    - idioma: Inglés
+      nivel: null   # Poné tu nivel real: filtrarlo por idioma te ahorra ofertas.
+  certificaciones: []

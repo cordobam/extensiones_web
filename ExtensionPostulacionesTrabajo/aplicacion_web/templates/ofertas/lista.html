@@ -1,0 +1,230 @@
+{% extends "base.html" %}
+
+{% block titulo %}{{ super() }} · Ofertas{% endblock %}
+
+{% block contenido %}
+<h1>Ofertas</h1>
+
+{% if error %}<p class="aviso error">{{ error }}</p>{% endif %}
+{% if aviso %}<p class="aviso">{{ aviso }}</p>{% endif %}
+
+{% if not perfil %}
+  <p class="vacio">
+    Todavía no cargaste ningún perfil.
+    <a href="/perfiles">Creá uno</a>
+    y activalo: el radar sólo puntúa contra los perfiles que cargaste.
+  </p>
+{% else %}
+  {# El selector navega con JS; sin JS queda el botón, que es el mismo form. #}
+  <form class="selector-perfil" method="get" action="/ofertas">
+    <label for="perfil">Comparando contra</label>
+    <select id="perfil" name="perfil" onchange="this.form.submit()">
+      {% for p in perfiles %}
+      <option value="{{ p.id }}" {% if p.id == perfil.id %}selected{% endif %}>
+        {{ p.nombre }}{% if p.id not in activos %} (inactivo){% endif %}
+      </option>
+      {% endfor %}
+    </select>
+    <noscript><button class="btn-chico" type="submit">Ver</button></noscript>
+  </form>
+
+  {% if skills_desconocidas %}
+  <p class="aviso">
+    {{ skills_desconocidas | length }} skill{{ 's' if skills_desconocidas | length != 1 }}
+    del perfil no están en el catálogo y no van a matchear nunca:
+    {{ skills_desconocidas | join(', ') }}.
+    Agregalas a <code>catalogo/skills.yml</code> o sacalas del CV.
+  </p>
+  {% endif %}
+
+  {% if listado %}
+  <p class="resumen">
+    {% for nivel in ['alta', 'media', 'baja'] %}
+    <span class="contador nivel-{{ nivel }}">
+      <strong>{{ listado.total_por_nivel.get(nivel, 0) }}</strong> {{ nivel }}
+    </span>
+    {% endfor %}
+    {% if listado.total_descartadas %}
+    <span class="contador nivel-descartada">
+      <strong>{{ listado.total_descartadas }}</strong> descartada{{ 's' if listado.total_descartadas != 1 }}
+    </span>
+    {% endif %}
+  </p>
+
+  <form class="filtros" method="get" action="/ofertas" id="filtros">
+    <input type="hidden" name="perfil" value="{{ perfil.id }}">
+
+    <fieldset class="filtro-niveles">
+      <legend>Nivel</legend>
+      {% for nivel in ['alta', 'media', 'baja'] %}
+      <label>
+        <input type="checkbox" name="nivel" value="{{ nivel }}"
+          {% if nivel in filtros.niveles %}checked{% endif %}>
+        {{ nivel }}
+      </label>
+      {% endfor %}
+      <label>
+        <input type="checkbox" name="descartadas" value="1"
+          {% if filtros.incluir_descartadas %}checked{% endif %}>
+        mostrar las {{ listado.total_descartadas }} descartadas
+      </label>
+    </fieldset>
+
+    <label class="campo">
+      Buscar
+      <input type="search" name="texto" value="{{ filtros.texto }}"
+             placeholder="título o empresa">
+    </label>
+
+    <label class="campo">
+      Provincia
+      <select name="provincia" id="provincia">
+        {# El total sale de la suma de las provincias y no de `listado.total`,
+           porque los conteos de al lado no respetan los otros filtros y un
+           número junto a ellos calculado con otra regla se lee como que sí. #}
+        <option value="">Todas ({{ listado.provincias_disponibles | sum(attribute=1) }})</option>
+        {% for nombre, n in listado.provincias_disponibles %}
+        <option value="{{ nombre }}" {% if nombre == filtros.provincia %}selected{% endif %}>
+          {{ nombre }} ({{ n }})
+        </option>
+        {% endfor %}
+      </select>
+    </label>
+
+    <label class="campo">
+      Skill
+      <input type="text" name="skill" value="{{ filtros.skill }}"
+             list="skills-disponibles" placeholder="cualquiera">
+      <datalist id="skills-disponibles">
+        {% for skill in listado.skills_disponibles %}
+        <option value="{{ skill }}"></option>
+        {% endfor %}
+      </datalist>
+    </label>
+
+    <button class="btn" type="submit">Filtrar</button>
+  </form>
+  {% endif %}
+
+  {# Los tres finales distintos, porque la instrucción es distinta en cada uno. #}
+  {% if not perfil or not ofertas_en_base %}
+    <p class="vacio">
+      No hay ofertas en la base todavía. Traelas con
+      <code>radar ingest --perfil {{ perfil.id if perfil else 'soporte-it' }}</code>.
+    </p>
+  {% elif sin_match %}
+    <p class="vacio">
+      Hay {{ ofertas_en_base }} ofertas en la base pero ninguna está puntuada.
+      Corré <code>radar match --perfil {{ perfil.id }}</code> para ordenarlas.
+    </p>
+  {% elif not listado or not listado.total %}
+    <p class="vacio">Ninguna oferta coincide con el filtro.</p>
+  {% else %}
+  <p class="muted">
+    Mostrando {{ listado.rango[0] }}–{{ listado.rango[1] }} de {{ listado.total }}.
+  </p>
+
+  <ul class="lista-ofertas">
+    {% for fila in listado.filas %}
+    {% set m = fila.match %}
+    <li class="oferta con-borde-{{ m.nivel }}">
+      <div class="oferta-cabecera">
+        <span class="puntaje">{{ m.puntaje }}</span>
+        <div class="oferta-titulo">
+          {% if fila.oferta.url %}
+            <a href="{{ fila.oferta.url }}" target="_blank" rel="noopener noreferrer">{{ fila.oferta.titulo }}</a>
+          {% else %}
+            {{ fila.oferta.titulo }}
+          {% endif %}
+          {% if fila.oferta.empresa %}<span class="muted">{{ fila.oferta.empresa }}</span>{% endif %}
+        </div>
+        <span class="badge nivel-{{ m.nivel }}">{{ m.nivel }}</span>
+      </div>
+
+      <div class="oferta-meta">
+        {% if fila.oferta.ubicacion %}<span>{{ fila.oferta.ubicacion }}</span>{% endif %}
+        {% if fila.oferta.modalidad %}<span>{{ fila.oferta.modalidad }}</span>{% endif %}
+        {% if fila.oferta.fecha_publicacion %}
+          <span>{{ fila.oferta.fecha_publicacion.strftime('%d/%m') }}</span>
+        {% endif %}
+      </div>
+
+      <details class="por-que">
+        <summary>Por qué {{ m.puntaje }}</summary>
+
+        <dl>
+          <dt>Obligatorias</dt>
+          <dd>
+            {% if fila.coincidencias %}
+              {{ fila.coincidencias | join(', ') }}
+            {% else %}
+              <span class="rojo">ninguna coincide</span>
+            {% endif %}
+            <span class="muted">({{ m.obligatorios_ok }} de {{ m.obligatorios_total }})</span>
+          </dd>
+
+          {% if m.detalle.get('obligatorias_faltantes') %}
+          <dt>Te faltan</dt>
+          <dd class="rojo">{{ m.detalle['obligatorias_faltantes'] | join(', ') }}</dd>
+          {% endif %}
+
+          <dt>Deseables</dt>
+          <dd>
+            {{ m.deseables_ok }} de {{ m.deseables_total }}
+            {% if fila.deseables_ok_nombres %}
+            <span class="muted">({{ fila.deseables_ok_nombres | join(', ') }})</span>
+            {% endif %}
+          </dd>
+
+          {% if m.detalle.get('excluidas') %}
+          <dt>Descartada porque</dt>
+          <dd class="rojo">
+            coincide con lo que pedís excluir: {{ m.detalle['excluidas'] | join(', ') }}
+          </dd>
+          {% endif %}
+        </dl>
+
+        {% if fila.oferta.descripcion %}
+        <div class="descripcion">{{ fila.oferta.descripcion }}</div>
+        {% endif %}
+      </details>
+
+      {# El botón va en form y no en link porque marca algo: con GET se puede
+         activar con un prefetch de browser o con un crawler, y el `volver`
+         conserva los filtros para que no se pierda dónde estabas. #}
+      <div class="oferta-acciones">
+        {% if fila.postulacion %}
+          <a class="badge estado-{{ fila.postulacion.estado }}" href="/postulaciones?perfil={{ perfil.id }}">
+            {{ etiquetas[fila.postulacion.estado] }}
+          </a>
+        {% else %}
+          <form method="post" action="/postular">
+            <input type="hidden" name="perfil" value="{{ perfil.id }}">
+            <input type="hidden" name="oferta_id" value="{{ fila.oferta.id }}">
+            <input type="hidden" name="volver" value="/ofertas?{{ request.url.query }}">
+            <button class="btn-chico" type="submit">Postular</button>
+          </form>
+        {% endif %}
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+
+  {% if listado.paginas > 1 %}
+  <nav class="paginacion">
+    {% for n in range(1, listado.paginas + 1) %}
+      {% if n == listado.pagina %}
+        <span class="btn-chico actual">{{ n }}</span>
+      {% else %}
+        <a class="btn-chico" href="{{ filtros.url(n, perfil.id) }}">{{ n }}</a>
+      {% endif %}
+    {% endfor %}
+  </nav>
+  {% endif %}
+  {% endif %}
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', path='ofertas.js') }}"></script>
+{% endblock %}

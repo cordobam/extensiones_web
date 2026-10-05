@@ -1,0 +1,123 @@
+# Perfiles de ejemplo — COPIÁ ESTE ARCHIVO Y RENOMBRÁLO A .yml
+
+# Un archivo YAML por perfil. La UI escribe este archivo al guardar.
+# Podés editarlo a mano, pero si guardás desde la UI los cambios manuales se pisan.
+#
+# id: clave única (slug). Se usa como nombre de archivo (data-engineer.yml)
+id: data-engineer
+
+# Nombre legible para el listado
+nombre: Data Engineer
+
+busqueda:
+  # Keywords que usa el radar para buscar en Computrabajo
+  keywords:
+    - data engineer
+    - python
+    - pyspark
+    # - databricks
+
+  # Ciudades/áreas a priorizar (vacío = sin filtro)
+  ubicaciones: []
+    # - CABA
+    # - Buenos Aires
+
+  # remoto | híbrido | presencial (vacío = todos)
+  modalidades:
+    - remoto
+    # - híbrido
+
+  # senior, semi-senior, junior, lead...
+  seniority:
+    - senior
+    - semi-senior
+
+  # Palabras a excluir de los títulos/descripciones
+  excluir: []
+    # - pasantía
+    # - trainee
+
+cv:
+  # Texto que la extensión de Firefox escribe en el campo de presentación del
+  # formulario. Es fijo y lo escribís vos: la versión que se arma según cada
+  # oferta es la fase 14, y depende de la 11, que está trabada porque
+  # `evidencia` está vacía en los perfiles y un modelo que la inventa te manda a
+  # entrevistas por cosas que no hiciste.
+  #
+  # presentacion: |
+  #   Hola. Soy Ada y hago soporte de escritorio desde 2018.
+  contacto:
+    nombre: Tu
+    apellido: Nombre
+    email: tu.email@ejemplo.com
+    telefono: "+54 9 11 0000-0000"
+    ciudad: Tu Ciudad
+    linkedin: "https://linkedin.com/in/tu-usuario"
+
+  skills:
+    # Cada skill puede tener alias para el matching por reglas.
+    # obligatorio: true → cuenta como requisito obligatorio
+    # evidencia: cita de tu experiencia que respalda este skill (importa para fases futuras)
+    # anios: años de experiencia con ese skill (numérico o '3 años')
+    - nombre: Python
+      alias: ["python3"]
+      obligatorio: true
+      evidencia: "Desarrollo y automatización en Python"
+      anios: 4
+
+    - nombre: SQL
+      obligatorio: true
+      evidencia: "Consultas y modelado en SQL"
+      anios: 4
+
+    - nombre: PySpark
+      alias: ["spark", "pyspark", "apache spark"]
+      obligatorio: true
+      evidencia: "Pipelines distribuidos con Spark"
+      anios: 3
+
+    - nombre: Databricks
+      alias: ["databricks"]
+      obligatorio: false
+      evidencia: "Workflows y notebooks"
+      anios: 2
+
+    - nombre: dbt
+      alias: ["dbt core"]
+      obligatorio: false
+      evidencia: "Transformaciones con dbt"
+      anios: 1
+
+  experiencia:
+    - puesto: Data Engineer
+      empresa: Empresa Ejemplo
+      desde: 2023-01-01
+      hasta: null  # null = actual
+      descripcion: |
+        Diseño y mantenimiento de pipelines ETL/ELT, optimización de consultas
+        y orquestación de procesos.
+      skills: ["Python", "SQL", "PySpark"]
+
+    # - puesto: ...
+    #   empresa: ...
+    #   desde: 2021-06-01
+    #   hasta: 2022-12-31
+    #   descripcion: |
+    #     Descripción breve de responsabilidades y logros.
+    #   skills: ["SQL", "Python"]
+
+  educacion:
+    - estudio: Ingeniería / Licenciatura en Sistemas (o afín)
+      institucion: Universidad Ejemplo
+      anio: 2020
+
+  idiomas:
+    - idioma: Español
+      nivel: Nativo
+    - idioma: Inglés
+      nivel: B2
+
+  certificaciones:
+    # - nombre: Databricks Certified Data Engineer Associate
+    #   emisor: Databricks
+    #   fecha: 2025-03-01
