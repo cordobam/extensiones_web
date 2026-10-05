@@ -5,6 +5,9 @@
 {% block contenido %}
 <h1>Ofertas</h1>
 
+{% if error %}<p class="aviso error">{{ error }}</p>{% endif %}
+{% if aviso %}<p class="aviso">{{ aviso }}</p>{% endif %}
+
 {% if not perfil %}
   <p class="vacio">
     Todavía no cargaste ningún perfil.
@@ -185,6 +188,24 @@
         <div class="descripcion">{{ fila.oferta.descripcion }}</div>
         {% endif %}
       </details>
+
+      {# El botón va en form y no en link porque marca algo: con GET se puede
+         activar con un prefetch de browser o con un crawler, y el `volver`
+         conserva los filtros para que no se pierda dónde estabas. #}
+      <div class="oferta-acciones">
+        {% if fila.postulacion %}
+          <a class="badge estado-{{ fila.postulacion.estado }}" href="/postulaciones?perfil={{ perfil.id }}">
+            {{ etiquetas[fila.postulacion.estado] }}
+          </a>
+        {% else %}
+          <form method="post" action="/postular">
+            <input type="hidden" name="perfil" value="{{ perfil.id }}">
+            <input type="hidden" name="oferta_id" value="{{ fila.oferta.id }}">
+            <input type="hidden" name="volver" value="/ofertas?{{ request.url.query }}">
+            <button class="btn-chico" type="submit">Postular</button>
+          </form>
+        {% endif %}
+      </div>
     </li>
     {% endfor %}
   </ul>

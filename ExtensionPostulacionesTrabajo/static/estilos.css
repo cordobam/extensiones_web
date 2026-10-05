@@ -402,3 +402,63 @@ code {
 
 .paginacion { display: flex; flex-wrap: wrap; gap: 6px; margin: 16px 0; }
 .paginacion .actual { background: var(--primario); color: #fff; border-color: var(--primario); }
+
+/* ------------------------------------------------------- postulaciones
+ *
+ * Los colores del embudo no son los del matching a propósito: allá el color
+ * dice "qué tan buena es la oferta para tu CV", y acá "en qué punto estás". Que
+ * se confundan sería el error más caro de la pantalla. El verde es el único
+ * que se repite, y sólo porque aceptada es aceptada.
+ */
+.oferta-acciones {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+.oferta-acciones form { margin: 0; }
+
+.lista-postulaciones { list-style: none; margin: 0 0 20px; padding: 0; }
+.postulacion {
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  background: var(--superficie);
+}
+.postulacion-editar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+.postulacion-editar .campo { margin: 0; }
+.postulacion-editar input[type="text"] { min-width: 240px; }
+.postulacion-borrar { margin: 8px 0 0; text-align: right; }
+.postulacion-borrar .btn-chico { color: var(--muted); }
+
+/* El color de la barra es el del estado; el fondo del badge, el del mismo
+ * grupo. `.pendiente` y `.enviada` comparten tono porque son los dos estados
+ * en los que todavía se puede actuar y se distinguen por el texto. */
+.estado-pendiente { border-left: 4px solid var(--borde); }
+.estado-enviada { border-left: 4px solid #1a73c4; }
+.estado-entrevista { border-left: 4px solid #7b3fa0; }
+.estado-resultado-aceptada { border-left: 4px solid #1e8e3e; }
+.estado-resultado-rechazada { border-left: 4px solid #b3261e; }
+.estado-archivada { border-left: 4px solid var(--borde); opacity: 0.7; }
+
+.badge.estado-pendiente { background: #eef0f2; color: var(--muted); }
+.badge.estado-enviada { background: #e6f0f8; color: #12507f; }
+.badge.estado-entrevista { background: #f0e8f6; color: #57297a; }
+.badge.estado-resultado-aceptada { background: #e6f4ea; color: #14622c; }
+.badge.estado-resultado-rechazada { background: #fbeae9; color: #8c1d18; }
+.badge.estado-archivada { background: #eef0f2; color: var(--muted); }
+
+.contador.estado-pendiente { border-left: 4px solid var(--borde); }
+.contador.estado-enviada { border-left: 4px solid #1a73c4; }
+.contador.estado-entrevista { border-left: 4px solid #7b3fa0; }
+.contador.estado-resultado-aceptada { border-left: 4px solid #1e8e3e; }
+.contador.estado-resultado-rechazada { border-left: 4px solid #b3261e; }
+.contador.estado-archivada { border-left: 4px solid var(--borde); }
+
+.aviso.error { border-left: 4px solid #b3261e; color: #8c1d18; }

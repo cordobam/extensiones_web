@@ -1,6 +1,7 @@
 """Tests de las rutas de perfiles.
 
-Usan la base real (`radar_laboral`) con dependencia sobreescrita por una sesión
+Usan la base de tests (`radar_laboral_test`, la que arma `conftest.py`) con
+dependencia sobreescrita por una sesión
 única por test, y un directorio de perfiles temporal para no tocar los YAML
 versionados.
 """

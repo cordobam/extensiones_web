@@ -1,7 +1,11 @@
 """Tests de la línea de comandos.
 
-La CLI se prueba con `main(argv)` y leyendo lo que imprime, no ejecutando el
+La CLI se prueba con `main(argv)` y leyendo lo que imprime, sin ejecutar el
 proceso: es lo mismo que ve la persona y evita depender del intérprete.
+
+La excepción es `test_la_cli_responde_aunque_la_consola_no_sepa_el_simbolo`, que
+corre un subproceso de verdad. El problema que cubre —codificación y buffers de
+los streams— no existe bajo `capsys`, que los reemplaza por objetos de texto.
 
 `ingest` sí toca la red, así que los tests que lo corren usan
 `monkeypatch` sobre `radar.cli.ingestar` para no pegarle al portal. El
@@ -10,12 +14,16 @@ proceso: es lo mismo que ve la persona y evita depender del intérprete.
 
 from __future__ import annotations
 
+import os
+import subprocess
+import sys
 from collections.abc import Iterator
 
 import pytest
 from sqlalchemy import delete
 
 from radar import cli
+from radar.config import RAIZ
 from radar.db import SessionLocal
 from radar.ingesta import Resumen
 from radar.models import Match, Oferta, OfertaSkill, Perfil
@@ -329,3 +337,105 @@ def test_match_con_perfil_inexistente_falla(capsys) -> None:
 
     assert codigo == 1
     assert "✗" in capsys.readouterr().out
+
+
+# ----------------------------------------------------- errores que se ven
+
+
+def test_el_traceback_del_error_se_imprime(capsys, monkeypatch, _perfil) -> None:
+    """Un error interno tiene que decir dónde está, no sólo qué dice.
+
+    `ingest` y `match` capturan `Exception` para devolver 1 en vez de
+    dejar un volcado de traceback de Python. Eso está bien para el código de
+    salida, pero si además se traga el traceback, un `KeyError` interno y un
+    error de red se ven idénticos y no hay por dónde empezar.
+
+    El mensaje sigue a stdout (es el reporte del comando y hay tests que lo leen
+    ahí); el traceback va a stderr, que es donde se redirige para no verlo.
+    """
+
+    def explota(*args, **kwargs):
+        raise KeyError("puntaje")
+
+    monkeypatch.setattr(cli, "ingestar", explota)
+
+    codigo = cli.main(["ingest", "--perfil", "soporte-it"])
+
+    capturado = capsys.readouterr()
+    assert codigo == 1
+    assert "puntaje" in capturado.out
+    assert "Traceback (most recent call last)" in capturado.err
+    assert "KeyError" in capturado.err
+    # El traceback tiene que ubicar el fallo, no sólo repetir el mensaje. El
+    # separador de la ruta cambia según el sistema, así que se busca el archivo.
+    assert "cli.py" in capturado.err
+
+
+def test_la_cli_responde_aunque_la_consola_no_sepa_el_simbolo(tmp_path) -> None:
+    """El caso real que se reportó: una consola que no tiene el `✗`.
+
+    cp1252 no tiene U+2717, y `print` de un carácter que no se puede escribir
+    revienta en el `print` y no en la línea que lo pidió, así que el error
+    reemplaza al error. Con `errors="replace"` sale `?` y el resto del mensaje
+    se lee igual.
+
+    Va en un subproceso porque es lo único que reproduce las dos cosas que
+    importan: la codificación de los streams y el orden en que se escriben.
+    `capsys` no sirve — reemplaza los streams por objetos de texto— y con dos
+    objetos separados tampoco se podría comprobar el orden, que es justo lo que
+    se rompió: stdout tiene buffer y stderr no, así que sin `flush` el volcado
+    salía primero y la línea del error al final, al revés de cómo se lee.
+
+    Se usa un perfil que no existe, que falla antes de tocar la base, así que no
+    depende de que haya datos ni de la red.
+    """
+    destino = tmp_path / "salida.txt"
+
+    with destino.open("wb") as archivo:
+        proceso = subprocess.run(
+            [sys.executable, "-m", "radar", "match", "--perfil", "no-existe"],
+            stdout=archivo,
+            stderr=subprocess.STDOUT,
+            cwd=RAIZ,
+            env={**os.environ, "PYTHONIOENCODING": "cp1252"},
+        )
+
+    # Los bytes están en cp1252 a propósito: si el `✗` se hubiera escrito sin
+    # reemplazar, este `decode` fallaría.
+    texto = destino.read_bytes().decode("cp1252")
+
+    assert proceso.returncode == 1
+    assert "No existe el perfil" in texto
+    assert "Traceback" in texto
+    assert "PerfilNoEncontrado" in texto
+    assert texto.index("No existe el perfil") < texto.index("Traceback")
+
+
+def test_preparar_la_consola_no_rompe_si_falta_reconfigure(monkeypatch) -> None:
+    """Bajo pytest los flujos no son los de siempre.
+
+    `capsys` reemplaza `sys.stdout`, y si ese objeto no tuviera `reconfigure`
+    la preparación de la consola reventaría todos los tests en vez de ninguno.
+    """
+
+    class SinReconfigure:
+        pass
+
+    monkeypatch.setattr(cli.sys, "stdout", SinReconfigure())
+    monkeypatch.setattr(cli.sys, "stderr", SinReconfigure())
+
+    cli._preparar_consola()  # no debe levantar
+
+
+def test_preparar_la_consola_tolera_lo_que_no_se_puede_escribir(capsys) -> None:
+    """El caso real: una consola que no tiene el `✗`.
+
+    cp1252 no tiene U+2717, y `print` de un carácter que no se puede escribir
+    lanza `UnicodeEncodeError` en el `print` y no en la línea que lo pidió. Con
+    `errors="replace"` sale `?` y el resto del mensaje se lee igual.
+    """
+    cli._preparar_consola()
+
+    print("✗ se sigue leyendo")
+
+    assert "se sigue leyendo" in capsys.readouterr().out

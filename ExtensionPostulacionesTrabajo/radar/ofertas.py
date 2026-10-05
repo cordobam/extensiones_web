@@ -20,7 +20,7 @@ from sqlalchemy import Select, func, or_, select
 from sqlalchemy.orm import Session, selectinload
 
 from radar.matching import conjuntos_perfil
-from radar.models import Match, Oferta, OfertaSkill
+from radar.models import Match, Oferta, OfertaSkill, Postulacion
 from radar.perfiles.validacion import PerfilCompleto
 from radar.ubicaciones import expr_provincia
 
@@ -86,6 +86,10 @@ class FilaOferta:
     match: Match
     coincidencias: list[str] = field(default_factory=list)
     deseables_ok_nombres: list[str] = field(default_factory=list)
+    #: La postulación viva de esta oferta para el perfil, o None si todavía no
+    #: se marcó. Va acá y no como JOIN para que la fila sepa si tiene que
+    #: mostrar el botón "Postular" o el estado en el que está.
+    postulacion: Postulacion | None = None
 
 
 @dataclass
@@ -208,7 +212,35 @@ def listar(
     _contar_niveles(sesion, perfil.id, resultado)
     resultado.skills_disponibles = _skills_disponibles(sesion, perfil.id)
     resultado.provincias_disponibles = provincias_de(sesion, perfil.id)
+    _colgar_postulaciones(sesion, perfil.id, resultado.filas)
     return resultado
+
+
+def _colgar_postulaciones(
+    sesion: Session, perfil_id: str, filas: list[FilaOferta]
+) -> None:
+    """Le pone a cada fila su postulación, si ya la tiene.
+
+    Va en una consulta aparte y no como JOIN a propósito. Un JOIN por
+    `postulaciones` sobre la consulta de la página descartaría de la lista toda
+    oferta sin postulación --que son casi todas-- y además dejaría el filtro de
+    provincial skills funcionando sobre un producto cartesiano que ya no tiene
+    sentido. Acá se consulta sólo lo de la página actual, que son 25 filas.
+    """
+    if not filas:
+        return
+
+    por_oferta = {
+        p.oferta_id: p
+        for p in sesion.scalars(
+            select(Postulacion).where(
+                Postulacion.perfil_id == perfil_id,
+                Postulacion.oferta_id.in_([f.oferta.id for f in filas]),
+            )
+        )
+    }
+    for fila in filas:
+        fila.postulacion = por_oferta.get(fila.oferta.id)
 
 
 def _armar(

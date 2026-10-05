@@ -335,14 +335,41 @@ Bajando a una sola obligatoria y cinco deseables que sí se repiten
 El `.example` de `soporte-it` quedó corregido y lleva los números anotados, para
 que se entienda el método y no sólo el resultado.
 
+## Postulaciones
+
+El botón "Postular" de cada fila de `/ofertas` marca esa oferta como
+postulándose. Queda en **Pendiente**, que es una intención, no un envío: la
+fecha de envío se guarda cuando vos movés la postulación a **Enviada**.
+
+Los estados del embudo son `pendiente`, `enviada`, `entrevista`,
+`resultado_aceptada`, `resultado_rechazada` y `archivada`. Viven en
+`radar/postulaciones/estados.py` y las transiciones permitidas también, así que
+el `<select>` y el servicio no se pueden desincronizar.
+
+El embudo no es una cadena. `enviada` va directo a `resultado_rechazada` porque
+te rechazan sin entrevista, y con una cadena lineal tendrías que fingir una
+entrevista que no pasó para poder registrar el rechazo.
+
+Dos fechas y por qué: `creado_en` es cuándo la marcaste y `fecha_postulacion`
+cuándo la mandaste. Una postulación con la segunda vacía está esperando que la
+mandes. Con una sola fecha no se distinguirían.
+
+Las aceptadas y las rechazadas son estados distintos a propósito: juntas no
+alcanzan para decir tu tasa de acierto, que es el único número para el que vale
+la pena llevar el embudo.
+
+"Desmarcar" borra la postulación. No es lo mismo que archivar: archivar dice
+"la seguí y se terminó", desmarcar dice "esto nunca fue una postulación".
+
 ## Estado
 
-Fases 1 a 10 completas: andamiaje, modelo de datos con Alembic, perfiles con UI
+Fases 1 a 12 completas: andamiaje, modelo de datos con Alembic, perfiles con UI
 (alta, edición, activación múltiple, borrado) escribiendo YAML, catálogo de
 219 skills en 12 categorías, ingesta de Computrabajo con normalizador y filtro
-temporal, matching por reglas, CLI y el dashboard de ofertas. 381 tests.
+temporal, matching por reglas, CLI, el dashboard de ofertas y el embudo de
+postulaciones. 441 tests.
 
-Próximas: historial de postulaciones y extensión.
+Próximas: extensión web y el resto de los portales.
 
 ## Estructura
 
@@ -357,6 +384,7 @@ radar/
   ingesta.py     perfil -> páginas del portal -> tabla ofertas, con upsert
   matching.py    perfil + oferta -> nivel y puntaje, con upsert en matches
   ofertas.py     consulta del dashboard: filtros, orden y paginación
+  postulaciones/ el embudo: estados válidos y transiciones, y el CRUD
   ubicaciones.py provincia canónica de una ubicación, en Python y en SQL
   cli.py         comandos ingest y match
   __main__.py    python -m radar
@@ -377,6 +405,7 @@ scripts/
   init_db.py       creación del esquema (atajo, preferí Alembic)
   ingesta_humo.py  corrida de la ingesta contra el portal real
 tests/
+  conftest.py           apunta los tests a `radar_laboral_test`
   fixtures/computrabajo/  HTML real del portal, recortado (sin style ni script)
 ```
 
@@ -386,9 +415,17 @@ tests/
 pytest
 ```
 
-Los tests de perfiles tocan la base real (`radar_laboral`) y usan directorios
-temporarios para los YAML, así que no tocan `perfiles/`. `tests/test_db.py`
-limpia sus filas al terminar.
+Los tests corren contra una base aparte, `radar_laboral_test`, no contra la del
+`.env`. `tests/conftest.py` la deriva cambiando el nombre de la URL, así que no
+es una configuración que se pueda olvidar: ni siquiera si `DATABASE_URL` apunta a
+la base equivocada en la shell. La crea si no existe y la sube con
+`alembic upgrade head` en vez de `create_all`, que además sirve de prueba de que
+las migraciones de verdad funcionan sobre una base vacía. Esto importa porque
+los fixtures de ofertas, matches, perfiles y postulaciones borran sus filas
+antes y después de cada test; sin esto, cada `pytest` vaciaba la ingesta entera.
+
+Los tests de perfiles usan directorios temporales para los YAML, así que no tocan
+`perfiles/`.
 
 **Ningún test toca la red.** Los de Computrabajo parsean el HTML real guardado en
 `tests/fixtures/computrabajo/`, y los de ingesta usan un `httpx.MockTransport`.

@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import argparse
 import sys
+import traceback
 
 from sqlalchemy import delete
 
@@ -28,6 +29,54 @@ from radar.models import Match, Oferta
 from radar.perfiles import servicio
 
 DESCRIPCION = "Radar de ofertas: traer del portal y puntuar contra tu perfil."
+
+
+def _preparar_consola() -> None:
+    """Que la salida no reviente por un carácter que la consola no tiene.
+
+    La consola de Windows viene en cp1252, y el `✗` de los mensajes de error es
+    U+2717: un guion oblicuo ballot, que en cp1252 no existe. `print` de un
+    carácter que no se puede escribir lanza `UnicodeEncodeError` **en el `print`**
+    y no en la línea que lo pidió, así que el `except Exception` de abajo lo
+    capturaba y lo re-emitía como `✗ UnicodeEncodeError`, y el segundo `print`
+    volvía a fallar. El mensaje real del error se perdía en el intento de
+    mostrarlo.
+
+    Con `errors="replace"` el carácter problemático sale como `?` y el resto del
+    mensaje se lee igual. No se fuerza UTF-8 a propósito: si la consola está en
+    cp1252 y se le escriben bytes UTF-8, lo que se ve son dos caracteres
+    raros en vez de uno. Para ver el `✗` bien, `PYTHONIOENCODING=utf-8`, que es
+    lo que hace falta igual en Windows.
+
+    El `except` es porque bajo pytest `sys.stdout` no siempre es el `TextIOWrapper`
+    original: `capsys` lo reemplaza por otra cosa, y si no tuviera
+    `reconfigure` no habría que romper los tests por un detalle de la consola.
+    """
+    for flujo in (sys.stdout, sys.stderr):
+        try:
+            flujo.reconfigure(errors="replace")
+        except (AttributeError, ValueError, OSError):
+            pass
+
+
+def _fallo(error: Exception) -> None:
+    """El error y su traceback.
+
+    El traceback va aparte porque esta CLI existe justo para ver qué se está
+    rompiendo (ver el docstring del módulo): con sólo `str(error)`, un error de
+    red y un `KeyError` interno se ven iguales, y `str()` de una excepción sin
+    mensaje --`KeyError('puntaje')`-- es media línea de contexto que se pierde.
+
+    El mensaje sigue a stdout porque es parte del reporte del comando y hay tests
+    que lo leen ahí; el traceback va a stderr, que es donde un programa escribe
+    sus diagnósticos y donde se puede redirigir para no verlo.
+    """
+    print(f"✗ {error}")
+    # El mensaje va a stdout y el traceback a stderr, que no está bufferizado
+    # igual: sin este flush, el traceback se imprime antes y el resumen del error
+    # queda al final, que se lee al revés.
+    sys.stdout.flush()
+    traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
 
 
 def _limpiar(sesion) -> None:
@@ -58,7 +107,7 @@ def _cmd_ingest(args: argparse.Namespace) -> int:
                 else servicio.activos(sesion)
             )
         except Exception as error:  # noqa: BLE001
-            print(f"✗ {error}")
+            _fallo(error)
             return 1
 
         if not perfiles:
@@ -81,7 +130,7 @@ def _cmd_ingest(args: argparse.Namespace) -> int:
                 con_detalle=not (args.sin_detalle or args.listados),
             )
         except Exception as error:  # noqa: BLE001
-            print(f"✗ {error}")
+            _fallo(error)
             return 1
 
         print(f"  {resumen.linea()}")
@@ -104,7 +153,7 @@ def _cmd_match(args: argparse.Namespace) -> int:
             print("No hay perfiles activos. Activá alguno en /perfiles.")
             return 1
         except Exception as error:  # noqa: BLE001
-            print(f"✗ {error}")
+            _fallo(error)
             return 1
 
         print(f"  {resumen.linea()}")
@@ -171,6 +220,7 @@ def _parser() -> argparse.ArgumentParser:
 
 
 def main(argv: list[str] | None = None) -> int:
+    _preparar_consola()
     args = _parser().parse_args(argv)
     return args.func(args)
 

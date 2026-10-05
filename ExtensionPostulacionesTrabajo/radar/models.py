@@ -135,7 +135,14 @@ class Match(Base):
 
 
 class Postulacion(Base):
-    """Estado de una postulación. El embudo 300→70→30→5→1 de fases futuras."""
+    """Estado de una postulación, y el embudo que la mueve.
+
+    Los estados no son "descartada / posta": son los de `radar.postulaciones.
+    estados`. Acá sólo queda el default, que es `pendiente` -- una postulación
+    nace cuando la marcás, no cuando la mandás. `fecha_postulacion` se llena
+    cuando pasa a `enviada`, y no antes: es la diferencia entre "la tengo en
+    mira" y "la mandé", y son dos hechos que no salen de la misma fecha.
+    """
 
     __tablename__ = "postulaciones"
     __table_args__ = (
@@ -150,9 +157,10 @@ class Postulacion(Base):
         ForeignKey("perfiles.id", ondelete="CASCADE"), index=True
     )
 
-    estado: Mapped[str] = mapped_column(String(40), default="descartada", index=True)
+    estado: Mapped[str] = mapped_column(String(40), default="pendiente", index=True)
     fecha_postulacion: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     notas: Mapped[str | None] = mapped_column(Text)
+    creado_en: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
 
     oferta: Mapped[Oferta] = relationship(back_populates="postulaciones")
     perfil: Mapped[Perfil] = relationship(back_populates="postulaciones")

@@ -1,7 +1,8 @@
 """Tests de la pantalla de ofertas.
 
-Usan la base real (`radar_laboral`) con la dependencia sobreescrita por una
-sesión única por test, como `test_api_perfiles.py`.
+Usan la base de tests (`radar_laboral_test`, la que arma `conftest.py`) con la
+dependencia sobreescrita por una sesión única por test, como
+`test_api_perfiles.py`.
 
 Las ofertas y los matches no se escriben a mano: se arma un perfil y se corre el
 matching de verdad, así que los tests también quedan atados a las reglas del

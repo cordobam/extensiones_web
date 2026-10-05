@@ -8,8 +8,8 @@ número y filtra otro.
 Las ubicaciones de acá son reales, sacadas de las 248 ofertas que trajo
 Computrabajo, más los casos borde que el parser no garantiza.
 
-Usa la base real (`radar_laboral`) como el resto de los tests: la expresión SQL
-no se puede probar con SQLite.
+Usa la base de tests (`radar_laboral_test`, la que arma `conftest.py`) como el
+resto de los tests: la expresión SQL no se puede probar con SQLite.
 """
 
 from __future__ import annotations

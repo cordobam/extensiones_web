@@ -1,8 +1,9 @@
 """API y páginas del radar.
 
-Dos cosas: la gestión de perfiles y la lista de ofertas del dashboard. La
-consulta de ofertas vive en `radar/ofertas.py`, que es donde está la lógica de
-filtrar y ordenar; acá sólo se traducen los query params a filtros.
+Tres cosas: la gestión de perfiles, la lista de ofertas del dashboard y el
+embudo de postulaciones. La consulta de ofertas vive en `radar/ofertas.py` y el
+embudo en `radar/postulaciones/`, que son donde está la lógica de filtrar,
+ordenar y mover estados; acá sólo se traducen los query params y los forms.
 """
 
 from __future__ import annotations
@@ -26,6 +27,8 @@ from radar.db import get_session
 from radar.models import Perfil
 from radar.perfiles import formulario, serializacion, servicio
 from radar.perfiles.validacion import PerfilCompleto
+from radar.postulaciones import estados
+from radar.postulaciones import servicio as postulaciones
 
 app = FastAPI(title="Radar Laboral")
 
@@ -262,6 +265,9 @@ def listar_ofertas(request: Request, sesion: Session = Depends(get_session)):
         "filtros": filtros,
         "listado": None,
         "ofertas_en_base": ofertas.contar_ofertas(sesion),
+        "etiquetas": _ETIQUETAS,
+        "aviso": _AVISOS.get(request.query_params.get("aviso") or ""),
+        "error": _ERRORES.get(request.query_params.get("error") or ""),
     }
 
     if perfil is not None:
@@ -474,3 +480,182 @@ def borrar_perfil(id_perfil: str, sesion: Session = Depends(get_session)) -> Red
 @app.get("/health")
 def health() -> dict[str, str]:
     return {"estado": "ok"}
+
+
+# ---------- postulaciones: el embudo ----------
+
+
+#: Los mensajes van por código y no por texto en la URL. El texto libre en la
+#: query se refleja en la página, y aunque Jinja escapea, un código no deja que
+#: un link con `?aviso=<script>` dependa de que el escape funcione.
+_AVISOS = {
+    "postulada": "Oferta marcada. Queda en Pendiente hasta que la mandes.",
+    "ya-postulada": "Esa oferta ya estaba marcada.",
+    "estado-guardado": "Estado actualizado.",
+    "notas-guardadas": "Notas guardadas.",
+    "desmarcada": "Postulación deshecha.",
+}
+
+_ERRORES = {
+    "estado-invalido": "Ese estado no existe en el embudo.",
+    "transicion-invalido": "Ese cambio de estado no está permitido desde donde está.",
+    "perfil-desconocido": "Ese perfil no existe.",
+    "oferta-desconocida": "Esa oferta no existe.",
+}
+
+#: Los prefijos que un `volver` puede usar. Es una lista blanca porque el campo
+#: viene del form y se vuelve a mandar en un redirect: sin esto, un link con
+#: `?volver=https://...` manda a la persona a otro sitio.
+_ORIGENES_VALIDOS = ("/ofertas", "/postulaciones")
+
+#: Cómo se muestra cada estado. Va en el contexto y no el módulo entero para
+#: que la plantilla no tenga que llamar funciones de Python: `resultado_aceptada`
+#: no se lee solo, y la traducción tiene que estar en un solo lugar.
+_ETIQUETAS = {estado: estados.etiqueta(estado) for estado in estados.ESTADOS}
+
+
+def _volver(pedido: str | None, por_defecto: str) -> str:
+    """Adónde vuelve el form, validado contra open redirect.
+
+    `startswith` alcanza con la lista blanca, pero `//host` y `/\\host` también
+    empiezan con barra y algunos navegadores los tratan como absolutos, así que
+    se rechazan aparte.
+    """
+    if not pedido:
+        return por_defecto
+    limpio = pedido.strip()
+    if limpio.startswith(("//", "/\\")) or any(c in limpio for c in "\r\n\t"):
+        return por_defecto
+    if limpio.startswith(_ORIGENES_VALIDOS):
+        return limpio
+    return por_defecto
+
+
+def _aviso_redirect(destino: str, codigo: str) -> RedirectResponse:
+    separador = "&" if "?" in destino else "?"
+    return RedirectResponse(f"{destino}{separador}aviso={codigo}", status_code=303)
+
+
+def _error_redirect(destino: str, codigo: str) -> RedirectResponse:
+    separador = "&" if "?" in destino else "?"
+    return RedirectResponse(f"{destino}{separador}error={codigo}", status_code=303)
+
+
+def _perfil_de_query(
+    sesion: Session, pedido: str
+) -> PerfilCompleto | None:
+    """El perfil pedido, o el primero activo. Igual que en `/ofertas`."""
+    perfiles, activos = servicio.listar_con_activo(sesion)
+    elegido = next((p for p in perfiles if p.id == pedido), None)
+    if elegido is not None:
+        return elegido
+    return next((p for p in perfiles if p.id in activos), None) or (
+        perfiles[0] if perfiles else None
+    )
+
+
+@app.post("/postular")
+async def marcar_postulacion(
+    request: Request, sesion: Session = Depends(get_session)
+) -> RedirectResponse:
+    """Marca una oferta de la lista como postulándose.
+
+    Va a `pendiente` y no a `enviada` a propósito: marcar es una intención, y la
+    fecha de envío se guarda cuando la persona confirma que la mandó. Si esto
+    marcara `enviada`, la fecha sería la de hacer clic, que no sirve para nada.
+    """
+    datos = await request.form()
+    perfil_id = (datos.get("perfil") or "").strip()
+    destino = _volver(datos.get("volver"), "/ofertas")
+
+    try:
+        oferta_id = int(datos.get("oferta_id") or "")
+    except ValueError:
+        return _error_redirect(destino, "transicion-invalido")
+
+    try:
+        postulaciones.crear(sesion, oferta_id, perfil_id)
+    except postulaciones.PostulacionDuplicada:
+        return _aviso_redirect(destino, "ya-postulada")
+    except postulaciones.PerfilDesconocido:
+        return _error_redirect(destino, "perfil-desconocido")
+    return _aviso_redirect(destino, "postulada")
+
+
+@app.get("/postulaciones")
+def listar_postulaciones(request: Request, sesion: Session = Depends(get_session)):
+    """El embudo: qué marcaste, en qué estado está y desde cuándo.
+
+    Es la respuesta a la pregunta que `/ofertas` no puede contestar por sí sola:
+    qué hago con esta lista. `/ofertas` dice cuáles ofertas parecen buenas; esta
+    dice en cuál estás trabajando.
+    """
+    pedido = request.query_params.get("perfil") or ""
+    perfil = _perfil_de_query(sesion, pedido)
+
+    contexto: dict[str, Any] = {
+        "perfiles": servicio.listar(sesion),
+        "perfil": perfil,
+        "postulaciones": [],
+        "filas": [],
+        "postulaciones_estados": estados.ESTADOS,
+        "etiquetas": _ETIQUETAS,
+        "conteos": {estado: 0 for estado in estados.ESTADOS},
+        "aviso": _AVISOS.get(request.query_params.get("aviso") or ""),
+        "error": _ERRORES.get(request.query_params.get("error") or ""),
+    }
+
+    if perfil is not None:
+        filas = postulaciones.listar(sesion, perfil.id)
+        contexto["filas"] = [postulaciones.de_una_fila(f) for f in filas]
+        contexto["conteos"] = postulaciones.contar_por_estado(sesion, perfil.id)
+
+    return plantillas.TemplateResponse(
+        request=request,
+        name="postulaciones/lista.html",
+        context=contexto,
+    )
+
+
+@app.post("/postulaciones/{id_postulacion}")
+async def actualizar_postulacion(
+    id_postulacion: int, request: Request, sesion: Session = Depends(get_session)
+) -> RedirectResponse:
+    """Cambia el estado y guarda las notas.
+
+    Estado y notas van en el mismo form porque se editan en la misma fila y
+    guardar las notas no debería obligar a tocar el estado.
+    """
+    datos = await request.form()
+    destino = _volver(datos.get("volver"), "/postulaciones")
+    nuevo = (datos.get("estado") or "").strip()
+
+    try:
+        postulaciones.cambiar_estado(sesion, id_postulacion, nuevo)
+    except postulaciones.PostulacionNoEncontrada:
+        return RedirectResponse("/postulaciones", status_code=303)
+    except postulaciones.EstadoInvalido:
+        return _error_redirect(destino, "estado-invalido")
+    except postulaciones.TransicionInvalida:
+        return _error_redirect(destino, "transicion-invalido")
+
+    # Sólo si viene el campo. Si un form mandara sólo el estado, tocar las notas
+    # sería borrarlas, porque `datos.get` no distingue "no vino" de "viene vacío".
+    if "notas" in datos:
+        notas = datos.get("notas")
+        postulaciones.poner_notas(
+            sesion, id_postulacion, notas if isinstance(notas, str) else None
+        )
+    return _aviso_redirect(destino, "estado-guardado")
+
+
+@app.post("/postulaciones/{id_postulacion}/borrar")
+def borrar_postulacion(
+    id_postulacion: int, sesion: Session = Depends(get_session)
+) -> RedirectResponse:
+    """Desmarca. Es el deshacer del botón "Postular"."""
+    try:
+        postulaciones.borrar(sesion, id_postulacion)
+    except postulaciones.PostulacionNoEncontrada:
+        pass
+    return RedirectResponse("/postulaciones", status_code=303)

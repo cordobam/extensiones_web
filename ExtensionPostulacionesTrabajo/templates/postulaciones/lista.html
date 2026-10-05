@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block titulo %}{{ super() }} · Postulaciones{% endblock %}
+
+{% block contenido %}
+<h1>Postulaciones</h1>
+
+{% if error %}<p class="aviso error">{{ error }}</p>{% endif %}
+{% if aviso %}<p class="aviso">{{ aviso }}</p>{% endif %}
+
+{% if not perfil %}
+  <p class="vacio">
+    Todavía no cargaste ningún perfil. <a href="/perfiles">Creá uno</a>.
+  </p>
+{% else %}
+  <form class="selector-perfil" method="get" action="/postulaciones">
+    <label for="perfil">Embudo de</label>
+    <select id="perfil" name="perfil" onchange="this.form.submit()">
+      {% for p in perfiles %}
+      <option value="{{ p.id }}" {% if p.id == perfil.id %}selected{% endif %}>
+        {{ p.nombre }}
+      </option>
+      {% endfor %}
+    </select>
+    <noscript><button class="btn-chico" type="submit">Ver</button></noscript>
+  </form>
+
+  {# Los seis estados se muestran siempre, aunque estén en cero. El embudo se
+     lee entero desde el primer día y no aparece un estado recién cuando le
+     llega la primera postulación. #}
+  <p class="resumen">
+    {% for estado in postulaciones_estados %}
+      {% if conteos.get(estado) %}
+        <span class="contador estado-{{ estado | replace('resultado_', 'resultado-') }}">
+          <strong>{{ conteos[estado] }}</strong> {{ etiquetas[estado] | lower }}
+        </span>
+      {% endif %}
+    {% endfor %}
+  </p>
+
+  {% if not filas %}
+    <p class="vacio">
+      Todavía no marcaste ninguna oferta.
+      Andá a <a href="/ofertas?perfil={{ perfil.id }}">Ofertas</a> y apretá
+      "Postular" en las que te interesen. Marcar no es mandar: queda en
+      <strong>Pendiente</strong> hasta que vos digas que la enviaste.
+    </p>
+  {% else %}
+    <ul class="lista-postulaciones">
+      {% for p in filas %}
+      <li class="postulacion estado-{{ p.estado_css }}">
+        <div class="oferta-cabecera">
+          <div class="oferta-titulo">
+            {% if p.url %}
+              <a href="{{ p.url }}" target="_blank" rel="noopener noreferrer">{{ p.titulo }}</a>
+            {% else %}
+              {{ p.titulo }}
+            {% endif %}
+            {% if p.empresa %}<span class="muted">{{ p.empresa }}</span>{% endif %}
+          </div>
+          <span class="badge estado-{{ p.estado_css }}">{{ p.etiqueta }}</span>
+        </div>
+
+        <div class="oferta-meta">
+          <span>Marcada {{ p.creado_en.strftime('%d/%m/%Y') }}</span>
+          {% if p.fecha_postulacion %}
+            <span>Enviada {{ p.fecha_postulacion.strftime('%d/%m/%Y') }}</span>
+          {% endif %}
+        </div>
+
+        {# Un form por fila, con botón, y no un select que se autosubea: los
+           select que se guardan solos fallan en silencio si algo sale mal y no
+           son usables sin JS. #}
+        <form class="postulacion-editar" method="post" action="/postulaciones/{{ p.id }}">
+          <input type="hidden" name="volver" value="/postulaciones?perfil={{ perfil.id }}">
+
+          <label class="campo">
+            Estado
+            <select name="estado">
+              <option value="{{ p.estado }}" selected>{{ p.etiqueta }}</option>
+              {% for destino in p.abiertas %}
+                <option value="{{ destino }}">{{ etiquetas[destino] }}</option>
+              {% endfor %}
+            </select>
+          </label>
+
+          <label class="campo">
+            Notas
+            <input type="text" name="notas" value="{{ p.notas or '' }}"
+              placeholder="con quién hablaste, qué te pidieron">
+          </label>
+
+          <button class="btn-chico" type="submit">Guardar</button>
+        </form>
+
+        <form class="postulacion-borrar" method="post"
+              action="/postulaciones/{{ p.id }}/borrar">
+          <button class="btn-chico" type="submit" title="Volver atrás: esto nunca fue una postulación">
+            Desmarcar
+          </button>
+        </form>
+      </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endif %}
+{% endblock %}
