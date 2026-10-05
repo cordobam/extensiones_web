@@ -122,3 +122,40 @@ def test_los_perfiles_de_ejemplo_son_validos(nombre: str) -> None:
     assert perfil.id == nombre
     assert perfil.cv.skills
     assert perfil.cv.contacto.email
+
+# --------------------------------------------------------------- presentación
+
+
+def test_la_presentacion_viaja_al_yaml() -> None:
+    """El YAML es la fuente de verdad cuando no hay app corriendo.
+
+    Si la presentación no llegara al archivo, la extensión nunca la tendría sin
+    la app levantada, que es justo el caso para el que existe el volcado.
+    """
+    datos = {
+        **DATOS,
+        "cv": {**DATOS["cv"], "presentacion": "Hola, soy Ada."},
+    }
+    perfil = PerfilCompleto.model_validate(datos)
+
+    recuperado = serializacion.desde_yaml(serializacion.a_yaml(perfil))
+
+    assert recuperado.cv.presentacion == "Hola, soy Ada."
+
+
+def test_una_presentacion_larga_no_se_corta() -> None:
+    """El límite, si hay, lo pone el formulario del portal, no el YAML."""
+    perfil = _perfil()
+    largo = "\n\n".join(["Párrafo largo."] * 80)
+    perfil.cv.presentacion = largo
+
+    recuperado = serializacion.desde_yaml(serializacion.a_yaml(perfil))
+
+    assert recuperado.cv.presentacion == largo
+
+
+def test_un_perfil_sin_presentacion_sigue_siendo_valido() -> None:
+    """Los YAML que ya estaban en disco no la tienen, y tienen que abrir."""
+    perfil = _perfil()
+    assert perfil.cv.presentacion is None
+    assert serializacion.desde_yaml(serializacion.a_yaml(perfil)) == perfil

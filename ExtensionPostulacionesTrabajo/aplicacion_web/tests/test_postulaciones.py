@@ -759,3 +759,123 @@ def test_el_embudo_separa_aceptadas_de_rechazadas(cliente, datos) -> None:
 
     assert "Aceptada" in pagina.text
     assert "Rechazada" in pagina.text
+
+
+# ------------------------------------------------- el envío reportado por la extensión
+
+
+class TestRegistrarEnvio:
+    """`registrar_envio` lo llama la extensión al confirmar que mandaste.
+
+    Tres casos y los tres importan: crear la que faltaba, mover la que estaba
+    pendiente, y no tocar la que ya avanzó. El tercero es el que protege el
+    dato: si la postulación llegó a `entrevista` y el reporte la bajara a
+    `enviada`, se perdería la entrevista.
+    """
+
+    def test_una_oferta_no_marcada_se_crea_y_queda_enviada(self) -> None:
+        id_oferta, _ = _base()
+        with SessionLocal() as sesion:
+            servicio.registrar_envio(sesion, sesion.get(Oferta, id_oferta), ID_PERFIL)
+
+        with SessionLocal() as sesion:
+            fila = servicio.obtener_por_oferta(sesion, id_oferta, ID_PERFIL)
+            assert fila is not None, "la extensión mandó el envío, tiene que existir"
+            assert fila.estado == "enviada"
+            assert fila.fecha_postulacion is not None, "mandarla es lo que fecha"
+
+    def test_el_registro_dice_que_la_creo(self) -> None:
+        id_oferta, _ = _base()
+        with SessionLocal() as sesion:
+            registro = servicio.registrar_envio(
+                sesion, sesion.get(Oferta, id_oferta), ID_PERFIL
+            )
+        assert registro.enviada
+        assert "creé" in registro.mensaje
+
+    def test_una_pendiente_se_mueve(self) -> None:
+        id_oferta, _ = _base()
+        with SessionLocal() as sesion:
+            servicio.crear(sesion, id_oferta, ID_PERFIL)
+
+        with SessionLocal() as sesion:
+            registro = servicio.registrar_envio(
+                sesion, sesion.get(Oferta, id_oferta), ID_PERFIL
+            )
+            assert registro.postulacion.estado == "enviada"
+            assert registro.enviada
+            assert "creé" not in registro.mensaje
+
+    def test_una_que_ya_esta_enviada_no_rompe_nada(self) -> None:
+        id_oferta, _ = _base()
+        with SessionLocal() as sesion:
+            creada = servicio.crear(sesion, id_oferta, ID_PERFIL)
+            servicio.cambiar_estado(sesion, creada.id, "enviada")
+
+        with SessionLocal() as sesion:
+            fila = servicio.obtener_por_oferta(sesion, id_oferta, ID_PERFIL)
+            primera_fecha = fila.fecha_postulacion
+
+        with SessionLocal() as sesion:
+            registro = servicio.registrar_envio(
+                sesion, sesion.get(Oferta, id_oferta), ID_PERFIL
+            )
+            assert registro.enviada
+            assert "Ya estaba" in registro.mensaje
+
+        with SessionLocal() as sesion:
+            fila = servicio.obtener_por_oferta(sesion, id_oferta, ID_PERFIL)
+            assert fila.estado == "enviada"
+            assert fila.fecha_postulacion == primera_fecha, (
+                "la fecha es cuándo la mandaste, no cuándo lo reportó la extensión"
+            )
+
+    #: El camino hasta cada estado, no sólo el estado final. Aceptar exige pasar
+    #: por `entrevista` y `enviada` no va directo a `resultado_aceptada`: en el
+    #: embudo no se acepta a alguien a quien nunca interviews, y el rechazo sí
+    #: se puede saltar porque te rechazan sin entrevista.
+    @pytest.mark.parametrize(
+        "camino",
+        [
+            ["enviada", "entrevista"],
+            ["enviada", "entrevista", "resultado_aceptada"],
+            ["enviada", "resultado_rechazada"],
+        ],
+    )
+    def test_una_que_ya_avanzo_no_se_toca(self, camino) -> None:
+        estado = camino[-1]
+        id_oferta, _ = _base()
+        with SessionLocal() as sesion:
+            creada = servicio.crear(sesion, id_oferta, ID_PERFIL)
+            for paso in camino:
+                servicio.cambiar_estado(sesion, creada.id, paso)
+
+        with SessionLocal() as sesion:
+            registro = servicio.registrar_envio(
+                sesion, sesion.get(Oferta, id_oferta), ID_PERFIL
+            )
+            assert not registro.enviada, "el estado real no dice que la mandaste ahora"
+            assert "No la toqué" in registro.mensaje
+            assert estados.etiqueta(estado) in registro.mensaje
+            assert registro.postulacion.estado == estado
+
+    def test_una_archivada_no_vuelve_al_embudo(self) -> None:
+        id_oferta, _ = _base()
+        with SessionLocal() as sesion:
+            creada = servicio.crear(sesion, id_oferta, ID_PERFIL)
+            servicio.cambiar_estado(sesion, creada.id, "archivada")
+
+        with SessionLocal() as sesion:
+            registro = servicio.registrar_envio(
+                sesion, sesion.get(Oferta, id_oferta), ID_PERFIL
+            )
+            assert registro.postulacion.estado == "archivada"
+            assert not registro.enviada
+
+    def test_un_perfil_inexistente_no_se_inventa(self) -> None:
+        id_oferta, _ = _base()
+        with SessionLocal() as sesion:
+            with pytest.raises(servicio.PerfilDesconocido):
+                servicio.registrar_envio(
+                    sesion, sesion.get(Oferta, id_oferta), "no-existe"
+                )

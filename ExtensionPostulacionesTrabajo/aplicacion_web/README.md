@@ -2,6 +2,10 @@
 
 Radar de ofertas de empleo: scraper, matching por reglas y dashboard.
 
+Es la mitad web de PostulacionesTrabajo. La otra es `extension_web/`, la
+extensión de Firefox que usa esta app como fuente de datos. El panorama de las
+dos está en el [`README.md`](../README.md) de la raíz.
+
 ## Requisitos
 
 - Python 3.11+ (probado en 3.14)
@@ -9,11 +13,29 @@ Radar de ofertas de empleo: scraper, matching por reglas y dashboard.
 
 ## Instalación
 
+Todo lo de acá se corre **desde esta carpeta**. Es lo único que cambió al
+separar las dos mitades: `RAIZ` en `radar/config.py` y `radar/api.py` se
+derivan del propio paquete, así que `templates/`, `static/`, `catalogo/` y
+`perfiles/` se resuelven solos mientras el código esté acá adentro.
+
+El entorno quedó en la raíz de PostulacionesTrabajo, un nivel arriba, y se
+llama con `..\.venv` en vez de `.venv`. Es porque los entornos virtuales de
+Windows no se pueden reubicar: si se moviera la carpeta, el intérprete apuntaría
+a rutas que ya no existen y habría que reinstalar todo.
+
 ```bat
-python -m venv .venv
-.venv\Scripts\activate
+cd ExtensionPostulacionesTrabajo\aplicacion_web
+..\.venv\Scripts\activate
 pip install -e ".[dev]"
 copy .env.example .env
+```
+
+En un clon nuevo el `.venv` todavía no existe, así que primero hay que crearlo un
+nivel arriba:
+
+```bat
+cd ExtensionPostulacionesTrabajo
+python -m venv .venv
 ```
 
 Editá `.env` con tus credenciales de PostgreSQL.
@@ -361,13 +383,70 @@ la pena llevar el embudo.
 "Desmarcar" borra la postulación. No es lo mismo que archivar: archivar dice
 "la seguí y se terminó", desmarcar dice "esto nunca fue una postulación".
 
+## La API que usa la extensión
+
+Dos rutas JSON para la extensión de Firefox de `../extension_web/`. No son
+públicas: son el cable entre las dos mitades del proyecto.
+
+```
+GET  /api/extension/datos?perfil=<id>
+POST /api/extension/enviada        {"perfil": "...", "external_id": "..."}
+```
+
+`/api/extension/datos` devuelve el CV y las postulaciones vivas del perfil, todo
+junto a propósito. La extensión necesita las dos cosas para funcionar, y si
+fueran dos requests podría terminar rellenando un formulario con los datos de
+una versión y el embudo de otra. `perfil` es opcional: sin él va el primer
+perfil activo, igual que en `/ofertas`.
+
+`/api/extension/enviada` reporta que mandaste la postulación. La extensión
+manda el `external_id` de la oferta, que es lo que viaja en la URL del
+formulario del portal (`?oi=<external_id>`), así que no depende de ids internos
+de la base.
+
+### El candado de la cabecera
+
+Las dos rutas exigen la cabecera `X-Radar-Extension: 1`:
+
+```
+X-Radar-Extension: 1
+```
+
+No es autenticación: cualquiera que pueda mandarla puede leer el CV. Es un
+candado contra una amenaza concreta. La app escucha en `127.0.0.1:8000`, así que
+cualquier página que abras en el navegador puede intentar pegarle un POST. Una
+cabecera personalizada obliga al navegador a hacer un preflight, y como la app
+no contesta con `Access-Control-Allow-*`, ese preflight falla y la petición
+nunca sale. La extensión sí la manda, porque tiene `host_permissions` para el
+localhost.
+
+Para una herramienta personal con los datos en tu disco alcanza. Si algún día
+corre en una red, hay que reemplazarlo por algo de verdad.
+
+### Un detalle de las fechas
+
+Todas las fechas del JSON van en UTC y con offset. Sin normalizar, el mismo
+envío puede volver como `2026-10-05T01:46:57-03:00` en una respuesta y
+`2026-10-05T04:46:57+00:00` en la siguiente, según si el valor salió de
+PostgreSQL --que lo devuelve en la zona de la conexión-- o quedó en memoria
+después del `INSERT`. Es el mismo instante, pero un texto que cambia de forma no
+se puede comparar.
+
+### Reportar un envío nunca es un error
+
+Si la postulación ya estaba más avanzada, la ruta responde 200 con el estado
+real y un mensaje que lo dice, en vez de un 4xx. El reporte llegó tarde, no
+está mal: bajarla a `enviada` perdería una entrevista que ya pasó. El 4xx queda
+para lo que sí es un error: que la oferta no esté en el radar o que el perfil no
+exista.
+
 ## Estado
 
 Fases 1 a 12 completas: andamiaje, modelo de datos con Alembic, perfiles con UI
 (alta, edición, activación múltiple, borrado) escribiendo YAML, catálogo de
 219 skills en 12 categorías, ingesta de Computrabajo con normalizador y filtro
-temporal, matching por reglas, CLI, el dashboard de ofertas y el embudo de
-postulaciones. 441 tests.
+temporal, matching por reglas, CLI, el dashboard de ofertas, el embudo de
+postulaciones y la API que consume la extensión. 481 tests.
 
 Próximas: extensión web y el resto de los portales.
 

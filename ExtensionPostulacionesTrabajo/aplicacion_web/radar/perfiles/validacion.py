@@ -145,6 +145,21 @@ class Cv(Base):
     """Los datos para comparar y, más adelante, para completar formularios."""
 
     contacto: Contacto
+
+    #: Lo que la extensión escribe en el campo "presentación" del formulario.
+    #:
+    #: Es texto fijo, escrito a mano, y no lo genera un modelo. La idea de que
+    #: la presentación se armara con lo que dice cada oferta es la fase 14, que
+    #: depende de la 11, que está trabada: `SkillCv.evidencia` está vacía en los
+    #: perfiles, y un modelo que invente la evidencia te manda a entrevistas por
+    #: cosas que no hiciste. Mientras tanto, un texto que vos controlás es
+    #: mejor que uno inventado.
+    #:
+    #: Sin límite de largo a propósito: lo que entre en el formulario lo decide
+    #: el portal, no el modelo. Si Computrabajo corta a 3000 caracteres, es un
+    #: tema del adaptador de la extensión.
+    presentacion: str | None = None
+
     skills: ListaSkillsCv = Field(default_factory=list)
     experiencia: ListaExperiencias = Field(default_factory=list)
     educacion: ListaEducaciones = Field(default_factory=list)

@@ -9,22 +9,24 @@ ordenar y mover estados; acá sólo se traducen los query params y los forms.
 from __future__ import annotations
 
 from dataclasses import replace
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlencode
 
 from fastapi import Depends, FastAPI, Request
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, ValidationError
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from radar import matching, ofertas
 from radar.catalogo import normalizar
 from radar.config import RAIZ, get_settings
 from radar.db import get_session
-from radar.models import Perfil
+from radar.models import Oferta, Perfil
 from radar.perfiles import formulario, serializacion, servicio
 from radar.perfiles.validacion import PerfilCompleto
 from radar.postulaciones import estados
@@ -76,6 +78,7 @@ class PerfilVista(BaseModel):
             ),
             cv={
                 "contacto": dict(CONTACTOS_VACIO),
+                "presentacion": "",
                 "skills": [],
                 "experiencia": [],
                 "educacion": [],
@@ -92,6 +95,7 @@ class PerfilVista(BaseModel):
             busqueda=BusquedaVista(**perfil.busqueda.model_dump()),
             cv={
                 "contacto": perfil.cv.contacto.model_dump(),
+                "presentacion": perfil.cv.presentacion or "",
                 "skills": [s.model_dump() for s in perfil.cv.skills],
                 "experiencia": [e.model_dump() for e in perfil.cv.experiencia],
                 "educacion": [e.model_dump() for e in perfil.cv.educacion],
@@ -122,6 +126,7 @@ class PerfilVista(BaseModel):
                             else contacto.get(campo))
                     for campo in CONTACTOS_VACIO
                 },
+                "presentacion": cv.get("presentacion") or "",
                 "skills": [_texto_a_skill(s) for s in cv.get("skills") or []],
                 "experiencia": cv.get("experiencia") or [],
                 "educacion": cv.get("educacion") or [],
@@ -659,3 +664,203 @@ def borrar_postulacion(
     except postulaciones.PostulacionNoEncontrada:
         pass
     return RedirectResponse("/postulaciones", status_code=303)
+
+
+# ---------- la API que consume la extensión de Firefox ----------
+
+
+#: Cabecera que tiene que mandar la extensión.
+#:
+#: No es autenticación: anybody que pueda mandar esa cabecera puede leer el CV
+#: de los perfiles y tocar el embudo. Es un candado, no una llave, y está puesto
+#: por una razón concreta: la app escucha en 127.0.0.1:8000, así que cualquier
+#: página que abras en el navegador puede intentar pegarle un POST. Una cabecera
+#: personalizada obliga al navegador a hacer un preflight, y como la app no
+#: responde con `Access-Control-Allow-*`, ese preflight falla y la petición nunca
+#: sale. La extensión sí la manda porque tiene `host_permissions` para el
+#: localhost.
+#:
+#: Para una app personal en localhost con datos que ya están en tu disco, es
+#: suficiente. Si algún día corre en una red, esto hay que reemplazarlo por algo
+#: de verdad: un token compartido, o mejor, que la extensión no acceda al CV por
+#: HTTP y lo lea de un archivo generado en tu máquina.
+CABECERA_EXTENSION = "X-Radar-Extension"
+CLAVE_EXTENSION = "1"
+
+
+def _es_la_extension(request: Request) -> bool:
+    return request.headers.get(CABECERA_EXTENSION) == CLAVE_EXTENSION
+
+
+def _rechazar_si_no_es_extension(request: Request) -> JSONResponse:
+    return JSONResponse(
+        {
+            "ok": False,
+            "error": "sin-cabecera",
+            "mensaje": "Esta ruta sólo la usa la extensión del navegador.",
+        },
+        status_code=403,
+    )
+
+
+def _instante(momento: datetime | None) -> str | None:
+    """Una fecha de la base como texto, siempre en UTC.
+
+    Sin esto el mismo envío puede volver como `2026-10-05T01:46:57-03:00` en una
+    respuesta y `2026-10-05T04:46:57+00:00` en la siguiente, según si el valor se
+    leyó de PostgreSQL --que lo devuelve en la zona de la conexión-- o quedó en
+    memoria después del `INSERT`, que lo dejó en UTC. Son el mismo instante, pero
+    la extensión no puede comparar dos textos que cambian de forma, ni pintar
+    "la mandaste a las 1:46" y después "a las 4:46".
+    """
+    if momento is None:
+        return None
+    if momento.tzinfo is None:
+        return momento.replace(tzinfo=timezone.utc).isoformat()
+    return momento.astimezone(timezone.utc).isoformat()
+
+
+class EnvioExtension(BaseModel):
+    """El cuerpo de `POST /api/extension/enviada`."""
+
+    perfil: str
+    external_id: str
+
+
+@app.get("/api/extension/datos")
+def datos_para_la_extension(
+    request: Request, perfil: str | None = None, sesion: Session = Depends(get_session)
+) -> JSONResponse:
+    """Todo lo que la extensión necesita, en un solo request.
+
+    Son tres bloques y van juntos a propósito. La extensión necesita el CV para
+    llenar el formulario y necesita saber qué ofertas están en el embudo para no
+    ofrecer registrar un envío donde ya no corresponde. Si fueran dos requests,
+    la extensión podría tener el CV de una versión y el embudo de otra, y el
+    resultado sería rellenar datos viejos.
+
+    `perfil` es opcional: sin él va el primer perfil activo, igual que en
+    `/ofertas`. Con varias pestañas de la extensión abierta, cada una puede
+    apuntar a un perfil distinto, así que el parámetro tiene que servir.
+    """
+    if not _es_la_extension(request):
+        return _rechazar_si_no_es_extension(request)
+
+    perfiles, activos = servicio.listar_con_activo(sesion)
+    elegido = next((p for p in perfiles if p.id == perfil), None)
+    if elegido is None and perfil:
+        return JSONResponse(
+            {
+                "ok": False,
+                "error": "perfil-desconocido",
+                "mensaje": f"No existe el perfil {perfil!r}.",
+                "perfiles_disponibles": [p.id for p in perfiles],
+            },
+            status_code=404,
+        )
+    if elegido is None:
+        elegido = next((p for p in perfiles if p.id in activos), None) or (
+            perfiles[0] if perfiles else None
+        )
+    if elegido is None:
+        return JSONResponse(
+            {
+                "ok": False,
+                "error": "sin-perfiles",
+                "mensaje": "No hay ningún perfil cargado.",
+            },
+            status_code=404,
+        )
+
+    vivas = [
+        fila
+        for fila in postulaciones.listar(sesion, elegido.id)
+        if fila.estado != "archivada"
+    ]
+
+    return JSONResponse(
+        {
+            "ok": True,
+            "perfil": elegido.id,
+            "nombre": elegido.nombre,
+            "activo": elegido.id in activos,
+            "cv": {
+                "contacto": elegido.cv.contacto.model_dump(mode="json"),
+                "presentacion": elegido.cv.presentacion,
+            },
+            "postulaciones": [
+                {
+                    "id": fila.id,
+                    "external_id": fila.oferta.external_id,
+                    "titulo": fila.oferta.titulo,
+                    "empresa": fila.oferta.empresa,
+                    "url": fila.oferta.url,
+                    "estado": fila.estado,
+                    "etiqueta": estados.etiqueta(fila.estado),
+                    "fecha_postulacion": _instante(fila.fecha_postulacion),
+                }
+                for fila in vivas
+            ],
+        }
+    )
+
+
+@app.post("/api/extension/enviada")
+def registrar_enviado_por_extension(
+    request: Request, cuerpo: EnvioExtension, sesion: Session = Depends(get_session)
+) -> JSONResponse:
+    """Registra el envío de una postulación, desde la extensión.
+
+    La extensión manda el `external_id` de la oferta, que es lo que viene en la
+    URL del formulario del portal (`?oi=<external_id>`). Con eso se evita que
+    la extensión tenga que mandar ids internos de la base, que cambian con cada
+    dump y no le dicen nada a quien la usa.
+
+    Nunca devuelve 4xx por una transición inválida. Si la postulación ya estaba
+    más avanzada, el reporte llegó tarde pero no está mal, y la extensión tiene
+    que poder pintar el estado real sin tratarlo como un error.
+    """
+    if not _es_la_extension(request):
+        return _rechazar_si_no_es_extension(request)
+
+    oferta = sesion.scalar(
+        select(Oferta).where(Oferta.external_id == cuerpo.external_id)
+    )
+    if oferta is None:
+        return JSONResponse(
+            {
+                "ok": False,
+                "error": "oferta-desconocida",
+                "mensaje": (
+                    f"La oferta {cuerpo.external_id!r} no está en el radar. "
+                    "Cargala con `radar ingest` primero."
+                ),
+            },
+            status_code=404,
+        )
+
+    try:
+        registro = postulaciones.registrar_envio(sesion, oferta, cuerpo.perfil)
+    except postulaciones.PerfilDesconocido:
+        return JSONResponse(
+            {
+                "ok": False,
+                "error": "perfil-desconocido",
+                "mensaje": f"No existe el perfil {cuerpo.perfil!r}.",
+            },
+            status_code=404,
+        )
+
+    fila = registro.postulacion
+    return JSONResponse(
+        {
+            "ok": registro.enviada,
+            "id": fila.id,
+            "external_id": oferta.external_id,
+            "titulo": oferta.titulo,
+            "estado": fila.estado,
+            "etiqueta": estados.etiqueta(fila.estado),
+            "fecha_postulacion": _instante(fila.fecha_postulacion),
+            "mensaje": registro.mensaje,
+        }
+    )

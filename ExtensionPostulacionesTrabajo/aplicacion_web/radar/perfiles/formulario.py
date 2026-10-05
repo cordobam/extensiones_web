@@ -171,7 +171,10 @@ def a_dict_formulario(valores: dict[str, list[str]]) -> dict[str, Any]:
     }
     contacto = {alias: primero(clave).strip() or None for clave, alias in CAMPOS_CONTACTO.items()}
 
-    cv: dict[str, Any] = {"contacto": contacto}
+    cv: dict[str, Any] = {
+        "contacto": contacto,
+        "presentacion": primero("cv__presentacion").strip() or None,
+    }
     obligatorios_por_lista = {
         "skills": ("nombre",),
         "experiencia": ("puesto",),

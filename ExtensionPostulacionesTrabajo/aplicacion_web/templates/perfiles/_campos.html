@@ -108,6 +108,23 @@
 </fieldset>
 
 <fieldset>
+  <legend>Presentación</legend>
+
+  <div class="campo">
+    <label for="cv-presentacion">Texto de presentación</label>
+    <textarea id="cv-presentacion" name="cv__presentacion" rows="10"
+              placeholder="Escribís acá lo que querés que la extensión cargue en el formulario.">{{ perfil.cv.presentacion or '' if perfil else '' }}</textarea>
+    <p class="ayuda">
+      Lo escribe la extensión de Firefox en el campo de presentación del
+      formulario. Es un texto fijo, no lo genera la IA: la idea de que se arme
+      según cada oferta es la fase 14 y depende de la 11, que está trabada
+      porque <code>evidencia</code> está vacía en los perfiles y un modelo que
+      la inventa te manda a entrevistas por cosas que no hiciste.
+    </p>
+  </div>
+</fieldset>
+
+<fieldset>
   <legend>Skills</legend>
   <p class="ayuda">
     Cada skill puede tener alias (otras formas en que la escriben los empleadores),

@@ -38,6 +38,14 @@ busqueda:
     # - trainee
 
 cv:
+  # Texto que la extensión de Firefox escribe en el campo de presentación del
+  # formulario. Es fijo y lo escribís vos: la versión que se arma según cada
+  # oferta es la fase 14, y depende de la 11, que está trabada porque
+  # `evidencia` está vacía en los perfiles y un modelo que la inventa te manda a
+  # entrevistas por cosas que no hiciste.
+  #
+  # presentacion: |
+  #   Hola. Soy Ada y hago soporte de escritorio desde 2018.
   contacto:
     nombre: Tu
     apellido: Nombre

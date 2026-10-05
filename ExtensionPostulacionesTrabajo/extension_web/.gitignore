@@ -1,0 +1,8 @@
+# Este archivo lo genera `aplicacion_web/scripts/generar_datos_extension.py` a
+# partir del perfil activo.
+#
+# NO se versiona y por la misma razón que los perfiles reales: trae nombre,
+# apellido, email, teléfono y ciudad. Es un volcado del CV para que la
+# extensión pueda autocompletar sin la app corriendo, así que versionarlo
+# publicaría tus datos en el repo.
+/datos.json

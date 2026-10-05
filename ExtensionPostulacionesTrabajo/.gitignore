@@ -1,0 +1,14 @@
+# Artefactos que viven en la raíz del producto, no en una de las dos carpetas.
+#
+# El .gitignore de `aplicacion_web/` sigue con lo suyo (.env, perfiles/*.yml);
+# éste sólo cubre lo que quedó en este nivel, que es el entorno y los caches.
+# La línea de `perfiles/` NO va acá: los patrones se resuelven relativos a la
+# carpeta donde está el archivo, así que un `perfiles/*.yml` en esta raíz no
+# protegería `aplicacion_web/perfiles/`.
+
+.venv/
+venv/
+.pytest_cache/
+*.egg-info/
+__pycache__/
+*.py[cod]

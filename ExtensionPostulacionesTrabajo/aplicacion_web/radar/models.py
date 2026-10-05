@@ -79,6 +79,7 @@ class Perfil(Base):
 
     busqueda: Mapped[dict] = mapped_column(JSON, default=dict)
     contacto: Mapped[dict] = mapped_column(JSON, default=dict)
+    presentacion: Mapped[str | None] = mapped_column(Text)
     skills: Mapped[list] = mapped_column(JSON, default=list)
     experiencia: Mapped[list] = mapped_column(JSON, default=list)
     educacion: Mapped[list] = mapped_column(JSON, default=list)

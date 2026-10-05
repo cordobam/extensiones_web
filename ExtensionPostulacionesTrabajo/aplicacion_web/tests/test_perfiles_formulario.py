@@ -208,3 +208,36 @@ def test_todas_las_listas_siempre_presentes() -> None:
     cv = a_dict_formulario(_minimo())["cv"]
     for lista in ("skills", "experiencia", "educacion", "idiomas", "certificaciones"):
         assert cv[lista] == []
+
+# --------------------------------------------------------------- presentación
+
+
+def test_la_presentacion_se_parsea() -> None:
+    datos = a_dict_formulario(
+        {**_minimo(), "cv__presentacion": ["Hola, soy Ada y hago soporte."]}
+    )
+    assert datos["cv"]["presentacion"] == "Hola, soy Ada y hago soporte."
+
+
+def test_una_presentacion_vacia_queda_en_none() -> None:
+    """Como los campos de contacto: vacío es "no lo escribí", no ""."""
+    datos = a_dict_formulario({**_minimo(), "cv__presentacion": ["   "]})
+    assert datos["cv"]["presentacion"] is None
+
+
+def test_sin_el_campo_igual_queda_en_none() -> None:
+    """El campo es opcional: un cliente viejo no lo manda y no debe romper."""
+    datos = a_dict_formulario(_minimo())
+    assert datos["cv"]["presentacion"] is None
+
+
+def test_los_saltos_de_linea_se_conservan() -> None:
+    """Es un textarea y se escribe en párrafos.
+
+    A diferencia de un input de una línea, acá no tiene sentido colapsar los
+    espacios: el texto va a un campo de presentación del portal y perder el
+    formato lo haría una pared de caracteres.
+    """
+    texto = "Hola.\n\nHago soporte de escritorio.\nDesde 2018."
+    datos = a_dict_formulario({**_minimo(), "cv__presentacion": [texto]})
+    assert datos["cv"]["presentacion"] == texto

@@ -104,6 +104,7 @@ def test_formulario_nuevo(cliente: TestClient) -> None:
     assert respuesta.status_code == 200
     assert "Nuevo perfil" in respuesta.text
     assert 'name="skills__IDX__nombre"' in respuesta.text
+    assert 'name="cv__presentacion"' in respuesta.text
 
 
 def test_crear_perfil_escribe_en_base_y_yaml(cliente: TestClient, tmp_path) -> None:
@@ -480,3 +481,66 @@ def test_importar_no_ofrece_importar_de_nuevo(cliente: TestClient, tmp_path) -> 
     (tmp_path / "importado.yml").write_text(YAML_VALIDO, encoding="utf-8")
     cliente.post("/perfiles/importar", follow_redirects=False)
     assert "Importar desde perfiles/" not in cliente.get("/perfiles").text
+
+# --------------------------------------------------------------- presentación
+
+
+def test_la_presentacion_se_guarda_en_la_columna(cliente: TestClient) -> None:
+    """El viaje entero: form -> base. La extensión lee esa columna."""
+    respuesta = cliente.post(
+        "/perfiles",
+        data={**FORMULARIO, "cv__presentacion": "Hola, soy Ada y hago soporte."},
+        follow_redirects=False,
+    )
+    assert respuesta.status_code == 303
+
+    with SessionLocal() as sesion:
+        fila = sesion.get(Perfil, "data-engineer")
+        assert fila.presentacion == "Hola, soy Ada y hago soporte."
+
+
+def test_la_presentacion_va_al_yaml(cliente: TestClient, tmp_path) -> None:
+    """Sin esto no habría fallback: la extensión sin la app no tendría texto."""
+    cliente.post(
+        "/perfiles",
+        data={**FORMULARIO, "cv__presentacion": "Hola, soy Ada."},
+        follow_redirects=False,
+    )
+
+    archivo = tmp_path / "data-engineer.yml"
+    perfil = serializacion.desde_yaml(archivo.read_text(encoding="utf-8"))
+    assert perfil.cv.presentacion == "Hola, soy Ada."
+
+
+def test_editar_deja_mandar_sin_presentacion(cliente: TestClient) -> None:
+    """Borrar el texto tiene que poder dejarlo vacío, no conservar el viejo.
+
+    Es el caso de cambiar de idea sobre la presentación, y es el que muestra
+    por qué `strip() or None`: si no, mandar el textarea vacío dejaría el texto
+    anterior pegado en el formulario cada vez.
+    """
+    cliente.post(
+        "/perfiles",
+        data={**FORMULARIO, "cv__presentacion": "Hola, soy Ada."},
+        follow_redirects=False,
+    )
+    cliente.post(
+        "/perfiles/data-engineer",
+        data={**FORMULARIO, "cv__presentacion": "  "},
+        follow_redirects=False,
+    )
+
+    with SessionLocal() as sesion:
+        assert sesion.get(Perfil, "data-engineer").presentacion is None
+
+
+def test_el_formulario_reabre_con_el_texto_que_esta(cliente: TestClient) -> None:
+    cliente.post(
+        "/perfiles",
+        data={**FORMULARIO, "cv__presentacion": "Hola, soy Ada."},
+        follow_redirects=False,
+    )
+
+    respuesta = cliente.get("/perfiles/data-engineer")
+
+    assert "Hola, soy Ada." in respuesta.text

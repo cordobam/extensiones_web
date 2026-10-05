@@ -37,6 +37,7 @@ def _desde_fila(fila: Perfil) -> PerfilCompleto:
             "busqueda": fila.busqueda or {},
             "cv": {
                 "contacto": fila.contacto or {},
+                "presentacion": fila.presentacion,
                 "skills": fila.skills or [],
                 "experiencia": fila.experiencia or [],
                 "educacion": fila.educacion or [],
@@ -53,6 +54,7 @@ def _aplicar(fila: Perfil, perfil: PerfilCompleto) -> None:
     fila.nombre = perfil.nombre
     fila.busqueda = datos["busqueda"]
     fila.contacto = cv["contacto"]
+    fila.presentacion = cv["presentacion"]
     fila.skills = cv["skills"]
     fila.experiencia = cv["experiencia"]
     fila.educacion = cv["educacion"]

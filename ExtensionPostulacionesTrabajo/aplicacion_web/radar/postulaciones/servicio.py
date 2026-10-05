@@ -13,12 +13,13 @@ fecha no se distinguirían.
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 from datetime import datetime, timezone
 
 from sqlalchemy import delete, func, select
 from sqlalchemy.orm import Session
 
-from radar.models import Perfil, Postulacion
+from radar.models import Oferta, Perfil, Postulacion
 from radar.postulaciones import estados
 
 
@@ -170,6 +171,85 @@ def borrar(sesion: Session, id_postulacion: int) -> None:
     obtener(sesion, id_postulacion)
     sesion.execute(delete(Postulacion).where(Postulacion.id == id_postulacion))
     sesion.commit()
+
+
+# ---------- el envío reportado por la extensión ----------
+
+
+@dataclass(frozen=True)
+class RegistroEnvio:
+    """Qué pasó cuando se reportó un envío.
+
+    El mensaje va en el dataclass y no se arma en la ruta porque los tres casos
+    --recién creada, recién movida y ya avanzada-- son decisiones de negocio
+    ("esto no es una postulación todavía" contra "esto ya se archive"), y la ruta
+    sólo tiene que pasarlo a la extensión.
+    """
+
+    postulacion: Postulacion
+    mensaje: str
+
+    @property
+    def enviada(self) -> bool:
+        """Si el embudo quedó en un estado que dice que la mandaste."""
+        return self.postulacion.estado == "enviada"
+
+
+def registrar_envio(sesion: Session, oferta: Oferta, perfil_id: str) -> RegistroEnvio:
+    """Registra que mandaste la postulación de una oferta.
+
+    Lo llama la extensión de Firefox cuando confirmás el envío, y hace tres
+    cosas según dónde esté la postulación:
+
+    - Si no existe, la crea y la manda directo a `enviada`. No la deja en
+      `pendiente` para que la veas y la muevas vos: ya la mandaste, y una
+      postulación en `pendiente` con la fecha puesta mentiría sobre el embudo.
+      La marca, eso sí, no la descarta nadie: queda en el historial como una
+      postulación más.
+
+    - Si estaba en `pendiente`, la mueve a `enviada`, que es lo normal.
+
+    - Si ya estaba más adelante, **no la toca**. Si llegó a `entrevista` es que
+      el portal ya la había contado antes de que reportaras, y rebajarla a `enviada`
+      perdería la entrevista. Si está archivada o tiene resultado, el envío ya
+      quedó registrado en su momento. En los dos casos se devuelve el estado
+      real y un mensaje que lo dice, en vez de un error: el reporte no estaba
+      mal, es que llegó tarde.
+    """
+    if sesion.get(Perfil, perfil_id) is None:
+        raise PerfilDesconocido(f"No existe el perfil {perfil_id!r}")
+
+    fila = obtener_por_oferta(sesion, oferta.id, perfil_id)
+
+    if fila is None:
+        nueva = crear(sesion, oferta.id, perfil_id)
+        cambiar_estado(sesion, nueva.id, "enviada")
+        return RegistroEnvio(
+            postulacion=obtener(sesion, nueva.id),
+            mensaje="Registrada como enviada. La creé porque esa oferta no "
+            "estaba marcada en el embudo.",
+        )
+
+    if fila.estado == "pendiente":
+        cambiar_estado(sesion, fila.id, "enviada")
+        return RegistroEnvio(
+            postulacion=obtener(sesion, fila.id),
+            mensaje="Registrada como enviada.",
+        )
+
+    if fila.estado == "enviada":
+        return RegistroEnvio(
+            postulacion=fila,
+            mensaje="Ya estaba registrada como enviada.",
+        )
+
+    return RegistroEnvio(
+        postulacion=fila,
+        mensaje=(
+            f"No la toqué: ya estaba en {estados.etiqueta(fila.estado)}. "
+            "La fecha de envío quedó como estaba."
+        ),
+    )
 
 
 def de_una_fila(fila: Postulacion) -> dict:
