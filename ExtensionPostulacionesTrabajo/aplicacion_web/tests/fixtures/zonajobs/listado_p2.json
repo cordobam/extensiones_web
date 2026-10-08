@@ -1,0 +1,474 @@
+{
+  "number": 1,
+  "size": 20,
+  "total": 83,
+  "content": [
+    {
+      "id": 2189003,
+      "titulo": "Desarrollador Ssr",
+      "detalle": "GrupoMulti es un grupo empresario argentino con más de 48 años de trayectoria, integrado por distintas unidades de negocio que brindan soluciones especializadas en tecnología, comunicaciones y energías renovables. Nuestro crecimiento se ha construido sobre una cultura basada en el compromiso, la innovación, el trabajo colaborativo y la cercanía con nuestros clientes y colaboradores.Creemos en las relaciones de largo plazo, en el desarrollo de las personas y en la búsqueda constante de nuevas soluciones que generen valor. Por eso, impulsamos un entorno donde la pasión por hacer las cosas bien, la mejora continua y el trabajo en equipo forman parte de nuestro día a día.A través de nuestras empresas, desarrollamos soluciones adaptadas a las necesidades de cada mercado:Multiradio: especializada en soluciones de radiocomunicación y telecomunicaciones.Multipoint: enfocada en la distribución de tecnología y soluciones de conectividad e integración de sistemas.Multiaires: dedicada a la comercialización de sistemas de climatización y soluciones eficientes para entornos corporativos e industriales.Multisolar: especializada en la distribución de productos de energías renovables y en el desarrollo de proyectos fotovoltaicos, promoviendo la eficiencia energética y un futuro más sostenible.En GrupoMulti trabajamos con un propósito claro: conectar personas, tecnología y oportunidades para construir soluciones que impulsen el crecimiento de nuestros clientes, nuestro equipo y nuestra comunidad. Somos Grupo Multi, una empresa en constante crecimiento, nos encontramos en la búsqueda de un/a Desarrollador/a SSR para sumarse al área de Sistemas, con foco en el desarrollo full stack de aplicaciones web, APIs, integraciones y automatizaciones. Principales tareas Desarrollo full stack de aplicaciones web. Diseño y desarrollo de APIs. Desarrollo de integraciones entre sistemas. Automatización de procesos. Manejo y administración de bases de datos. Requisitos excluyentes Conocimiento en C# (.NET Core). Conocimiento en React / Next.js. Conocimiento en bases de datos SQL. Experiencia en el uso de agentes de IA aplicados al desarrollo. Manejo de Cursor. Manejo de GitHub. Beneficios: Vianda de almuerzo incluida. Plan Saludable para tu bienestar. Descuentos exclusivos en Multibeneficios y plataformas asociadas. Regalos en momentos especiales (matrimonio, nacimiento, graduación). Bono anual por desempeño. Plan de capacitación continuo. Clases de inglés In Company. Modalidad de trabajo: Esquema híbrido (4 dias presenciales - 1 home semanal). Jornada full time de lunes a viernes. Zona de trabajo: Benavidez ¡Esperamos tu postulación!  Requisitos: ",
+      "aptoDiscapacitado": false,
+      "idEmpresa": 647544,
+      "empresa": "GrupoMulti",
+      "confidencial": false,
+      "logoURL": "https://imgzj.jobscdn.com/portal/img/empresas/1/static/logoMainPic_647544_bum_vccbfe1d0.jpg",
+      "validada": false,
+      "empresaPro": false,
+      "fechaHoraPublicacion": "30-08-2026 20:54:26",
+      "fechaPublicacion": "30-08-2026",
+      "fechaModificado": "01-10-2026 11:28:28",
+      "planPublicacion": {
+        "id": 40,
+        "nombre": "Avisos Gold"
+      },
+      "portal": "zonajobs",
+      "tipoTrabajo": "Full-time",
+      "idPais": 1,
+      "idArea": 19,
+      "idSubarea": 2621,
+      "leido": null,
+      "visitadoPorPostulante": null,
+      "localizacion": "Benavídez, Buenos Aires",
+      "cantidadVacantes": 1,
+      "guardado": null,
+      "gptwUrl": null,
+      "promedioEmpresa": null,
+      "modalidadTrabajo": "Presencial",
+      "tienePreguntas": false,
+      "salarioObligatorio": false,
+      "altaRevisionPerfiles": false,
+      "postulacionRapida": true,
+      "tipoAviso": "destacado"
+    },
+    {
+      "id": 2188948,
+      "titulo": "PROGRAMADOR CENTRO MECANIZADO",
+      "detalle": "Programación control FANUC amplios dominio ISO (opcional Siemens). Experiencia en el puesto comprobable 5 años mínimo. Amplios dominios de lectura de planos, tolerancia y acabados superficiales. Sólidos conocimientos de estrategia de mecanizado, montaje y preparación de pieza. Ajuste de parámetro según material a mecanizar. Utilización de diferentes tipos de herramientas, manejo de instrumentos de medición calibre, micrómetro, alesómetros, galgas. Completar hojas de control de calidad. Fabricación de piezas únicas ajustadas en máquina.",
+      "aptoDiscapacitado": false,
+      "idEmpresa": 680278,
+      "empresa": "Matripre srlsrl S.R.L:",
+      "confidencial": false,
+      "logoURL": null,
+      "validada": null,
+      "empresaPro": null,
+      "fechaHoraPublicacion": "28-08-2026 11:26:17",
+      "fechaPublicacion": "28-08-2026",
+      "fechaModificado": "11-09-2026 11:57:39",
+      "planPublicacion": {
+        "id": 10,
+        "nombre": "Avisos Platinum"
+      },
+      "portal": "zonajobs",
+      "tipoTrabajo": "Full-time",
+      "idPais": 1,
+      "idArea": 16,
+      "idSubarea": 2602,
+      "leido": null,
+      "visitadoPorPostulante": null,
+      "localizacion": "Villa Ballester, Buenos Aires",
+      "cantidadVacantes": 1,
+      "guardado": null,
+      "gptwUrl": null,
+      "promedioEmpresa": null,
+      "modalidadTrabajo": "Presencial",
+      "tienePreguntas": false,
+      "salarioObligatorio": false,
+      "altaRevisionPerfiles": false,
+      "postulacionRapida": true,
+      "tipoAviso": "home"
+    },
+    {
+      "id": 2188907,
+      "titulo": "Programador CNC",
+      "detalle": "Programador CNC Objetivo del Puesto Nos encontramos en la búsqueda de un Programador CNC para sumarse a nuestro equipo. La persona seleccionada será responsable de la fabricación, ajuste y mantenimiento de matrices y moldes mediante la programación, puesta a punto y operación de centros de mecanizado CNC, con el fin de optimizar tiempos y garantizar la precisión dimensional. Responsabilidades  Programación, puesta a punto y operación de centros de mecanizado CNC. Fabricación, ajuste y mantenimiento de matrices y moldes. Optimización de tiempos de producción. Garantizar la precisión dimensional de las piezas.  Requisitos  Experiencia comprobable en mecanizado CNC, incluyendo seteo de herramientas y operación de centros de mecanizado. Conocimientos sólidos en matricería, interpretación de planos, ajuste manual, control dimensional y mantenimiento. Formación técnica en Mecánica, Electromecánica o afines, o cursos de formación profesional relacionados. Capacidad para trabajar de forma autónoma y en equipo. Atención al detalle y orientación a resultados. ",
+      "aptoDiscapacitado": false,
+      "idEmpresa": 640045,
+      "empresa": "MB Consultores en Recursos Humanos",
+      "confidencial": false,
+      "logoURL": "https://imgzj.jobscdn.com/portal/img/empresas/1/static/logoMainPic_640045_bum_v4ba111d7.jpg",
+      "validada": false,
+      "empresaPro": false,
+      "fechaHoraPublicacion": "27-08-2026 17:42:37",
+      "fechaPublicacion": "27-08-2026",
+      "fechaModificado": "28-08-2026 12:04:33",
+      "planPublicacion": {
+        "id": 2001,
+        "nombre": "Freemium"
+      },
+      "portal": "zonajobs",
+      "tipoTrabajo": "Full-time",
+      "idPais": 1,
+      "idArea": 16,
+      "idSubarea": 32,
+      "leido": null,
+      "visitadoPorPostulante": null,
+      "localizacion": "Quilmes, Buenos Aires",
+      "cantidadVacantes": 1,
+      "guardado": null,
+      "gptwUrl": null,
+      "promedioEmpresa": null,
+      "modalidadTrabajo": "Presencial",
+      "tienePreguntas": false,
+      "salarioObligatorio": false,
+      "altaRevisionPerfiles": false,
+      "postulacionRapida": false,
+      "tipoAviso": "freemium"
+    },
+    {
+      "id": 2188279,
+      "titulo": "operador programador CNC-Carpinteria centro de trabajo",
+      "detalle": "Buscamos una persona con experiencia en: Operación de centros de trabajo CNC para madera y placas. Programación y preparación de mecanizados. Interpretación de […]",
+      "aptoDiscapacitado": false,
+      "idEmpresa": 680168,
+      "empresa": "Oromanta ",
+      "confidencial": false,
+      "logoURL": null,
+      "validada": null,
+      "empresaPro": null,
+      "fechaHoraPublicacion": "19-08-2026 10:30:57",
+      "fechaPublicacion": "19-08-2026",
+      "fechaModificado": "07-09-2026 10:47:04",
+      "planPublicacion": {
+        "id": 70,
+        "nombre": "Avisos Classic"
+      },
+      "portal": "zonajobs",
+      "tipoTrabajo": "Full-time",
+      "idPais": 1,
+      "idArea": 22,
+      "idSubarea": 2610,
+      "leido": null,
+      "visitadoPorPostulante": null,
+      "localizacion": "Luis Guillón, Buenos Aires",
+      "cantidadVacantes": 1,
+      "guardado": null,
+      "gptwUrl": null,
+      "promedioEmpresa": null,
+      "modalidadTrabajo": "Presencial",
+      "tienePreguntas": false,
+      "salarioObligatorio": false,
+      "altaRevisionPerfiles": false,
+      "postulacionRapida": true,
+      "tipoAviso": "simple"
+    },
+    {
+      "id": 2188026,
+      "titulo": "Desarrollador Node Js Ssr - Mix (Onsite - Remoto) - 1807",
+      "detalle": "¿Qué hace la compañía?Empresa tecnológica con sólida proyección en el mercado, especializada en el desarrollo de soluciones SaaS para la gestión integral de flo […]",
+      "aptoDiscapacitado": false,
+      "idEmpresa": 570364,
+      "empresa": "Aliantec",
+      "confidencial": false,
+      "logoURL": "https://imgzj.jobscdn.com/portal/img/empresas/1/static/logoMainPic_570364_bum_v183b0a04.jpg",
+      "validada": false,
+      "empresaPro": false,
+      "fechaHoraPublicacion": "13-08-2026 17:08:31",
+      "fechaPublicacion": "13-08-2026",
+      "fechaModificado": "13-08-2026 17:08:31",
+      "planPublicacion": {
+        "id": 1020,
+        "nombre": "Aviso Select"
+      },
+      "portal": "zonajobs",
+      "tipoTrabajo": "Full-time",
+      "idPais": 1,
+      "idArea": 19,
+      "idSubarea": 2621,
+      "leido": null,
+      "visitadoPorPostulante": null,
+      "localizacion": "Capital Federal, Buenos Aires",
+      "cantidadVacantes": 1,
+      "guardado": null,
+      "gptwUrl": null,
+      "promedioEmpresa": null,
+      "modalidadTrabajo": "Híbrido",
+      "tienePreguntas": false,
+      "salarioObligatorio": false,
+      "altaRevisionPerfiles": false,
+      "postulacionRapida": true,
+      "tipoAviso": "talento"
+    }
+  ],
+  "filters": [
+    {
+      "type": "provincia",
+      "facets": [
+        {
+          "id": "29",
+          "idSemantico": "argentina|buenos-aires",
+          "name": "Buenos Aires",
+          "quantity": 74
+        },
+        {
+          "id": "14725",
+          "idSemantico": "argentina|neuquen",
+          "name": "Neuquen",
+          "quantity": 3
+        },
+        {
+          "id": "146949",
+          "idSemantico": "argentina|santa-fe",
+          "name": "Santa Fe",
+          "quantity": 5
+        },
+        {
+          "id": "103872",
+          "idSemantico": "argentina|cordoba",
+          "name": "Cordoba",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "type": "area",
+      "facets": [
+        {
+          "id": "19",
+          "idSemantico": "tecnologia-sistemas-y-telecomunicaciones",
+          "name": "Tecnología, Sistemas y Telecomunicaciones",
+          "quantity": 59
+        },
+        {
+          "id": "6",
+          "idSemantico": "comercial-ventas-y-negocios",
+          "name": "Comercial, Ventas y Negocios",
+          "quantity": 11
+        },
+        {
+          "id": "16",
+          "idSemantico": "produccion-y-manufactura",
+          "name": "Producción y Manufactura",
+          "quantity": 8
+        },
+        {
+          "id": "11",
+          "idSemantico": "gerencia-y-direccion-general",
+          "name": "Gerencia y Dirección General",
+          "quantity": 2
+        },
+        {
+          "id": "22",
+          "idSemantico": "oficios-y-otros",
+          "name": "Oficios y Otros",
+          "quantity": 1
+        },
+        {
+          "id": "28",
+          "idSemantico": "seguros",
+          "name": "Seguros",
+          "quantity": 1
+        },
+        {
+          "id": "36",
+          "idSemantico": "departamento-tecnico",
+          "name": "Departamento Tecnico",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "type": "apto_discapacitado",
+      "facets": [
+        {
+          "id": "true",
+          "idSemantico": "discapacitados-apto",
+          "name": "Apto discapacitados",
+          "quantity": 4
+        }
+      ]
+    },
+    {
+      "type": "segmentacion_collar",
+      "facets": [
+        {
+          "id": "1",
+          "idSemantico": "white",
+          "name": "White Collar",
+          "quantity": 69
+        },
+        {
+          "id": "2",
+          "idSemantico": "blue",
+          "name": "Blue Collar",
+          "quantity": 8
+        },
+        {
+          "id": "3",
+          "idSemantico": "grey",
+          "name": "Grey Collar",
+          "quantity": 6
+        }
+      ]
+    },
+    {
+      "type": "tipo_trabajo",
+      "facets": [
+        {
+          "id": "2",
+          "idSemantico": "full-time",
+          "name": "Full-time",
+          "quantity": 83
+        }
+      ]
+    },
+    {
+      "type": "tipo_contratacion",
+      "facets": [
+        {
+          "id": "1",
+          "idSemantico": "indeterminado",
+          "name": "Indeterminado",
+          "quantity": 46
+        },
+        {
+          "id": "5",
+          "idSemantico": "autonomo",
+          "name": "Autónomo",
+          "quantity": 2
+        },
+        {
+          "id": "2",
+          "idSemantico": "temporal",
+          "name": "Temporal",
+          "quantity": 2
+        }
+      ]
+    },
+    {
+      "type": "nivel_laboral",
+      "facets": [
+        {
+          "id": "1",
+          "idSemantico": "senior-semi-senior",
+          "name": "Senior / Semi-Senior",
+          "quantity": 24
+        },
+        {
+          "id": "8",
+          "idSemantico": "semi-sr",
+          "name": "Semi Sr",
+          "quantity": 25
+        },
+        {
+          "id": "7",
+          "idSemantico": "senior",
+          "name": "Senior",
+          "quantity": 18
+        },
+        {
+          "id": "5",
+          "idSemantico": "otro",
+          "name": "Otro",
+          "quantity": 2
+        },
+        {
+          "id": "2",
+          "idSemantico": "junior",
+          "name": "Junior",
+          "quantity": 8
+        }
+      ]
+    },
+    {
+      "type": "postulacion_rapida",
+      "facets": [
+        {
+          "id": "true",
+          "idSemantico": "postulacion-rapida",
+          "name": "Postulación rápida",
+          "quantity": 61
+        }
+      ]
+    },
+    {
+      "type": "modalidad_trabajo",
+      "facets": [
+        {
+          "id": "3",
+          "idSemantico": "hibrido",
+          "name": "Híbrido",
+          "quantity": 37
+        },
+        {
+          "id": "1",
+          "idSemantico": "presencial",
+          "name": "Presencial",
+          "quantity": 37
+        },
+        {
+          "id": "2",
+          "idSemantico": "remoto",
+          "name": "Remoto",
+          "quantity": 9
+        }
+      ]
+    },
+    {
+      "type": "dias_fecha_publicacion",
+      "facets": [
+        {
+          "id": "now-3d/d",
+          "idSemantico": "publicacion-menor-a-3-dias",
+          "name": "Menor a 3 días",
+          "quantity": 7
+        },
+        {
+          "id": "now-4d/d",
+          "idSemantico": "publicacion-menor-a-4-dias",
+          "name": "Menor a 4 días",
+          "quantity": 7
+        },
+        {
+          "id": "now-5d/d",
+          "idSemantico": "publicacion-menor-a-5-dias",
+          "name": "Menor a 5 días",
+          "quantity": 7
+        },
+        {
+          "id": "now-6d/d",
+          "idSemantico": "publicacion-menor-a-6-dias",
+          "name": "Menor a 6 días",
+          "quantity": 7
+        },
+        {
+          "id": "now-7d/d",
+          "idSemantico": "publicacion-menor-a-7-dias",
+          "name": "Menor a 1 semana",
+          "quantity": 13
+        },
+        {
+          "id": "now-15d/d",
+          "idSemantico": "publicacion-menor-a-15-dias",
+          "name": "Menor a 15 días",
+          "quantity": 26
+        },
+        {
+          "id": "now-31d/d",
+          "idSemantico": "publicacion-menor-a-1-mes",
+          "name": "Menor a 1 mes",
+          "quantity": 46
+        },
+        {
+          "id": "now/d",
+          "idSemantico": "publicacion-hoy",
+          "name": "Hoy",
+          "quantity": 1
+        },
+        {
+          "id": "now-1d/d",
+          "idSemantico": "publicacion-menor-a-2-dias",
+          "name": "Menor a 2 días",
+          "quantity": 1
+        }
+      ]
+    }
+  ],
+  "filtersApplied": [
+    {
+      "id": "query",
+      "value": "programador"
+    }
+  ],
+  "totalSearched": 83,
+  "homeList": null
+}

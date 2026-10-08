@@ -382,6 +382,17 @@ code {
   color: var(--muted);
 }
 
+/* El badge de la fuente (computrabajo, zonajobs). En la línea de metadatos va
+   tranquilo: con el fondo primario compite con el título, y acá sólo informa de
+   dónde salió la oferta. */
+.oferta-meta .badge {
+  margin-left: 0;
+  padding: 0 7px;
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  color: var(--muted);
+}
+
 .por-que { margin-top: 8px; }
 .por-que summary { cursor: pointer; font-size: 13px; color: var(--primario); }
 .por-que dl { margin: 10px 0 0; display: grid; grid-template-columns: 150px 1fr; gap: 4px 12px; }

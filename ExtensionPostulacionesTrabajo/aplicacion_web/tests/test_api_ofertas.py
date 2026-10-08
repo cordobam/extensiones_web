@@ -660,3 +660,39 @@ def test_el_filtro_de_provincia_tolera_un_texto_largo(cliente: TestClient) -> No
     # No hay ninguna provincia de 400 caracteres, así que el filtro se descarta
     # y se ve la lista entera.
     assert "Retiro, Capital Federal" in r.text
+
+
+# ------------------------------------------------------------- la fuente
+
+
+def test_cada_oferta_dice_de_que_portal_vino(cliente: TestClient) -> None:
+    """El badge de la fuente en la lista.
+
+    Con un solo portal el dato sobraba; con dos en la misma pantalla es lo que
+    impide confundir una oferta de Computrabajo con una de ZonaJobs.
+    """
+    sesion = SessionLocal()
+    sesion.add_all(
+        [
+            Oferta(
+                external_id="computrabajo:AAA",
+                fuente="computrabajo",
+                titulo="Mesa de Ayuda",
+                skills=[OfertaSkill(skill="Soporte Técnico")],
+            ),
+            Oferta(
+                external_id="zonajobs:111",
+                fuente="zonajobs",
+                titulo="Mesa de Ayuda",
+                skills=[OfertaSkill(skill="Soporte Técnico")],
+            ),
+        ]
+    )
+    sesion.commit()
+    _cargar_perfil(sesion, _perfil())
+    sesion.close()
+
+    html = cliente.get("/ofertas?perfil=soporte-it").text
+
+    assert '<span class="badge">computrabajo</span>' in html
+    assert '<span class="badge">zonajobs</span>' in html

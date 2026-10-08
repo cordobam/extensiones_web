@@ -18,6 +18,13 @@ class Settings(BaseSettings):
     dias_por_defecto: int = 2
     request_delay: float = 2.0
 
+    # Qué portales recorre `radar ingest`, en ese orden, separados por comas.
+    # Los ids son los del registro (`radar/fuentes/__init__.py`); un id que no
+    # existe hace fallar la corrida entera en vez de ignorarse en silencio.
+    # Para una corrida puntual está `radar ingest --fuente <id>`, que no toca
+    # esto.
+    fuentes_activas: str = "computrabajo,zonajobs"
+
     # Tope de páginas por keyword. Es una red de seguridad, no la regla: la
     # ingesta para antes cuando una página no trae ofertas nuevas. Con 5
     # keywords × 20 ofertas × 2 s de pausa, un tope muy alto puede tardar

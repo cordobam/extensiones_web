@@ -1,0 +1,400 @@
+{
+  "number": 4,
+  "size": 20,
+  "total": 83,
+  "content": [
+    {
+      "id": 1118399084,
+      "titulo": "Project Manager para Desarrolladora",
+      "detalle": "Importante desarrolladora inmobiliaria con más de 18 años de trayectoria.Nos encontramos en la búsqueda de un Project Manager Senior para incorporarse al equipo de una desarrolladora inmobiliaria con operaciones en Buenos Aires. Buscamos un profesional con sólida experiencia en la gestión integral de proyectos residenciales, capaz de coordinar todas las etapas del desarrollo desde la adquisición del terreno hasta la entrega de la obra, garantizando el cumplimiento de plazos, costos, calidad y objetivos del negocio.Será una posición con alta interacción con Dirección, Arquitectura, Finanzas, Compras, Comercial y equipos de obra.Principales Responsabilidades: Liderar el seguimiento integral de los proyectos inmobiliarios desde su planificación hasta la finalización. Elaborar y mantener cronogramas de proyecto (Gantt), identificando el camino crítico, dependencias entre actividades y riesgos potenciales. Monitorear el avance físico de las obras y asegurar el cumplimiento de los hitos definidos. Coordinar arquitectos internos y externos, directores de obra, estudios proyectistas, asesores técnicos y contratistas. Participar en la definición, revisión y mejora de especificaciones técnicas, memorias descriptivas y estándares de calidad. Coordinar procesos de licitación y negociación técnica y económica con proveedores y contratistas. Analizar y controlar presupuestos de obra. Monitorear desvíos de costos y plazos, proponiendo acciones correctivas y preventivas. Supervisar certificaciones de avance y validar la consistencia técnica y económica de los trabajos ejecutados. Identificar riesgos del proyecto y desarrollar planes de mitigación. Coordinar la planificación de compras críticas para evitar impactos en el cronograma. Preparar reportes ejecutivos de avance para Dirección con indicadores de plazo, costo, calidad y riesgos. Impulsar procesos de mejora continua en la gestión de proyectos. Velar por el cumplimiento de normas de seguridad, calidad y requisitos regulatorios aplicables. Colaborar en procesos de value engineering para optimizar costos sin afectar la calidad ni el posicionamiento comercial del producto.Requisitos: Ingeniero Civil / Ingeniero en Construcciones. Se valorarán estudios de posgrado en Dirección de Proyectos o certificaciones PMP, PMI o similares. Mínimo 5 años de experiencia gestionando proyectos de desarrollos inmobiliarios residenciales. Experiencia comprobable en coordinación de obras de mediana y gran escala. Conocimiento sólido de planificación de proyectos, presupuestos y control de costos. Experiencia en negociación con proveedores y contratistas. Manejo avanzado de Microsoft Project o herramientas equivalentes de planificación. Dominio avanzado de Excel. Se valorará experiencia con ERP de construcción (Odoo, SAP, Microsoft Dynamics, Prinex u otros). Disponibilidad para realizar visitas periódicas a obras.Trabajo presencial de lunes a viernes de 8 a 17BeneficiosExcelentes condiciones de contratación",
+      "aptoDiscapacitado": false,
+      "idEmpresa": 517210,
+      "empresa": "de Elizalde - Desarrollo del Talento",
+      "confidencial": false,
+      "logoURL": "https://imgbum.jobscdn.com/portal/img/empresas/1/static/logoMainPic_517210_bum_v56bd8b8b.jpg",
+      "validada": false,
+      "empresaPro": false,
+      "fechaHoraPublicacion": "12-08-2026 09:46:22",
+      "fechaPublicacion": "12-08-2026",
+      "fechaModificado": "25-08-2026 11:34:57",
+      "planPublicacion": {
+        "id": 1020,
+        "nombre": "Aviso Talento"
+      },
+      "portal": "bumeran",
+      "tipoTrabajo": "Full-time",
+      "idPais": 1,
+      "idArea": 11,
+      "idSubarea": 94,
+      "leido": null,
+      "visitadoPorPostulante": null,
+      "localizacion": "Capital Federal, Buenos Aires",
+      "cantidadVacantes": 1,
+      "guardado": null,
+      "gptwUrl": null,
+      "promedioEmpresa": null,
+      "modalidadTrabajo": "Presencial",
+      "tienePreguntas": false,
+      "salarioObligatorio": false,
+      "altaRevisionPerfiles": false,
+      "postulacionRapida": true,
+      "tipoAviso": "talento"
+    },
+    {
+      "id": 1118392714,
+      "titulo": "Desarrollador/a Backend",
+      "detalle": "Empresa del sector AgTech que desarrolla soluciones avanzadas de Inteligencia Artificial y Visión Computacional aplicadas a la agricultura de precisión. Su equipo técnico construye la infraestructura de hardware, software y modelos de Deep Learning en tiempo real que transforman la maquinaria agrícola tradicional en equipos inteligentes, combinando la innovación tecnológica de punta con un impacto directo en la sustentabilidad del negocio a escala global. ¿Te interesa sumarte a un equipo de Data & Platforms?Nos encontramos en la búsqueda de un/a Desarrollador/a de Software Semi Senior para sumarse al equipo de Data & Platforms de una reconocida empresa Agtech, con foco inicial en backend, datos e infraestructura ¿Cuáles serán tus principales desafíos? Diseñar, desarrollar y mantener servicios backend en Python, priorizando código limpio, testeable y performante Construir e integrar pipelines de datos y servicios sobre AWS (S3, DynamoDB, Elasticsearch, entre otros) Contenerizar aplicaciones con Docker y colaborar en su despliegue y operación en AWS Participar en decisiones de arquitectura de datos y servicios junto al equipo Diagnosticar y resolver incidentes de producción, y colaborar con Producto y Data para traducir requerimientos en soluciones técnicas Ir incorporando gradualmente trabajo en frontend/full-stack según necesidad del equipo  Requisitos: ¿Qué esperamos de vos?Buscamos una persona con autonomía para llevar proyectos de punta a punta, comunicación clara y curiosidad por aprenderEs indispensable que cuentes con: 2-3 años de experiencia profesional en desarrollo backend Sólido manejo de Python (tipado, testing, estructuras de datos, buenas prácticas) Experiencia con AWS: S3, DynamoDB, Elasticsearch, ECS (o servicios equivalentes: RDS, Lambda, SQS/SNS) Experiencia con Docker (construcción de imágenes, docker-compose) Nivel avanzado de diseño y consumo de APIs REST Conocimientos de modelado de datos (relacional y NoSQL) y SQL Git y flujo de trabajo colaborativo (PRs, code review, CI) Apertura para trabajar con herramientas de desarrollo asistido por IA (Claude Code y similares) como parte del flujo diario Inglés técnico para lectura y escritura de documentaciónValoramos que cuentes con: Experiencia con IaC (Terraform o CloudFormation) y CI/CD Nociones de frontend (JavaScript/TypeScript, React) Experiencia en IoT Formación Ciencias de la Computación, Ingeniería en Sistemas o carreras afines Beneficios ¿Qué te ofrecemos? Sumarte a un equipo Agtech en pleno crecimiento, con proyectos desafiantes Trabajar en equipo, con tecnologías de punta y herramientas de IA en tendencia Modalidad híbrida con oficinas en Rosario Trabajo full time en relación de dependencia",
+      "aptoDiscapacitado": false,
+      "idEmpresa": 13261807,
+      "empresa": "Find Me",
+      "confidencial": false,
+      "logoURL": null,
+      "validada": false,
+      "empresaPro": false,
+      "fechaHoraPublicacion": "06-08-2026 10:43:56",
+      "fechaPublicacion": "06-08-2026",
+      "fechaModificado": "07-10-2026 20:12:35",
+      "planPublicacion": {
+        "id": 2013,
+        "nombre": "Simples Hiring Room 30-60"
+      },
+      "portal": "bumeran",
+      "tipoTrabajo": "Full-time",
+      "idPais": 1,
+      "idArea": 19,
+      "idSubarea": 105,
+      "leido": null,
+      "visitadoPorPostulante": null,
+      "localizacion": "Rosario, Santa Fe",
+      "cantidadVacantes": 1,
+      "guardado": null,
+      "gptwUrl": null,
+      "promedioEmpresa": null,
+      "modalidadTrabajo": "Híbrido",
+      "tienePreguntas": false,
+      "salarioObligatorio": false,
+      "altaRevisionPerfiles": false,
+      "postulacionRapida": true,
+      "tipoAviso": "simple"
+    },
+    {
+      "id": 1118391671,
+      "titulo": "Desarrollador Físico/a Matemático/a Jr.",
+      "detalle": " ¡Estamos buscando Desarrollador Físico/a Matemático/a Jr. – Monte Carlo!Seleccionamos Físico/a Matemático/a Jr. para sumarse a un proyecto de desarrollo de simuladores para una importante compañía del sector petrolero. Modalidad: 100% remotaResponsabilidades: Participar en el desarrollo de simuladores físicos. Implementar y optimizar modelos de simulación basados en el método de Monte Carlo. Colaborar en tareas de modelado físico-matemático y optimización de procesos. Trabajar junto a un equipo de especialistas. Participar en dailys y reuniones de seguimiento semanales. Contribuir al desarrollo de soluciones escalables para futuros proyectos. Requisitos:  Graduados o estudiantes avanzados con al menos 2 años de experiencia. Formación en Física, Física Aplicada, Ingeniería Física, Matemática o carreras afines. Experiencia desarrollando modelos o simulaciones físicas (no buscamos un perfil únicamente teórico). Conocimientos en simulación mediante Método de Monte Carlo. Interés por el modelado, la programación y la resolución de problemas complejos. Buscamos una persona analítica, curiosa, con capacidad de aprendizaje y ganas de crecer profesionalmente.Condiciones: Contratación full-time o part-time (mínimo 5 horas diarias). Remuneración en USD o ARS, según modalidad de contratación.Jornada 100% remota y flexible.",
+      "aptoDiscapacitado": false,
+      "idEmpresa": 13176203,
+      "empresa": "B&B Consultores",
+      "confidencial": false,
+      "logoURL": "https://imgbum.jobscdn.com/portal/img/empresas/1/static/logoMainPic_13176203_bum_vd10a9d43.jpg",
+      "validada": true,
+      "empresaPro": false,
+      "fechaHoraPublicacion": "05-08-2026 14:06:42",
+      "fechaPublicacion": "05-08-2026",
+      "fechaModificado": "05-08-2026 14:06:42",
+      "planPublicacion": {
+        "id": 1020,
+        "nombre": "Aviso Talento"
+      },
+      "portal": "bumeran",
+      "tipoTrabajo": "Full-time",
+      "idPais": 1,
+      "idArea": 19,
+      "idSubarea": 34,
+      "leido": null,
+      "visitadoPorPostulante": null,
+      "localizacion": "Rosario, Santa Fe",
+      "cantidadVacantes": 1,
+      "guardado": null,
+      "gptwUrl": null,
+      "promedioEmpresa": null,
+      "modalidadTrabajo": "Remoto",
+      "tienePreguntas": false,
+      "salarioObligatorio": false,
+      "altaRevisionPerfiles": false,
+      "postulacionRapida": true,
+      "tipoAviso": "talento"
+    }
+  ],
+  "filters": [
+    {
+      "type": "provincia",
+      "facets": [
+        {
+          "id": "29",
+          "idSemantico": "argentina|buenos-aires",
+          "name": "Buenos Aires",
+          "quantity": 74
+        },
+        {
+          "id": "14725",
+          "idSemantico": "argentina|neuquen",
+          "name": "Neuquen",
+          "quantity": 3
+        },
+        {
+          "id": "146949",
+          "idSemantico": "argentina|santa-fe",
+          "name": "Santa Fe",
+          "quantity": 5
+        },
+        {
+          "id": "103872",
+          "idSemantico": "argentina|cordoba",
+          "name": "Cordoba",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "type": "area",
+      "facets": [
+        {
+          "id": "19",
+          "idSemantico": "tecnologia-sistemas-y-telecomunicaciones",
+          "name": "Tecnología, Sistemas y Telecomunicaciones",
+          "quantity": 59
+        },
+        {
+          "id": "6",
+          "idSemantico": "comercial-ventas-y-negocios",
+          "name": "Comercial, Ventas y Negocios",
+          "quantity": 11
+        },
+        {
+          "id": "16",
+          "idSemantico": "produccion-y-manufactura",
+          "name": "Producción y Manufactura",
+          "quantity": 8
+        },
+        {
+          "id": "11",
+          "idSemantico": "gerencia-y-direccion-general",
+          "name": "Gerencia y Dirección General",
+          "quantity": 2
+        },
+        {
+          "id": "22",
+          "idSemantico": "oficios-y-otros",
+          "name": "Oficios y Otros",
+          "quantity": 1
+        },
+        {
+          "id": "28",
+          "idSemantico": "seguros",
+          "name": "Seguros",
+          "quantity": 1
+        },
+        {
+          "id": "36",
+          "idSemantico": "departamento-tecnico",
+          "name": "Departamento Tecnico",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "type": "apto_discapacitado",
+      "facets": [
+        {
+          "id": "true",
+          "idSemantico": "discapacitados-apto",
+          "name": "Apto discapacitados",
+          "quantity": 4
+        }
+      ]
+    },
+    {
+      "type": "segmentacion_collar",
+      "facets": [
+        {
+          "id": "1",
+          "idSemantico": "white",
+          "name": "White Collar",
+          "quantity": 69
+        },
+        {
+          "id": "2",
+          "idSemantico": "blue",
+          "name": "Blue Collar",
+          "quantity": 8
+        },
+        {
+          "id": "3",
+          "idSemantico": "grey",
+          "name": "Grey Collar",
+          "quantity": 6
+        }
+      ]
+    },
+    {
+      "type": "tipo_trabajo",
+      "facets": [
+        {
+          "id": "2",
+          "idSemantico": "full-time",
+          "name": "Full-time",
+          "quantity": 83
+        }
+      ]
+    },
+    {
+      "type": "tipo_contratacion",
+      "facets": [
+        {
+          "id": "1",
+          "idSemantico": "indeterminado",
+          "name": "Indeterminado",
+          "quantity": 46
+        },
+        {
+          "id": "5",
+          "idSemantico": "autonomo",
+          "name": "Autónomo",
+          "quantity": 2
+        },
+        {
+          "id": "2",
+          "idSemantico": "temporal",
+          "name": "Temporal",
+          "quantity": 2
+        }
+      ]
+    },
+    {
+      "type": "nivel_laboral",
+      "facets": [
+        {
+          "id": "1",
+          "idSemantico": "senior-semi-senior",
+          "name": "Senior / Semi-Senior",
+          "quantity": 24
+        },
+        {
+          "id": "8",
+          "idSemantico": "semi-sr",
+          "name": "Semi Sr",
+          "quantity": 25
+        },
+        {
+          "id": "7",
+          "idSemantico": "senior",
+          "name": "Senior",
+          "quantity": 18
+        },
+        {
+          "id": "5",
+          "idSemantico": "otro",
+          "name": "Otro",
+          "quantity": 2
+        },
+        {
+          "id": "2",
+          "idSemantico": "junior",
+          "name": "Junior",
+          "quantity": 8
+        }
+      ]
+    },
+    {
+      "type": "postulacion_rapida",
+      "facets": [
+        {
+          "id": "true",
+          "idSemantico": "postulacion-rapida",
+          "name": "Postulación rápida",
+          "quantity": 61
+        }
+      ]
+    },
+    {
+      "type": "modalidad_trabajo",
+      "facets": [
+        {
+          "id": "3",
+          "idSemantico": "hibrido",
+          "name": "Híbrido",
+          "quantity": 37
+        },
+        {
+          "id": "1",
+          "idSemantico": "presencial",
+          "name": "Presencial",
+          "quantity": 37
+        },
+        {
+          "id": "2",
+          "idSemantico": "remoto",
+          "name": "Remoto",
+          "quantity": 9
+        }
+      ]
+    },
+    {
+      "type": "dias_fecha_publicacion",
+      "facets": [
+        {
+          "id": "now-3d/d",
+          "idSemantico": "publicacion-menor-a-3-dias",
+          "name": "Menor a 3 días",
+          "quantity": 7
+        },
+        {
+          "id": "now-4d/d",
+          "idSemantico": "publicacion-menor-a-4-dias",
+          "name": "Menor a 4 días",
+          "quantity": 7
+        },
+        {
+          "id": "now-5d/d",
+          "idSemantico": "publicacion-menor-a-5-dias",
+          "name": "Menor a 5 días",
+          "quantity": 7
+        },
+        {
+          "id": "now-6d/d",
+          "idSemantico": "publicacion-menor-a-6-dias",
+          "name": "Menor a 6 días",
+          "quantity": 7
+        },
+        {
+          "id": "now-7d/d",
+          "idSemantico": "publicacion-menor-a-7-dias",
+          "name": "Menor a 1 semana",
+          "quantity": 13
+        },
+        {
+          "id": "now-15d/d",
+          "idSemantico": "publicacion-menor-a-15-dias",
+          "name": "Menor a 15 días",
+          "quantity": 26
+        },
+        {
+          "id": "now-31d/d",
+          "idSemantico": "publicacion-menor-a-1-mes",
+          "name": "Menor a 1 mes",
+          "quantity": 46
+        },
+        {
+          "id": "now/d",
+          "idSemantico": "publicacion-hoy",
+          "name": "Hoy",
+          "quantity": 1
+        },
+        {
+          "id": "now-1d/d",
+          "idSemantico": "publicacion-menor-a-2-dias",
+          "name": "Menor a 2 días",
+          "quantity": 1
+        }
+      ]
+    }
+  ],
+  "filtersApplied": [
+    {
+      "id": "query",
+      "value": "programador"
+    }
+  ],
+  "totalSearched": 83,
+  "homeList": null
+}

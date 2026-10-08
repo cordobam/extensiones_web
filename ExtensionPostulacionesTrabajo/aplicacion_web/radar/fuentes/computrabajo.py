@@ -24,7 +24,7 @@ from __future__ import annotations
 
 import re
 import time
-from dataclasses import dataclass
+from datetime import datetime
 from urllib.parse import urljoin, urlsplit, urlunsplit
 
 import httpx
@@ -32,6 +32,8 @@ from selectolax.parser import HTMLParser
 from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_fixed
 
 from radar.config import get_settings
+from radar.fuentes.base import OfertaCruda
+from radar.fuentes.fechas import parsear
 
 BASE_URL = "https://ar.computrabajo.com"
 USER_AGENT = (
@@ -65,26 +67,6 @@ def url_detalle(href: str) -> str:
     """
     partes = urlsplit(urljoin(BASE_URL, href))
     return urlunsplit((partes.scheme, partes.netloc, partes.path, partes.query, ""))
-
-
-@dataclass
-class OfertaCruda:
-    """Lo que da el listado, antes de tener descripción ni skills.
-
-    Va separada de `Offer` a propósito: el listado no trae descripción y no
-    conviene bajar 20 detalles para poder decidir si una oferta está en la
-    ventana temporal. `fecha_publicacion` sí viene acá, porque el filtro de
-    tiempo corre antes de bajar los detalles.
-    """
-
-    external_id: str
-    titulo: str
-    empresa: str | None
-    url: str
-    ubicacion: str | None
-    modalidad: str | None
-    salario: str | None
-    fecha_texto: str | None
 
 
 def _texto(nodo) -> str | None:
@@ -247,7 +229,15 @@ class Cliente:
     El `request_delay` sale de la config (2 s por defecto). No es un detalle:
     `robots.txt` prohíbe los filtros por query que reducirían el tráfico, así
     que la única forma de ser respetuoso es ir despacio.
+
+    Es además la implementación de la fuente (`base.Fuente`): `listar`,
+    `describir` y `fecha` son el contrato que la ingesta llama, y lo envuelven
+    al HTML de este portal.
     """
+
+    #: Identificador de la fuente. Va en `Oferta.fuente` y como prefijo del
+    #: `external_id`.
+    id = "computrabajo"
 
     def __init__(
         self,
@@ -309,6 +299,21 @@ class Cliente:
 
     def buscar(self, keyword: str, pagina: int = 1) -> list[OfertaCruda]:
         return parsear_listado(self.listado(keyword, pagina))
+
+    # ---------------------------------------------------------- el contrato
+
+    def listar(self, keyword: str, pagina: int) -> tuple[list[OfertaCruda], bool]:
+        """Una página del listado, con la señal de si hay una siguiente."""
+        html = self.listado(keyword, pagina)
+        return parsear_listado(html), hay_siguiente_pagina(html)
+
+    def describir(self, cruda: OfertaCruda) -> str:
+        """La descripción: acá sí hay que pedirle la página de detalle."""
+        return parsear_detalle(self.detalle(cruda.url))
+
+    def fecha(self, cruda: OfertaCruda, ahora: datetime) -> datetime | None:
+        """La fecha del listado ("Hace 19 horas"), que es relativa al reloj."""
+        return parsear(cruda.fecha_texto, ahora)
 
 
 def listar(keyword: str, pagina: int = 1, cliente: Cliente | None = None) -> list[OfertaCruda]:

@@ -21,6 +21,7 @@ import traceback
 
 from sqlalchemy import delete
 
+from radar import fuentes as registro
 from radar import matching
 from radar.db import SessionLocal
 from radar.ingesta import ingestar
@@ -119,6 +120,10 @@ def _cmd_ingest(args: argparse.Namespace) -> int:
             ", ".join(f"{p.id} ({len(p.busqueda.keywords)} keywords)" for p in perfiles),
         )
 
+        # `--fuente` no toca la config: es para una corrida puntual (probar un
+        # portal, evitar uno que está caído) sin editar el .env. Las crea esta
+        # función, así que las cierra esta función.
+        fuentes = [registro.crear(fuente_id) for fuente_id in (args.fuente or [])] or None
         try:
             resumen = ingestar(
                 sesion,
@@ -128,11 +133,16 @@ def _cmd_ingest(args: argparse.Namespace) -> int:
                 # probar el pipeline completo en segundos. Si bajara los
                 # detalles, serían cinco keywords x 20 ofertas x 2 s de pausa.
                 con_detalle=not (args.sin_detalle or args.listados),
+                fuentes=fuentes,
             )
         except Exception as error:  # noqa: BLE001
             _fallo(error)
             return 1
+        finally:
+            for fuente in fuentes or []:
+                fuente.close()
 
+        print(f"  fuentes: {', '.join(resumen.fuentes)}")
         print(f"  {resumen.linea()}")
         if resumen.fallidas:
             print(f"  fallidas ({len(resumen.fallidas)}):")
@@ -189,6 +199,17 @@ def _parser() -> argparse.ArgumentParser:
 
     ingest = sub.add_parser("ingest", help="trae ofertas del portal.")
     ingest.add_argument("--perfil", help="id del perfil. Sin esto, todos los activos.")
+    ingest.add_argument(
+        "--fuente",
+        action="append",
+        choices=registro.disponibles(),
+        default=None,
+        metavar="ID",
+        help=(
+            "sólo esta fuente (se puede repetir). Sin esto, las de "
+            "FUENTES_ACTIVAS: " + ", ".join(registro.disponibles()) + "."
+        ),
+    )
     ingest.add_argument(
         "--dias", type=int, help="ventana temporal en días. Sin esto, la de la config."
     )
