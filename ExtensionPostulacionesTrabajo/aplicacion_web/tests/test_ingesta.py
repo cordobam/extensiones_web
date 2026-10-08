@@ -9,6 +9,7 @@ Tocan PostgreSQL de verdad, como `test_db.py`.
 
 from __future__ import annotations
 
+import json
 from collections.abc import Iterator
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -18,7 +19,9 @@ import pytest
 from sqlalchemy import delete
 
 from radar.db import SessionLocal
+from radar.fuentes.base import OfertaCruda
 from radar.fuentes.computrabajo import Cliente
+from radar.fuentes.zonajobs import Cliente as ClienteZonaJobs
 from radar.ingesta import _actualizar_skills, ingestar, ingestar_perfil
 from radar.models import Match, Oferta, OfertaSkill, Perfil
 from radar.config import get_settings
@@ -27,6 +30,9 @@ from radar.perfiles.validacion import PerfilCompleto
 
 FIXTURES = Path(__file__).parent / "fixtures" / "computrabajo"
 EXTERNAL_ID = "EAD844F035268B1B61373E686DCF3405"
+# La ingesta guarda el id del portal con el prefijo de la fuente, para que la
+# unicidad de `ofertas.external_id` sea global y no por portal.
+CLAVE = f"computrabajo:{EXTERNAL_ID}"
 LISTADO_P1 = "listado_p1.html"
 LISTADO_P2 = "listado_p2.html"
 DETALLE = f"detalle_{EXTERNAL_ID}.html"
@@ -145,7 +151,7 @@ def test_guarda_las_ofertas_del_listado(sesion) -> None:
     cliente, http = portal.cliente()
     with http:
         resumen = ingestar_perfil(
-            sesion, _perfil(["mesa de ayuda"]), cliente=cliente, ahora=AHORA_FIJO
+            sesion, _perfil(["mesa de ayuda"]), fuentes=[cliente], ahora=AHORA_FIJO
         )
 
     guardadas = sesion.query(Oferta).all()
@@ -158,10 +164,10 @@ def test_una_oferta_tiene_los_campos_del_listado(sesion) -> None:
     cliente, http = portal.cliente()
     with http:
         ingestar_perfil(
-            sesion, _perfil(["mesa de ayuda"]), cliente=cliente, ahora=AHORA_FIJO
+            sesion, _perfil(["mesa de ayuda"]), fuentes=[cliente], ahora=AHORA_FIJO
         )
 
-    fila = sesion.query(Oferta).filter(Oferta.external_id == EXTERNAL_ID).one()
+    fila = sesion.query(Oferta).filter(Oferta.external_id == CLAVE).one()
     assert fila.fuente == "computrabajo"
     assert fila.titulo == "Soporte Tecnico IT"
     assert fila.empresa == "Universidad Siglo 21"
@@ -177,10 +183,10 @@ def test_el_detalle_carga_descripcion_y_skills(sesion) -> None:
     cliente, http = portal.cliente()
     with http:
         ingestar_perfil(
-            sesion, _perfil(["mesa de ayuda"]), cliente=cliente, ahora=AHORA_FIJO
+            sesion, _perfil(["mesa de ayuda"]), fuentes=[cliente], ahora=AHORA_FIJO
         )
 
-    fila = sesion.query(Oferta).filter(Oferta.external_id == EXTERNAL_ID).one()
+    fila = sesion.query(Oferta).filter(Oferta.external_id == CLAVE).one()
     assert fila.descripcion
     assert "SOPORTE TÉCNICO IT" in fila.descripcion.upper()
     assert {s.skill for s in fila.skills} >= {"Soporte Técnico"}
@@ -193,13 +199,13 @@ def test_sin_detalle_no_baja_ninguna_pagina_de_oferta(sesion) -> None:
         ingestar_perfil(
             sesion,
             _perfil(["mesa de ayuda"]),
-            cliente=cliente,
+            fuentes=[cliente],
             con_detalle=False,
             ahora=AHORA_FIJO,
         )
 
     assert not any("/ofertas-de-trabajo/" in u for u in portal.peticiones)
-    fila = sesion.query(Oferta).filter(Oferta.external_id == EXTERNAL_ID).one()
+    fila = sesion.query(Oferta).filter(Oferta.external_id == CLAVE).one()
     assert fila.descripcion is None
     # Sin detalle tampoco hay descripción, así que las skills salen sólo del
     # título. Antes esta lista era vacía porque el título no se miraba; ahora
@@ -219,7 +225,7 @@ def test_sin_detalle_las_skills_salen_del_titulo(sesion) -> None:
         ingestar_perfil(
             sesion,
             _perfil(["mesa de ayuda"]),
-            cliente=cliente,
+            fuentes=[cliente],
             con_detalle=False,
             ahora=AHORA_FIJO,
         )
@@ -240,7 +246,7 @@ def test_el_filtro_de_ventana_descarta_lo_viejo(sesion) -> None:
     cliente, http = portal.cliente()
     with http:
         resumen = ingestar_perfil(
-            sesion, _perfil(["mesa de ayuda"]), cliente=cliente, dias=1, ahora=AHORA_FIJO
+            sesion, _perfil(["mesa de ayuda"]), fuentes=[cliente], dias=1, ahora=AHORA_FIJO
         )
 
     assert resumen.fuera_de_ventana > 0
@@ -259,7 +265,7 @@ def test_una_ventana_de_365_dias_entra_todo(sesion) -> None:
     cliente, http = portal.cliente()
     with http:
         resumen = ingestar_perfil(
-            sesion, _perfil(["mesa de ayuda"]), cliente=cliente, dias=365, ahora=AHORA_FIJO
+            sesion, _perfil(["mesa de ayuda"]), fuentes=[cliente], dias=365, ahora=AHORA_FIJO
         )
 
     assert resumen.fuera_de_ventana == 0
@@ -271,7 +277,7 @@ def test_toda_oferta_guardada_tiene_fecha(sesion) -> None:
     cliente, http = portal.cliente()
     with http:
         ingestar_perfil(
-            sesion, _perfil(["mesa de ayuda"]), cliente=cliente, ahora=AHORA_FIJO
+            sesion, _perfil(["mesa de ayuda"]), fuentes=[cliente], ahora=AHORA_FIJO
         )
 
     sin_fecha = sesion.query(Oferta).filter(Oferta.fecha_publicacion.is_(None)).count()
@@ -283,13 +289,13 @@ def test_correr_dos_veces_no_duplica(sesion) -> None:
     cliente, http = portal.cliente()
     with http:
         primera = ingestar_perfil(
-            sesion, _perfil(["mesa de ayuda"]), cliente=cliente, ahora=AHORA_FIJO
+            sesion, _perfil(["mesa de ayuda"]), fuentes=[cliente], ahora=AHORA_FIJO
         )
         count_tras_primera = sesion.query(Oferta).count()
 
         portal.peticiones.clear()
         segunda = ingestar_perfil(
-            sesion, _perfil(["mesa de ayuda"]), cliente=cliente, ahora=AHORA_FIJO
+            sesion, _perfil(["mesa de ayuda"]), fuentes=[cliente], ahora=AHORA_FIJO
         )
 
     assert primera.nuevas > 0
@@ -303,11 +309,11 @@ def test_la_segunda_corrida_no_vuelve_a_bajar_detalles(sesion) -> None:
     cliente, http = portal.cliente()
     with http:
         ingestar_perfil(
-            sesion, _perfil(["mesa de ayuda"]), cliente=cliente, ahora=AHORA_FIJO
+            sesion, _perfil(["mesa de ayuda"]), fuentes=[cliente], ahora=AHORA_FIJO
         )
         portal.peticiones.clear()
         ingestar_perfil(
-            sesion, _perfil(["mesa de ayuda"]), cliente=cliente, ahora=AHORA_FIJO
+            sesion, _perfil(["mesa de ayuda"]), fuentes=[cliente], ahora=AHORA_FIJO
         )
 
     detalles = [u for u in portal.peticiones if "/ofertas-de-trabajo/" in u]
@@ -322,7 +328,7 @@ def test_varias_keywords_deduplican(sesion) -> None:
         resumen = ingestar_perfil(
             sesion,
             _perfil(["mesa de ayuda", "soporte técnico", "helpdesk"]),
-            cliente=cliente,
+            fuentes=[cliente],
             ahora=AHORA_FIJO,
         )
 
@@ -337,14 +343,14 @@ def test_correr_dos_veces_ve_las_mismas_ofertas(sesion) -> None:
     cliente, http = portal.cliente()
     with http:
         primera = ingestar_perfil(
-            sesion, _perfil(["mesa de ayuda"]), cliente=cliente, ahora=AHORA_FIJO
+            sesion, _perfil(["mesa de ayuda"]), fuentes=[cliente], ahora=AHORA_FIJO
         )
 
     otro = PortalFalso()
     cliente2, http2 = otro.cliente()
     with http2:
         segunda = ingestar_perfil(
-            sesion, _perfil(["mesa de ayuda"]), cliente=cliente2, ahora=AHORA_FIJO
+            sesion, _perfil(["mesa de ayuda"]), fuentes=[cliente2], ahora=AHORA_FIJO
         )
 
     assert primera.ofertas_vistas == segunda.ofertas_vistas == 20
@@ -359,7 +365,7 @@ def test_recorre_todas_las_paginas_hasta_que_se_acaban(sesion) -> None:
     cliente, http = portal.cliente()
     with http:
         ingestar_perfil(
-            sesion, _perfil(["mesa de ayuda"]), cliente=cliente, ahora=AHORA_FIJO
+            sesion, _perfil(["mesa de ayuda"]), fuentes=[cliente], ahora=AHORA_FIJO
         )
 
     listados = [u for u in portal.peticiones if "/trabajo-de-" in u]
@@ -377,7 +383,7 @@ def test_una_pagina_sin_nuevas_corta_el_recorrido(sesion) -> None:
     cliente, http = portal.cliente()
     with http:
         ingestar_perfil(
-            sesion, _perfil(["mesa de ayuda"]), cliente=cliente, ahora=AHORA_FIJO
+            sesion, _perfil(["mesa de ayuda"]), fuentes=[cliente], ahora=AHORA_FIJO
         )
 
     listados = [u for u in portal.peticiones if "/trabajo-de-" in u]
@@ -393,7 +399,7 @@ def test_una_pagina_vacia_cierra_el_recorrido(sesion) -> None:
     cliente, http = portal.cliente()
     with http:
         ingestar_perfil(
-            sesion, _perfil(["mesa de ayuda"]), cliente=cliente, ahora=AHORA_FIJO
+            sesion, _perfil(["mesa de ayuda"]), fuentes=[cliente], ahora=AHORA_FIJO
         )
 
     listados = [u for u in portal.peticiones if "/trabajo-de-" in u]
@@ -406,7 +412,7 @@ def test_un_listado_vacio_corta_el_recorrido(sesion) -> None:
     cliente, http = portal.cliente()
     with http:
         resumen = ingestar_perfil(
-            sesion, _perfil(["mesa de ayuda"]), cliente=cliente, ahora=AHORA_FIJO
+            sesion, _perfil(["mesa de ayuda"]), fuentes=[cliente], ahora=AHORA_FIJO
         )
 
     assert resumen.nuevas == 0
@@ -419,7 +425,7 @@ def test_un_detalle_que_falla_no_tira_la_corrida(sesion) -> None:
     cliente, http = portal.cliente()
     with http:
         resumen = ingestar_perfil(
-            sesion, _perfil(["mesa de ayuda"]), cliente=cliente, ahora=AHORA_FIJO
+            sesion, _perfil(["mesa de ayuda"]), fuentes=[cliente], ahora=AHORA_FIJO
         )
 
     assert resumen.fallidas
@@ -441,7 +447,7 @@ def test_ingestar_sin_perfil_recorre_los_activos(sesion) -> None:
     portal = PortalFalso()
     cliente, http = portal.cliente()
     with http:
-        resumen = ingestar(sesion, cliente=cliente, ahora=AHORA_FIJO)
+        resumen = ingestar(sesion, fuentes=[cliente], ahora=AHORA_FIJO)
 
     assert sorted(resumen.perfiles) == ["data-engineer", "soporte-it"]
 
@@ -451,7 +457,7 @@ def test_ingestar_sin_activos_no_hace_nada(sesion) -> None:
     portal = PortalFalso()
     cliente, http = portal.cliente()
     with http:
-        resumen = ingestar(sesion, cliente=cliente, ahora=AHORA_FIJO)
+        resumen = ingestar(sesion, fuentes=[cliente], ahora=AHORA_FIJO)
 
     assert resumen.perfiles == []
     assert resumen.ofertas_vistas == 0
@@ -463,7 +469,7 @@ def test_ingestar_un_perfil_concreto(sesion) -> None:
     portal = PortalFalso()
     cliente, http = portal.cliente()
     with http:
-        resumen = ingestar(sesion, "soporte-it", cliente=cliente, ahora=AHORA_FIJO)
+        resumen = ingestar(sesion, "soporte-it", fuentes=[cliente], ahora=AHORA_FIJO)
 
     assert resumen.perfiles == ["soporte-it"]
 
@@ -483,7 +489,7 @@ def test_el_resumen_se_lee_bien(sesion) -> None:
     cliente, http = portal.cliente()
     with http:
         resumen = ingestar_perfil(
-            sesion, _perfil(["mesa de ayuda"]), cliente=cliente, ahora=AHORA_FIJO
+            sesion, _perfil(["mesa de ayuda"]), fuentes=[cliente], ahora=AHORA_FIJO
         )
 
     linea = resumen.linea()
@@ -502,7 +508,7 @@ def test_dos_corridas_en_el_mismo_minuto_no_cuentan_como_cambio(sesion) -> None:
     cliente, http = portal.cliente()
     with http:
         ingestar_perfil(
-            sesion, _perfil(["mesa de ayuda"]), cliente=cliente, ahora=AHORA_FIJO
+            sesion, _perfil(["mesa de ayuda"]), fuentes=[cliente], ahora=AHORA_FIJO
         )
 
     otro = PortalFalso()
@@ -511,7 +517,7 @@ def test_dos_corridas_en_el_mismo_minuto_no_cuentan_como_cambio(sesion) -> None:
         despues = ingestar_perfil(
             sesion,
             _perfil(["mesa de ayuda"]),
-            cliente=cliente2,
+            fuentes=[cliente2],
             ahora=AHORA_FIJO + timedelta(seconds=20),
         )
 
@@ -531,7 +537,7 @@ def test_dos_corridas_en_minutos_distintos_mueven_la_fecha(sesion) -> None:
     cliente, http = portal.cliente()
     with http:
         ingestar_perfil(
-            sesion, _perfil(["mesa de ayuda"]), cliente=cliente, ahora=AHORA_FIJO
+            sesion, _perfil(["mesa de ayuda"]), fuentes=[cliente], ahora=AHORA_FIJO
         )
 
     otro = PortalFalso()
@@ -540,7 +546,7 @@ def test_dos_corridas_en_minutos_distintos_mueven_la_fecha(sesion) -> None:
         despues = ingestar_perfil(
             sesion,
             _perfil(["mesa de ayuda"]),
-            cliente=cliente2,
+            fuentes=[cliente2],
             ahora=AHORA_FIJO + timedelta(minutes=40),
         )
 
@@ -562,7 +568,7 @@ def test_re_correr_no_duplica_las_skills(sesion) -> None:
     cliente, http = portal.cliente()
     with http:
         ingestar_perfil(
-            sesion, _perfil(["mesa de ayuda"]), cliente=cliente, ahora=AHORA_FIJO
+            sesion, _perfil(["mesa de ayuda"]), fuentes=[cliente], ahora=AHORA_FIJO
         )
 
     antes = {
@@ -577,7 +583,7 @@ def test_re_correr_no_duplica_las_skills(sesion) -> None:
         ingestar_perfil(
             sesion,
             _perfil(["mesa de ayuda"]),
-            cliente=cliente2,
+            fuentes=[cliente2],
             ahora=AHORA_FIJO + timedelta(minutes=40),
         )
 
@@ -604,10 +610,10 @@ def test_una_skill_que_desaparece_se_borra(sesion) -> None:
     cliente, http = portal.cliente()
     with http:
         ingestar_perfil(
-            sesion, _perfil(["mesa de ayuda"]), cliente=cliente, ahora=AHORA_FIJO
+            sesion, _perfil(["mesa de ayuda"]), fuentes=[cliente], ahora=AHORA_FIJO
         )
 
-    oferta = sesion.query(Oferta).filter(Oferta.external_id == EXTERNAL_ID).one()
+    oferta = sesion.query(Oferta).filter(Oferta.external_id == CLAVE).one()
     # Se simula que la detección cambió: la fila guardada tenía
     # "Soporte Técnico" y la nueva pasada sólo ve "Windows".
     _actualizar_skills(oferta, ["Windows"])
@@ -623,7 +629,7 @@ def test_las_fechas_no_tienen_segundos(sesion) -> None:
     cliente, http = portal.cliente()
     with http:
         ingestar_perfil(
-            sesion, _perfil(["mesa de ayuda"]), cliente=cliente, ahora=AHORA_FIJO
+            sesion, _perfil(["mesa de ayuda"]), fuentes=[cliente], ahora=AHORA_FIJO
         )
 
     for fila in sesion.query(Oferta).all():
@@ -636,9 +642,134 @@ def test_las_skills_no_se_repiten_dentro_de_una_oferta(sesion) -> None:
     cliente, http = portal.cliente()
     with http:
         ingestar_perfil(
-            sesion, _perfil(["mesa de ayuda"]), cliente=cliente, ahora=AHORA_FIJO
+            sesion, _perfil(["mesa de ayuda"]), fuentes=[cliente], ahora=AHORA_FIJO
         )
 
     for fila in sesion.query(Oferta).all():
         skills = [s.skill for s in fila.skills]
         assert len(skills) == len(set(skills))
+
+
+# ------------------------------------------------------------- dos fuentes
+
+
+ZONAJOBS = Path(__file__).parent / "fixtures" / "zonajobs"
+
+# Reloj fijo para la corrida con los dos portales: las fechas de Computrabajo
+# son relativas (viven con el reloj) y las de ZonaJobs son absolutas (octubre
+# de 2026), así que hace falta una referencia compartida para que las dos caigan
+# dentro de la ventana.
+AHORA_DOS_PORTALES = datetime(2026, 10, 7, 15, 0, tzinfo=timezone.utc)
+
+
+def _zonajobs(nombre: str) -> dict:
+    return json.loads(ZONAJOBS.joinpath(nombre).read_text(encoding="utf-8"))
+
+
+class PortalZonaJobsFalso:
+    """Responde como ZonaJobs con el JSON guardado, por número de página.
+
+    El portal pagina desde 0, igual que el cliente real: `page=0` es la
+    primera. Las demás páginas devuelven el listado vacío, que es lo que hace
+    el portal cuando se acabaron los resultados.
+    """
+
+    def __init__(self, paginas: list[dict] | None = None) -> None:
+        self.paginas = paginas if paginas is not None else [_zonajobs("listado_p1.json")]
+        self.peticiones: list[str] = []
+
+    def _handler(self, peticion: httpx.Request) -> httpx.Response:
+        self.peticiones.append(str(peticion.url))
+        pagina = int(peticion.url.params.get("page", "0"))
+        datos = self.paginas[pagina] if pagina < len(self.paginas) else _zonajobs("vacio.json")
+        return httpx.Response(200, json=datos, headers={"x-session-jwt": "falso"})
+
+    def cliente(self, delay: float = 0.0) -> tuple[ClienteZonaJobs, httpx.Client]:
+        http = httpx.Client(transport=httpx.MockTransport(self._handler))
+        return ClienteZonaJobs(delay=delay, cliente=http), http
+
+
+def test_dos_portales_en_la_misma_corrida(sesion) -> None:
+    """Computrabajo y ZonaJobs guardados juntos, cada uno con su prefijo.
+
+    Es la razón de la migración 0005: `ofertas.external_id` es única en toda la
+    tabla, así que con dos portales el id tiene que decir de quién es.
+    """
+    servicio.guardar(sesion, _perfil(["mesa de ayuda"]))
+    servicio.activar(sesion, "soporte-it")
+
+    computrabajo = PortalFalso()
+    zonajobs = PortalZonaJobsFalso()
+    cliente_compu, http1 = computrabajo.cliente()
+    cliente_zona, http2 = zonajobs.cliente()
+
+    with http1, http2:
+        resumen = ingestar(
+            sesion,
+            fuentes=[cliente_compu, cliente_zona],
+            dias=365,
+            ahora=AHORA_DOS_PORTALES,
+        )
+
+    assert resumen.fuentes == ["computrabajo", "zonajobs"]
+    assert resumen.nuevas == 40
+    assert resumen.sin_fecha == 0
+
+    guardadas = sesion.query(Oferta).all()
+    por_fuente = {f.fuente for f in guardadas}
+    assert por_fuente == {"computrabajo", "zonajobs"}
+
+    for fila in guardadas:
+        # prefijo, no casualidad: la fila dice de dónde es sin mirar `fuente`.
+        assert fila.external_id.startswith(f"{fila.fuente}:")
+
+    # Veinte de cada portal: ninguno de los dos se comió al otro.
+    assert sum(1 for f in guardadas if f.fuente == "computrabajo") == 20
+    assert sum(1 for f in guardadas if f.fuente == "zonajobs") == 20
+
+
+def test_el_mismo_id_en_dos_fuentes_no_choca(sesion) -> None:
+    """El caso que la migración 0005 cubre: ids idénticos en dos portales.
+
+    Sin prefijo, el segundo `_guardar` habría encontrado la fila del primero y
+    la habría pisado en vez de crear la suya.
+    """
+    cruda = OfertaCruda(
+        external_id="123",
+        titulo="Mesa de Ayuda",
+        empresa=None,
+        url="https://ejemplo.com/aviso-123",
+        ubicacion=None,
+        modalidad=None,
+        salario=None,
+        fecha_texto="01-10-2026",
+    )
+
+    class FuenteFalsa:
+        def __init__(self, id_: str) -> None:
+            self.id = id_
+
+        def listar(self, keyword, pagina):
+            return ([cruda], False) if pagina == 1 else ([], False)
+
+        def describir(self, cruda_):
+            return ""
+
+        def fecha(self, cruda_, ahora):
+            return ahora
+
+        def close(self) -> None:
+            pass
+
+    perfil = _perfil(["mesa de ayuda"])
+    resumen = ingestar_perfil(
+        sesion,
+        perfil,
+        fuentes=[FuenteFalsa("portal-a"), FuenteFalsa("portal-b")],
+        ahora=AHORA_DOS_PORTALES,
+    )
+
+    guardadas = {f.external_id for f in sesion.query(Oferta).all()}
+    assert guardadas == {"portal-a:123", "portal-b:123"}
+    assert sorted(resumen.fuentes) == ["portal-a", "portal-b"]
+    assert resumen.nuevas == 2

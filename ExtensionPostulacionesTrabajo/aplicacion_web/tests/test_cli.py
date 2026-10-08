@@ -18,6 +18,7 @@ import os
 import subprocess
 import sys
 from collections.abc import Iterator
+from types import SimpleNamespace
 
 import pytest
 from sqlalchemy import delete
@@ -95,14 +96,26 @@ def _sin_red(monkeypatch, resumen: Resumen | None = None) -> list[dict]:
     """
     calls: list[dict] = []
 
-    def falso(sesion, perfil_id=None, dias=None, con_detalle=True):
-        calls.append({"perfil": perfil_id, "dias": dias, "con_detalle": con_detalle})
-        return resumen or Resumen(
+    def falso(sesion, perfil_id=None, dias=None, con_detalle=True, fuentes=None):
+        calls.append(
+            {
+                "perfil": perfil_id,
+                "dias": dias,
+                "con_detalle": con_detalle,
+                "fuentes": fuentes,
+            }
+        )
+        res = resumen or Resumen(
             perfiles=[perfil_id] if perfil_id else ["soporte-it"],
             ofertas_vistas=20,
             nuevas=12,
             fuera_de_ventana=8,
         )
+        # La ingesta de verdad anota acá las fuentes que corrieron; sin esto el
+        # renglón `fuentes:` que imprime la CLI saldría vacío en los tests.
+        if fuentes:
+            res.fuentes = [f.id for f in fuentes]
+        return res
 
     monkeypatch.setattr(cli, "ingestar", falso)
     return calls
@@ -156,7 +169,9 @@ def test_ingest_pasa_los_argumentos(capsys, monkeypatch, _perfil) -> None:
 
     cli.main(["ingest", "--perfil", "soporte-it", "--dias", "5", "--sin-detalle"])
 
-    assert llamadas == [{"perfil": "soporte-it", "dias": 5, "con_detalle": False}]
+    assert llamadas == [
+        {"perfil": "soporte-it", "dias": 5, "con_detalle": False, "fuentes": None}
+    ]
 
 
 def test_ingest_por_defecto_pide_detalle(capsys, monkeypatch, _perfil) -> None:
@@ -439,3 +454,48 @@ def test_preparar_la_consola_tolera_lo_que_no_se_puede_escribir(capsys) -> None:
     print("✗ se sigue leyendo")
 
     assert "se sigue leyendo" in capsys.readouterr().out
+
+
+# ------------------------------------------------------------- las fuentes
+
+
+def test_ingest_sin_flag_de_fuente_usa_las_de_la_config(
+    capsys, monkeypatch, _perfil
+) -> None:
+    """`fuentes=None` es "las de `FUENTES_ACTIVAS`", que las arma la ingesta."""
+    llamadas = _sin_red(monkeypatch)
+
+    cli.main(["ingest"])
+
+    assert llamadas[0]["fuentes"] is None
+    assert "fuentes:" in capsys.readouterr().out
+
+
+def test_ingest_puede_elegir_las_fuentes(capsys, monkeypatch, _perfil) -> None:
+    """`--fuente` es para una corrida puntual, sin editar el `.env`."""
+    llamadas = _sin_red(monkeypatch)
+    creadas: list[str] = []
+
+    def crear(fuente_id: str):
+        creadas.append(fuente_id)
+        return SimpleNamespace(id=fuente_id, close=lambda: None)
+
+    monkeypatch.setattr(cli.registro, "crear", crear)
+
+    codigo = cli.main(
+        ["ingest", "--fuente", "zonajobs", "--fuente", "computrabajo"]
+    )
+
+    assert codigo == 0
+    assert creadas == ["zonajobs", "computrabajo"]
+    assert [f.id for f in llamadas[0]["fuentes"]] == ["zonajobs", "computrabajo"]
+    assert "fuentes: zonajobs, computrabajo" in capsys.readouterr().out
+
+
+def test_ingest_con_una_fuente_desconocida_es_error_de_uso(capsys, _perfil) -> None:
+    """`choices` en argparse: el error sale antes de tocar la red ni la base."""
+    with pytest.raises(SystemExit) as excepcion:
+        cli.main(["ingest", "--fuente", "copiabobo"])
+
+    assert excepcion.value.code == 2
+    assert "copiabobo" in capsys.readouterr().err

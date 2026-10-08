@@ -87,14 +87,20 @@ def _guardar_perfil(id_perfil: str = ID_PERFIL, presentacion: str | None = None)
         perfiles.activar(sesion, id_perfil)
 
 
-def _oferta(external_id: str = EXTERNAL_ID) -> int:
+def _oferta(external_id: str | None = None, fuente: str = "computrabajo") -> int:
+    """Una oferta guardada, como la deja la ingesta: con el prefijo de la fuente.
+
+    `external_id` es lo que se guarda en la base; lo crudo de la URL del portal
+    lo manda la extensión y lo resuelve `registrar_enviado_por_extension`.
+    """
+    clave = external_id or f"{fuente}:{EXTERNAL_ID}"
     with SessionLocal() as sesion:
         oferta = Oferta(
-            external_id=external_id,
-            fuente="computrabajo",
+            external_id=clave,
+            fuente=fuente,
             titulo="Mesa de Ayuda",
             empresa="Acme",
-            url=f"https://www.computrabajo.com/oferta/{external_id}",
+            url=f"https://www.computrabajo.com/oferta/{clave}",
             skills=[OfertaSkill(skill="Soporte Técnico")],
         )
         sesion.add(oferta)
@@ -192,6 +198,8 @@ class TestDatos:
         ]
 
         assert len(vivas) == 1
+        # El id crudo: la extensión lo compara con el `?oi=` del formulario,
+        # que no trae el prefijo de la fuente (ver `_id_del_portal`).
         assert vivas[0]["external_id"] == EXTERNAL_ID
         assert vivas[0]["titulo"] == "Mesa de Ayuda"
         assert vivas[0]["estado"] == "pendiente"
@@ -394,3 +402,84 @@ class TestEnviada:
 
         assert "mensaje" in cuerpo
         assert cuerpo["ok"]
+
+# ------------------------------------------------------- el id con prefijo
+
+
+class TestPrefijoDeLaFuente:
+    """La extensión manda el id crudo que lee en la URL del portal.
+
+    Desde la migración 0005 lo guardado es `computrabajo:ABC123`, pero el
+    `?oi=` del formulario del portal sigue trayendo el id pelado, como lo traía
+    antes. El endpoint acepta las dos formas: la que devuelve `/datos` (ya
+    prefijada) y la que manda el portal, que es la que existe desde siempre.
+    """
+
+    def test_acepta_el_id_prefijado(self, cliente) -> None:
+        _guardar_perfil()
+        id_oferta = _oferta()
+
+        respuesta = cliente.post(
+            "/api/extension/enviada",
+            json={
+                "perfil": ID_PERFIL,
+                "external_id": f"computrabajo:{EXTERNAL_ID}",
+            },
+            headers=_headers(),
+        )
+
+        assert respuesta.status_code == 200
+        assert respuesta.json()["ok"]
+        with SessionLocal() as sesion:
+            assert postulaciones.obtener_por_oferta(sesion, id_oferta, ID_PERFIL)
+
+    def test_acepta_el_id_crudo_que_manda_el_portal(self, cliente) -> None:
+        _guardar_perfil()
+        id_oferta = _oferta()
+
+        respuesta = cliente.post(
+            "/api/extension/enviada",
+            json={"perfil": ID_PERFIL, "external_id": EXTERNAL_ID},
+            headers=_headers(),
+        )
+
+        assert respuesta.status_code == 200
+        assert respuesta.json()["ok"]
+        with SessionLocal() as sesion:
+            assert postulaciones.obtener_por_oferta(sesion, id_oferta, ID_PERFIL)
+
+    def test_el_id_crudo_de_otro_portal_tambien_se_encuentra(self, cliente) -> None:
+        _guardar_perfil()
+        id_oferta = _oferta(external_id="zonajobs:2191494", fuente="zonajobs")
+
+        respuesta = cliente.post(
+            "/api/extension/enviada",
+            json={"perfil": ID_PERFIL, "external_id": "2191494"},
+            headers=_headers(),
+        )
+
+        assert respuesta.status_code == 200
+        assert respuesta.json()["ok"]
+        with SessionLocal() as sesion:
+            assert postulaciones.obtener_por_oferta(sesion, id_oferta, ID_PERFIL)
+
+    def test_con_dos_prefijos_gana_la_coincidencia_exacta(self, cliente) -> None:
+        """El mismo id crudo en dos portales: que sea siempre la misma respuesta.
+
+        Sin la exacta ganando, `endswith(":123")` devolvería cualquiera de las
+        dos y el resultado dependería del orden de las filas.
+        """
+        _guardar_perfil()
+        computrabajo = _oferta(external_id="computrabajo:123")
+        zonajobs = _oferta(external_id="zonajobs:123", fuente="zonajobs")
+
+        cuerpo = {"perfil": ID_PERFIL, "external_id": "123"}
+        cliente.post("/api/extension/enviada", json=cuerpo, headers=_headers())
+
+        with SessionLocal() as sesion:
+            assert postulaciones.obtener_por_oferta(
+                sesion, computrabajo, ID_PERFIL
+            ), "con el id crudo, el prefijo exacto tiene que ganar"
+            assert (
+                postulaciones.obtener_por_oferta(sesion, zonajobs, ID_PERFIL) is None
+            )

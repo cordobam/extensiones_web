@@ -147,6 +147,7 @@
         {% if fila.oferta.fecha_publicacion %}
           <span>{{ fila.oferta.fecha_publicacion.strftime('%d/%m') }}</span>
         {% endif %}
+        {% if fila.oferta.fuente %}<span class="badge">{{ fila.oferta.fuente }}</span>{% endif %}
       </div>
 
       <details class="por-que">

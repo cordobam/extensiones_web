@@ -12,8 +12,9 @@ Uso:
 
 Sin `--perfil` recorre todos los perfiles activos.
 
-Esto pega contra Computrabajo de verdad, con la pausa de `request_delay` de la
-config entre requests. Con 5 keywords y detalles puede tardar un minuto.
+Esto pega contra los portales de verdad --los que mande `FUENTES_ACTIVAS`, o los
+que pase `--fuente`-- con la pausa de `request_delay` de la config entre
+requests. Con 5 keywords, dos portales y detalles puede tardar un par de minutos.
 """
 
 from __future__ import annotations
@@ -29,6 +30,7 @@ sys.path.insert(0, str(RAIZ))
 
 from sqlalchemy import delete, func, select  # noqa: E402
 
+from radar import fuentes as registro  # noqa: E402
 from radar.db import SessionLocal  # noqa: E402
 from radar.ingesta import ingestar  # noqa: E402
 from radar.models import Match, Oferta, Perfil  # noqa: E402
@@ -55,6 +57,30 @@ def _estado(sesion) -> str:
     return f"{total} ofertas ({con_fecha} con fecha, {con_desc} con descripción)"
 
 
+def _correr(sesion, args, con_detalle, referencia, fuentes) -> None:
+    """Las dos corridas seguidas: la segunda no tiene que agregar nada."""
+    for corrida in (1, 2):
+        print(f"--- corrida {corrida} ---")
+        inicio = time.monotonic()
+        resumen = ingestar(
+            sesion,
+            perfil_id=args.perfil,
+            dias=args.dias,
+            con_detalle=con_detalle,
+            fuentes=fuentes,
+            ahora=referencia,
+        )
+        took = time.monotonic() - inicio
+        print(f"  fuentes: {', '.join(resumen.fuentes)}")
+        print(f"  {resumen.linea()}")
+        print(f"  {resumen.ofertas_vistas} vistas en {took:.1f}s")
+        if resumen.fallidas:
+            print(f"  fallidas ({len(resumen.fallidas)}):")
+            for donde, error in resumen.fallidas[:5]:
+                print(f"    {donde}: {error[:90]}")
+        print()
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--perfil", help="id del perfil. Sin esto, todos los activos.")
@@ -70,6 +96,12 @@ def main() -> int:
         help="no baja detalles y limpia las ofertas antes. Para probar el listado solo.",
     )
     parser.add_argument("--limpiar", action="store_true", help="borra las ofertas y sale.")
+    parser.add_argument(
+        "--fuente",
+        action="append",
+        choices=registro.disponibles(),
+        help="sólo este portal (se puede repetir). Sin esto, los de la config.",
+    )
     args = parser.parse_args()
 
     if args.limpiar:
@@ -98,6 +130,10 @@ def main() -> int:
             print("No hay perfiles activos. Activá alguno en /perfiles.")
             return 1
 
+        # Lo mismo que en la CLI: las creo yo, las cierro yo. Las dos corridas
+        # comparten la misma instancia, como las compartiría la ingesta real.
+        fuentes = [registro.crear(fuente_id) for fuente_id in (args.fuente or [])] or None
+
         print("Perfiles:", ", ".join(f"{p.id} ({len(p.busqueda.keywords)} keywords)" for p in perfiles))
         print("Antes: ", _estado(sesion))
         print("Ventana:", args.dias or "la de la config", "días")
@@ -105,24 +141,11 @@ def main() -> int:
             print("Detalle: no (sin descripción ni skills)")
         print()
 
-        for corrida in (1, 2):
-            print(f"--- corrida {corrida} ---")
-            inicio = time.monotonic()
-            resumen = ingestar(
-                sesion,
-                perfil_id=args.perfil,
-                dias=args.dias,
-                con_detalle=con_detalle,
-                ahora=referencia,
-            )
-            took = time.monotonic() - inicio
-            print(f"  {resumen.linea()}")
-            print(f"  {resumen.ofertas_vistas} vistas en {took:.1f}s")
-            if resumen.fallidas:
-                print(f"  fallidas ({len(resumen.fallidas)}):")
-                for donde, error in resumen.fallidas[:5]:
-                    print(f"    {donde}: {error[:90]}")
-            print()
+        try:
+            _correr(sesion, args, con_detalle, referencia, fuentes)
+        finally:
+            for fuente in fuentes or []:
+                fuente.close()
 
         print("Después:", _estado(sesion))
 

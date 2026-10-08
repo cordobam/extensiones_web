@@ -491,8 +491,8 @@ Criterio de terminado
     mirar.
 
 
-FASE 16 — Multi-fuente (LA QUE FALTA)
--------------------------------------
+FASE 16 — Multi-fuente (HECHA)
+------------------------------
 Qué es
     Traer ofertas de los otros portales, no sólo de Computrabajo. Es el objetivo
     de verdad del proyecto --"muchos portales en un solo lugar"-- y el roadmap
@@ -501,14 +501,34 @@ Qué es
 El blocker real, que no es el scraper
     radar/fuentes/__init__.py promete que "mañana se puede sumar otro portal sin
     tocarlos", y el contrato Offer de schema.py efectivamente es agnóstico. Pero
-    ingesta.py tiene computrabajo escrito en seis lugares e instancia Cliente()
+    ingesta.py tenía computrabajo escrito en seis lugares e instanciaba Cliente()
     concreto. Agregar el portal #2 NO es escribir un scraper: primero hay que
     refactorizar ingesta.py a un registro de fuentes. Ese refactor no estaba
     presupuestado en ninguna fase.
 
 Criterio de terminado
     `radar ingest` trae ofertas de al menos dos portales y la lista las muestra
-    juntas, sin que el matching ni la base se enteren del origen.
+    juntas, sin que el matching ni la base se enteren del origen. CUMPLIDO.
+
+Cómo quedó
+    - radar/fuentes/base.py: el contrato Fuente (listar, describir, fecha,
+      close) y la fila OfertaCruda. Protocol, no herencia.
+    - radar/fuentes/__init__.py: el registro (FABRICAS, crear, activas,
+      disponibles). Sumar un portal = un archivo + una entrada acá.
+    - radar/ingesta.py: habla con el contrato, recorre las fuentes activas y
+      guarda el `external_id` prefijado con la fuente ("computrabajo:ABC123"),
+      que es lo que hace que la unicidad sea global y no por portal.
+    - radar/config.py: FUENTES_ACTIVAS (default "computrabajo,zonajobs").
+    - radar/cli.py: flag `--fuente` (repetible) para una corrida puntual, y
+      el resumen imprime qué fuentes corrieron.
+    - migrations/versions/0005_: le pone el prefijo a las filas viejas, sin
+      pisar las que ya lo tengan.
+    - radar/api.py: /api/extension/enviada acepta el id crudo que manda la
+      extensión (lo lee de la URL del portal). Con dos prefijos posibles gana
+      la coincidencia exacta, después el id más bajo: siempre la misma
+      respuesta, sin depender del orden de las filas. Y /datos devuelve el id
+      pelado (sin prefijo), porque la extensión lo compara con el `?oi=`.
+    - templates/ofertas/lista.html: badge con la fuente en cada oferta.
 
 Las tres preguntas antes de escribir un scraper
     1. ¿Se puede buscar por keyword sin sesión?
@@ -517,7 +537,14 @@ Las tres preguntas antes de escribir un scraper
     3. ¿Hay RSS o JSON en vez de HTML? Si hay, gana el feed: no es scrapear.
 
 Estado de cada portal
-    - zonajobs, indeed       Anónimos y parecidos a Computrabajo. Primer paso.
+    - zonajobs                HECHO. API interna en JSON; lo que costó fue la
+                              el header x-site-id, que exige SIEMPRE (sin él
+                              responde 400 aunque el jwt sea válido --error
+                              que encontró el smoke real--), el x-session-jwt
+                              que devuelve la respuesta y los 403 de
+                              Cloudflare sin UA de navegador. Ver
+                              radar/fuentes/zonajobs.py.
+    - indeed                  Anónimo y parecido a Computrabajo.
     - bolsas de universidad  HTML sencillo, pero muchas no traen fecha o la
                              traen como "cierra el". Ojo con eso.
     - meli, adecco, consultoras
@@ -529,6 +556,16 @@ Estado de cada portal
                              términos prohíben el acceso automatizado. Tratarlo
                              como un spike con resultado honesto, no como una fase
                              comprometida. Puede ser que no sea viable.
+
+Smoke real (corrido contra el portal, no contra fixtures)
+    - `radar ingest --fuente zonajobs --dias 3`: 28 vistas, 4 nuevas. Encontró
+      el bug de verdad: el backend exige `x-site-id` SIEMPRE (400 "No se
+      incluyo el header x-site-id"), incluso con el jwt puesto. Arreglado en
+      `_headers_con_sesion` con test de regresión.
+    - `radar ingest --dias 3` (las dos fuentes de la config): 338 vistas,
+      15 nuevas, `fuentes: computrabajo, zonajobs`.
+    - Migración 0005 aplicada a la base de trabajo: 832 ofertas prefijadas, 0
+      sin prefijo.
 
 
 ================================================================================
@@ -577,6 +614,37 @@ Por qué importa más adelante:
 
 
 ================================================================================
+MULTI-FUENTE (cambio de esta tanda)
+================================================================================
+
+Qué cambió:
+    - radar/fuentes/base.py (nuevo): contrato Fuente y OfertaCruda. `descripcion`
+      es el campo nuevo de OfertaCruda: si la fuente lo trae en el listado
+      (ZonaJobs), la ingesta no pide nada más.
+    - radar/fuentes/zonajobs.py (nuevo): Cliente con delay, reintentos y la
+      sesión del portal; a_cruda, url_aviso y parsear_fecha (UTC-3, sin tzdata).
+    - radar/fuentes/computrabajo.py: expone `id = "computrabajo"` y cumple el
+      contrato (OfertaCruda se mudó a base.py y se re-exporta).
+    - radar/fuentes/__init__.py: registro de fuentes + compatibilidad con
+      `from radar.fuentes import Cliente, listar, parsear`.
+    - radar/ingesta.py: `fuentes=[...]` (None = las de la config, y las cierra
+      la función que las creó), Resumen.fuentes, clave prefijada.
+    - radar/cli.py: `--fuente`, y el resumen imprime "fuentes: ...".
+    - radar/api.py: fallback de id crudo + desempate determinístico.
+    - migrations/versions/0005: prefijo en las filas viejas.
+    - templates/ofertas/lista.html: badge de la fuente.
+    - .env.example: FUENTES_ACTIVAS.
+    - scripts/ingesta_humo.py: `--fuente`, y sale qué fuentes corrieron.
+
+Tests nuevos: tests/test_zonajobs.py (37, contra el JSON real),
+tests/test_fuentes.py (6, el registro), el de dos portales en la misma corrida
+y el de "el mismo id en dos fuentes no choca" en test_ingesta.py, el de
+`--fuente` en test_cli.py, y los de id crudo/prefijado en
+test_api_extension.py. Los fixtures de ZonaJobs salieron del API en vivo con
+los mismos headers del cliente.
+
+
+================================================================================
 DECISIONES PENDIENTES
 ================================================================================
 
@@ -613,7 +681,8 @@ COMANDOS DE REFERENCIA
     copiar pefiles 
     traer ofertas
     priorizar ofertas
-    Levantar la app     uvicorn radar.api:app --reload
+    si no funcionan lo anterior pip install -e .
+    Levantar la app     uvicorn radar.api:app --reload		
     Tests               pytest
     Migraciones         alembic upgrade head
     Chequear migraciones alembic check

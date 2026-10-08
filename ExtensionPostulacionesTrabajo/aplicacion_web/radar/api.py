@@ -19,7 +19,7 @@ from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, ValidationError
-from sqlalchemy import select
+from sqlalchemy import case, or_, select
 from sqlalchemy.orm import Session
 
 from radar import matching, ofertas
@@ -703,6 +703,20 @@ def _rechazar_si_no_es_extension(request: Request) -> JSONResponse:
     )
 
 
+def _id_del_portal(external_id: str) -> str:
+    """El id pelado, como lo trae la URL del portal.
+
+    Desde la migración 0005 lo guardado lleva prefijo (`computrabajo:ABC123`),
+    pero la extensión compara este valor con el `?oi=` del formulario, que no
+    lo trae. Devolver el prefijado rompería esa comparación en silencio: la
+    postulación existiría y la extensión no la reconocería.
+
+    `/api/extension/enviada` acepta las dos formas, así que mandar este id
+    crudo de vuelta siempre cierra el circuito.
+    """
+    return external_id.rsplit(":", 1)[-1]
+
+
 def _instante(momento: datetime | None) -> str | None:
     """Una fecha de la base como texto, siempre en UTC.
 
@@ -791,7 +805,7 @@ def datos_para_la_extension(
             "postulaciones": [
                 {
                     "id": fila.id,
-                    "external_id": fila.oferta.external_id,
+                    "external_id": _id_del_portal(fila.oferta.external_id),
                     "titulo": fila.oferta.titulo,
                     "empresa": fila.oferta.empresa,
                     "url": fila.oferta.url,
@@ -816,16 +830,33 @@ def registrar_enviado_por_extension(
     la extensión tenga que mandar ids internos de la base, que cambian con cada
     dump y no le dicen nada a quien la usa.
 
+    Desde la migración 0005 los ids guardados llevan prefijo
+    ("computrabajo:ABC"), pero el de la URL viene crudo, así que se aceptan las
+    dos formas. Ante la ambigüedad --el mismo id crudo en dos portales-- gana
+    la coincidencia exacta, y después el id más bajo, para que la respuesta sea
+    siempre la misma.
+
     Nunca devuelve 4xx por una transición inválida. Si la postulación ya estaba
-    más avanzada, el reporte llegó tarde pero no está mal, y la extensión tiene
-    que poder pintar el estado real sin tratarlo como un error.
+    más avanzada, el reporte llegó tarde pero no está mal, y la extensión
+    tiene que poder pintar el estado real sin tratarlo como un error.
     """
     if not _es_la_extension(request):
         return _rechazar_si_no_es_extension(request)
 
-    oferta = sesion.scalar(
-        select(Oferta).where(Oferta.external_id == cuerpo.external_id)
-    )
+    candidato = cuerpo.external_id
+    oferta = sesion.scalars(
+        select(Oferta)
+        .where(
+            or_(
+                Oferta.external_id == candidato,
+                Oferta.external_id.endswith(f":{candidato}"),
+            )
+        )
+        .order_by(
+            case((Oferta.external_id == candidato, 0), else_=1),
+            Oferta.id,
+        )
+    ).first()
     if oferta is None:
         return JSONResponse(
             {
@@ -856,7 +887,7 @@ def registrar_enviado_por_extension(
         {
             "ok": registro.enviada,
             "id": fila.id,
-            "external_id": oferta.external_id,
+            "external_id": _id_del_portal(oferta.external_id),
             "titulo": oferta.titulo,
             "estado": fila.estado,
             "etiqueta": estados.etiqueta(fila.estado),

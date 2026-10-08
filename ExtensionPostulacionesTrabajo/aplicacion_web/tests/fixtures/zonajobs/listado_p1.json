@@ -1,0 +1,1029 @@
+{
+  "number": 0,
+  "size": 20,
+  "total": 83,
+  "content": [
+    {
+      "id": 2191494,
+      "titulo": "Desarrollador Mobile",
+      "detalle": "Empresa de desarrollo de software nacida con el objetivo de crear soluciones eficientes, seguras y adaptadas a las necesidades de cada cliente. Con base en Argentina, trabajan con empresas locales e internacionales, transformando ideas complejas en herramientas digitales claras y efectivas. Se encuentran ampliando su equipo de Tecnología y buscan incorporar un/a Desarrollador/a Mobile Semi-Senior para sumarse al desarrollo y mantenimiento de sus aplicaciones.La posición está orientada a profesionales con experiencia en el desarrollo de aplicaciones híbridas robustas, que disfruten involucrarse en las distintas etapas del ciclo de vida del producto, desde el desarrollo y mantenimiento del código hasta la publicación y gestión de las aplicaciones en las tiendas. ¿Cuáles serán tus desafíos?  Desarrollar, mantener y optimizar aplicaciones móviles utilizando Ionic y Angular.   Realizar integraciones con servicios backend, APIs RESTful.   Implementar plugins nativos utilizando Capacitor. Se valora experiencia en OneSignal (Push Notifications), Google Maps SDK, Geolocalización en tiempo real, Escáner de códigos de barra / QR, Manejo de Cámara e imagenes entre otros.   Gestionar el ciclo de compilación y publicación de las aplicaciones en Google Play Store y Apple App Store apoyándote en herramientas de CI/CD como Ionic Appflow y Capawesome.   Probar y validar funciones directamente en dispositivos mediante flujos de desarrollo ágiles (Live Reload).    Colaborar con el equipo para asegurar la calidad del código, el rendimiento de la app y la mejor experiencia de usuario.  Requisitos: ¿Qué buscamos?  Experiencia comprobable (2 a 4 años) desarrollando aplicaciones móviles, idealmente en posiciones Semi-Senior.   Dominio avanzado de Ionic y Angular. (TypeScript).   Experiencia sólida trabajando con Capacitor (integración y manejo de plugins nativos).   Experiencia real publicando aplicaciones en las tiendas de iOS y Android (deseable manejo de plataformas como Ionic Appflow).   Manejo de control de versiones (Git).  Beneficios  Entorno dinámico y orientado a resultados. Posibilidades de crecimiento y desarrollo profesional. Buen clima laboral y equipo de trabajo colaborativo.",
+      "aptoDiscapacitado": false,
+      "idEmpresa": 655910,
+      "empresa": "Italentitalentconnection Consultora",
+      "confidencial": false,
+      "logoURL": null,
+      "validada": false,
+      "empresaPro": false,
+      "fechaHoraPublicacion": "06-10-2026 18:56:15",
+      "fechaPublicacion": "06-10-2026",
+      "fechaModificado": "06-10-2026 18:56:15",
+      "planPublicacion": {
+        "id": 2006,
+        "nombre": "Simples Hiring Room"
+      },
+      "portal": "zonajobs",
+      "tipoTrabajo": "Full-time",
+      "idPais": 1,
+      "idArea": 19,
+      "idSubarea": 2624,
+      "leido": null,
+      "visitadoPorPostulante": null,
+      "localizacion": "Capital Federal, Buenos Aires",
+      "cantidadVacantes": 1,
+      "guardado": null,
+      "gptwUrl": null,
+      "promedioEmpresa": null,
+      "modalidadTrabajo": "Híbrido",
+      "tienePreguntas": false,
+      "salarioObligatorio": false,
+      "altaRevisionPerfiles": false,
+      "postulacionRapida": true,
+      "tipoAviso": "simple"
+    },
+    {
+      "id": 2191440,
+      "titulo": "Software Engineer Python IA - Remoto - 1731",
+      "detalle": "¿Qué hace la compañía?Compañía nativa digital con presencia global de gran escala de ingeniería, diseño e innovación, con sedes ubicadas en 18 países entre América, Asia y Europa. Cuenta con un equipo de más de 20 mil profesionales que forman parte de nuevos desafíos y proyectos de vanguardia.¿Qué necesitás para ser parte del equipo?Nos encontramos en búsqueda de un/a Software Engineer especializado/a en Python e Inteligencia Artificial, para participar en proyectos orientados al desarrollo de soluciones de Backend e Inteligencia Artificial. Más de 6 años de experiencia con Python en roles enfocados en Backend y tecnologías de Inteligencia Artificial. Experiencia en arquitectura de microservicios y patrones de diseño aplicados a soluciones de IA. Experiencia con Google Agent Development Kit (ADK), integraciones de APIs, Prompt Engineering, arquitecturas RAG y orquestación de agentes de IA. Experiencia trabajando con GCP, particularmente Cloud Run, Pub/Sub y GCS. Experiencia con FastAPI, Asyncio y Docker, incluyendo builds multi-stage. Experiencia trabajando con bases de datos relacionales y no relacionales. Experiencia trabajando con soluciones Cloud en GCP y Azure. Inglés C1 | Excluyente.A nivel personal: Experiencia llevando adelante funcionalidades end-to-end. Capacidad para elaborar PRDs y RFCs antes de comenzar el desarrollo.Será considerado un plus: Experiencia con GraphQL, FFmpeg, Pillow, conocimientos básicos de MLOps y fine-tuning de modelos.¿Qué vas a hacer?Como Software Engineer Python IA podrás: Desarrollar soluciones Backend utilizando Python y FastAPI. Diseñar y desarrollar arquitecturas basadas en microservicios. Diseñar e implementar soluciones de Inteligencia Artificial utilizando Google Agent Development Kit (ADK), RAG y agentes de IA. Integrar APIs y desarrollar soluciones orientadas a la orquestación de agentes de IA. Participar en el diseño de sistemas y aplicar patrones de arquitectura orientados a soluciones de IA. Trabajar con servicios Cloud de GCP como Cloud Run, Pub/Sub y GCS, además de Azure. Integrar y trabajar con bases de datos relacionales y no relacionales. Participar en proyectos vinculados con Inteligencia Artificial, LLMs, GenAI, RAG y agentes de IA. Llevar adelante funcionalidades end-to-end y colaborar en la definición de soluciones técnicas. Aplicar buenas prácticas de ingeniería y desarrollo de software.¿Cuándo y dónde trabajarás?Trabajarás bajo un esquema 100% remoto desde cualquier parte del país de lunes a viernes de 9-18 hs.¿Qué ofrecen? Sueldo split: gran porcentaje de la remuneración en dólares. Contrato directo con la Empresa. Prepaga de primer nivel para vos y tu grupo familiar. Plataforma de cursos gratuitos. Licencia de paternidad/maternidad extendida. Descuentos en entidades educativas privadas. Tarjeta de descuentos: ropa, comida, viajes, etc. Inglés in Company. Plan de carrera interno en diferentes ramas IT. Proyectos multidisciplinarios.¿De qué fases consta el proceso de selección?El proceso de selección se desarrolla en varias etapas. En primer lugar, tendrás una entrevista con nuestra Recruiter, Melina Rubio, donde conversaremos sobre tu experiencia laboral y tus intereses.Luego, con la empresa empleadora tendrás otras instancias. La primera una entrevista con el HR de la compañía para conocer más sobre el desafío y screening en inglés, la segunda una evaluación técnica para conocer con profundidad tus conocimientos y por último instancias con el cliente orientadas a conocer al equipo y el proyecto en mayor detalle.",
+      "aptoDiscapacitado": false,
+      "idEmpresa": 570364,
+      "empresa": "Aliantec",
+      "confidencial": false,
+      "logoURL": "https://imgzj.jobscdn.com/portal/img/empresas/1/static/logoMainPic_570364_bum_v183b0a04.jpg",
+      "validada": false,
+      "empresaPro": false,
+      "fechaHoraPublicacion": "06-10-2026 12:36:40",
+      "fechaPublicacion": "06-10-2026",
+      "fechaModificado": "06-10-2026 12:37:43",
+      "planPublicacion": {
+        "id": 1020,
+        "nombre": "Aviso Select"
+      },
+      "portal": "zonajobs",
+      "tipoTrabajo": "Full-time",
+      "idPais": 1,
+      "idArea": 19,
+      "idSubarea": 2621,
+      "leido": null,
+      "visitadoPorPostulante": null,
+      "localizacion": "Capital Federal, Buenos Aires",
+      "cantidadVacantes": 1,
+      "guardado": null,
+      "gptwUrl": null,
+      "promedioEmpresa": null,
+      "modalidadTrabajo": "Remoto",
+      "tienePreguntas": false,
+      "salarioObligatorio": false,
+      "altaRevisionPerfiles": false,
+      "postulacionRapida": true,
+      "tipoAviso": "talento"
+    },
+    {
+      "id": 2191166,
+      "titulo": "Desarrollador Full Stack (JAVA / React) Senior - Mix (Onsite - Remoto) - 1778",
+      "detalle": "¿Qué hace la compañía?Grupo empresario argentino con presencia nacional y trayectoria consolidada, con fuerte protagonismo en la industria bancaria y de servicios financieros, y operación en múltiples sectores estratégicos del país. Con foco en innovación, desarrollo regional y evolución tecnológica, continúa fortaleciendo sus plataformas digitales para acompañar el crecimiento del negocio y mejorar la experiencia de usuarios y clientes.Desde la Gerencia Corporativa de IT, se impulsa el desarrollo de soluciones modernas, escalables y seguras, en un entorno que combina desafíos técnicos, impacto real y trabajo colaborativo.¿Qué necesitás para ser parte del equipo?A nivel personal: Capacidad para trabajar de forma colaborativa con equipos multidisciplinarios Perfil proactivo, con orientación a la mejora continua y al aprendizaje constante. Buena capacidad de análisis y resolución de problemas técnicos. Comunicación clara, tanto para explicar decisiones técnicas como para alinear prioridades. Orientación a producto y foco en construir soluciones alineadas al negocio.A nivel técnico: Más de 5 años de experiencia desarrollando soluciones con Java (idealmente versiones modernas / Java 8+). Experiencia sólida con Spring Boot, Spring Data (JPA/Hibernate) y Spring Security. Experiencia en diseño e implementación de APIs RESTful e integración de sistemas. Experiencia sólida en desarrollo frontend con React 18 (Hooks, Context API). Dominio de TypeScript (excluyente). Experiencia trabajando con bases de datos relacionales y no relacionales. Familiaridad con arquitecturas modernas: microservicios, contenedores y entornos cloud. Conocimiento en desarrollo y mantenimiento de plataformas digitales y servicios de alta disponibilidad. Conocimientos prácticos en automatización, CI/CD y despliegue continuo. Experiencia en la escritura de pruebas unitarias, de integración y automatizadas, orientadas a garantizar estabilidad y confiabilidad. Familiaridad con metodologías ágiles. Manejo de librerías de UI como Tailwind CSS, Material UI o Styled Components. Experiencia en performance y optimización web (SSR, SSG, ISR y Core Web Vitals).¿Qué vas a hacer? Construir y mantener componentes de plataforma, productos y servicios alineados a las necesidades del negocio, siguiendo lineamientos técnicos definidos. Desarrollar soluciones modulares, escalables y seguras, con foco en resiliencia y eficiencia. Implementar buenas prácticas de desarrollo para asegurar calidad, performance y seguridad. Diseñar y ejecutar pruebas automatizadas (unitarias e integraciones) que garanticen robustez y estabilidad. Participar activamente en la evolución de la arquitectura, aportando sugerencias y mejoras. Diseñar herramientas o automatizaciones que reduzcan tareas manuales y mejoren la eficiencia operativa. Identificar y resolver problemas técnicos de forma proactiva, impulsando mejoras continuas en la plataforma.¿Cuál es el desafío de la posición?Serás una pieza clave en la construcción y evolución de soluciones técnicas para plataformas digitales. El rol se enfoca en desarrollar componentes modulares, escalables y seguros que soporten la operación de productos y servicios, trabajando en conjunto con líderes técnicos, arquitectos y otros equipos de ingeniería para asegurar que las soluciones sean resilientes, eficientes y estén alineadas con los objetivos del negocio.¿Cuándo y dónde trabajarás?Trabajarás de lunes a viernes, de 9 a 18 hs, bajo un esquema híbrido, con presencialidad de 2 días por semana en las oficinas ubicadas en Capital Federal.¿Qué ofrecen? Relación de dependencia directa. Excelentes condiciones de contratación bajo convenio bancario. Modalidad: esquema híbrido. Cobertura de prepaga para vos y tu grupo familiar directo- Plataforma de bienestar de primer nivel. Importantes descuentos en instituciones educativas para para vos y tu familia. Formación constante para la posición y para el desarrollo profesional. Beneficio de guardería. Cotización preferencial en productos bancarios. Bonificación en plataforma de compras Club de Beneficios.¿De qué fases consta el proceso de selección?Tendrás una primera entrevista con la Recruiter, Aldana Alvarenga, para conocer tu experiencia, expectativas e intereses.Luego, el proceso continuará con la empresa empleadora a través de distintas instancias, orientadas a que puedas conocer al equipo técnico, a Recursos Humanos y a la gerencia.",
+      "aptoDiscapacitado": false,
+      "idEmpresa": 570364,
+      "empresa": "Aliantec",
+      "confidencial": false,
+      "logoURL": "https://imgzj.jobscdn.com/portal/img/empresas/1/static/logoMainPic_570364_bum_v183b0a04.jpg",
+      "validada": false,
+      "empresaPro": false,
+      "fechaHoraPublicacion": "01-10-2026 14:26:10",
+      "fechaPublicacion": "01-10-2026",
+      "fechaModificado": "01-10-2026 14:26:10",
+      "planPublicacion": {
+        "id": 1020,
+        "nombre": "Aviso Select"
+      },
+      "portal": "zonajobs",
+      "tipoTrabajo": "Full-time",
+      "idPais": 1,
+      "idArea": 19,
+      "idSubarea": 2621,
+      "leido": null,
+      "visitadoPorPostulante": null,
+      "localizacion": "Capital Federal, Buenos Aires",
+      "cantidadVacantes": 1,
+      "guardado": null,
+      "gptwUrl": null,
+      "promedioEmpresa": null,
+      "modalidadTrabajo": "Híbrido",
+      "tienePreguntas": false,
+      "salarioObligatorio": false,
+      "altaRevisionPerfiles": false,
+      "postulacionRapida": true,
+      "tipoAviso": "talento"
+    },
+    {
+      "id": 2191165,
+      "titulo": "Desarrollador Salesforce Sr. (Reglas de Negocio) - Mix (Onsite - Remoto) - Retiro - 1808",
+      "detalle": "¿Qué hace la compañía?Importante Banco Nacional de capitales privados con la mayor red de sucursales en Argentina. Brindan distintos servicios financieros a más […]",
+      "aptoDiscapacitado": false,
+      "idEmpresa": 570364,
+      "empresa": "Aliantec",
+      "confidencial": false,
+      "logoURL": "https://imgzj.jobscdn.com/portal/img/empresas/1/static/logoMainPic_570364_bum_v183b0a04.jpg",
+      "validada": false,
+      "empresaPro": false,
+      "fechaHoraPublicacion": "01-10-2026 14:24:21",
+      "fechaPublicacion": "01-10-2026",
+      "fechaModificado": "01-10-2026 14:24:21",
+      "planPublicacion": {
+        "id": 1020,
+        "nombre": "Aviso Select"
+      },
+      "portal": "zonajobs",
+      "tipoTrabajo": "Full-time",
+      "idPais": 1,
+      "idArea": 19,
+      "idSubarea": 2621,
+      "leido": null,
+      "visitadoPorPostulante": null,
+      "localizacion": "Capital Federal, Buenos Aires",
+      "cantidadVacantes": 1,
+      "guardado": null,
+      "gptwUrl": null,
+      "promedioEmpresa": null,
+      "modalidadTrabajo": "Híbrido",
+      "tienePreguntas": false,
+      "salarioObligatorio": false,
+      "altaRevisionPerfiles": false,
+      "postulacionRapida": true,
+      "tipoAviso": "talento"
+    },
+    {
+      "id": 2191146,
+      "titulo": "Desarrollador Frontend (Angular) - Remoto - 1897",
+      "detalle": "¿Qué hace la compañía?Importante compañía de tecnología especializada en el desarrollo de soluciones y servicios IT, con foco en innovación y transformación dig […]",
+      "aptoDiscapacitado": false,
+      "idEmpresa": 570364,
+      "empresa": "Aliantec",
+      "confidencial": false,
+      "logoURL": "https://imgzj.jobscdn.com/portal/img/empresas/1/static/logoMainPic_570364_bum_v183b0a04.jpg",
+      "validada": false,
+      "empresaPro": false,
+      "fechaHoraPublicacion": "01-10-2026 11:50:37",
+      "fechaPublicacion": "01-10-2026",
+      "fechaModificado": "01-10-2026 11:50:37",
+      "planPublicacion": {
+        "id": 1020,
+        "nombre": "Aviso Select"
+      },
+      "portal": "zonajobs",
+      "tipoTrabajo": "Full-time",
+      "idPais": 1,
+      "idArea": 19,
+      "idSubarea": 2621,
+      "leido": null,
+      "visitadoPorPostulante": null,
+      "localizacion": "Capital Federal, Buenos Aires",
+      "cantidadVacantes": 1,
+      "guardado": null,
+      "gptwUrl": null,
+      "promedioEmpresa": null,
+      "modalidadTrabajo": "Remoto",
+      "tienePreguntas": false,
+      "salarioObligatorio": false,
+      "altaRevisionPerfiles": false,
+      "postulacionRapida": true,
+      "tipoAviso": "talento"
+    },
+    {
+      "id": 2191049,
+      "titulo": "Desarrollador/a de Negocios – Logística Internacional",
+      "detalle": "Desarrollador/a de Negocios – Logística InternacionalDesde ACTIF Talentxpert acompañamos a una empresa de logística internacional en la búsqueda de un/a Desarro […]",
+      "aptoDiscapacitado": false,
+      "idEmpresa": 666895,
+      "empresa": "ACTIF RH",
+      "confidencial": false,
+      "logoURL": null,
+      "validada": false,
+      "empresaPro": false,
+      "fechaHoraPublicacion": "30-09-2026 14:03:01",
+      "fechaPublicacion": "30-09-2026",
+      "fechaModificado": "30-09-2026 14:03:01",
+      "planPublicacion": {
+        "id": 2006,
+        "nombre": "Simples Hiring Room"
+      },
+      "portal": "zonajobs",
+      "tipoTrabajo": "Full-time",
+      "idPais": 1,
+      "idArea": 6,
+      "idSubarea": 2628,
+      "leido": null,
+      "visitadoPorPostulante": null,
+      "localizacion": "Neuquén, Neuquén",
+      "cantidadVacantes": 1,
+      "guardado": null,
+      "gptwUrl": null,
+      "promedioEmpresa": null,
+      "modalidadTrabajo": "Híbrido",
+      "tienePreguntas": false,
+      "salarioObligatorio": false,
+      "altaRevisionPerfiles": false,
+      "postulacionRapida": true,
+      "tipoAviso": "simple"
+    },
+    {
+      "id": 2191006,
+      "titulo": "Desarrollador React native multiplataforma",
+      "detalle": "Para importante empresa en CABA Buscamos Desarrollador React Native SR  Qué vas a hacer Trabajar 100% hands-on en el desarrollo de un punto de venta multiplataf […]",
+      "aptoDiscapacitado": false,
+      "idEmpresa": 515133,
+      "empresa": "MSP CONSULTORA EN RECURSOS HUMANOS",
+      "confidencial": false,
+      "logoURL": "https://imgzj.jobscdn.com/portal/img/empresas/1/static/logoMainPic_515133_bum_vd954945b.jpg",
+      "validada": false,
+      "empresaPro": false,
+      "fechaHoraPublicacion": "30-09-2026 09:11:49",
+      "fechaPublicacion": "30-09-2026",
+      "fechaModificado": "30-09-2026 09:11:49",
+      "planPublicacion": {
+        "id": 2006,
+        "nombre": "Simples Hiring Room"
+      },
+      "portal": "zonajobs",
+      "tipoTrabajo": "Full-time",
+      "idPais": 1,
+      "idArea": 19,
+      "idSubarea": 2624,
+      "leido": null,
+      "visitadoPorPostulante": null,
+      "localizacion": "Capital Federal, Buenos Aires",
+      "cantidadVacantes": 1,
+      "guardado": null,
+      "gptwUrl": null,
+      "promedioEmpresa": null,
+      "modalidadTrabajo": "Híbrido",
+      "tienePreguntas": false,
+      "salarioObligatorio": false,
+      "altaRevisionPerfiles": false,
+      "postulacionRapida": true,
+      "tipoAviso": "simple"
+    },
+    {
+      "id": 2190905,
+      "titulo": "Programador PLC SR",
+      "detalle": "Buscamos para empresa de automatización ubicada en Moreno, Buenos Aires, a un Programador PLC SR. Serás responsable de realizar proyectos de automatización con […]",
+      "aptoDiscapacitado": false,
+      "idEmpresa": 665775,
+      "empresa": "confiarrh",
+      "confidencial": false,
+      "logoURL": null,
+      "validada": false,
+      "empresaPro": false,
+      "fechaHoraPublicacion": "29-09-2026 00:50:01",
+      "fechaPublicacion": "28-09-2026",
+      "fechaModificado": "01-10-2026 16:12:00",
+      "planPublicacion": {
+        "id": 70,
+        "nombre": "Avisos Classic"
+      },
+      "portal": "zonajobs",
+      "tipoTrabajo": "Full-time",
+      "idPais": 1,
+      "idArea": 19,
+      "idSubarea": 2621,
+      "leido": null,
+      "visitadoPorPostulante": null,
+      "localizacion": "Moreno, Buenos Aires",
+      "cantidadVacantes": 1,
+      "guardado": null,
+      "gptwUrl": null,
+      "promedioEmpresa": null,
+      "modalidadTrabajo": "Presencial",
+      "tienePreguntas": false,
+      "salarioObligatorio": false,
+      "altaRevisionPerfiles": false,
+      "postulacionRapida": true,
+      "tipoAviso": "simple"
+    },
+    {
+      "id": 2190888,
+      "titulo": "Comercial Técnico / Desarrollador de Negocios",
+      "detalle": "Comercial Técnico / Desarrollador de Negocios Resumen del Puesto Buscamos incorporar un perfil comercial con enfoque técnico para desarrollar nuevas oportunidad […]",
+      "aptoDiscapacitado": false,
+      "idEmpresa": 673497,
+      "empresa": "branch ingenieria ",
+      "confidencial": false,
+      "logoURL": null,
+      "validada": false,
+      "empresaPro": false,
+      "fechaHoraPublicacion": "28-09-2026 17:42:22",
+      "fechaPublicacion": "28-09-2026",
+      "fechaModificado": "28-09-2026 17:42:22",
+      "planPublicacion": {
+        "id": 2001,
+        "nombre": "Freemium"
+      },
+      "portal": "zonajobs",
+      "tipoTrabajo": "Full-time",
+      "idPais": 1,
+      "idArea": 6,
+      "idSubarea": 2628,
+      "leido": null,
+      "visitadoPorPostulante": null,
+      "localizacion": "Almirante Brown, Buenos Aires",
+      "cantidadVacantes": 1,
+      "guardado": null,
+      "gptwUrl": null,
+      "promedioEmpresa": null,
+      "modalidadTrabajo": "Presencial",
+      "tienePreguntas": false,
+      "salarioObligatorio": false,
+      "altaRevisionPerfiles": false,
+      "postulacionRapida": false,
+      "tipoAviso": "freemium"
+    },
+    {
+      "id": 2190801,
+      "titulo": "Desarrollador/a Backend Ssr.",
+      "detalle": "En Grupo ST creemos que las ganas de crecer merecen convertirse en realidad. Por eso, desde hace más de 20 años acompañamos a personas y empresas en todo el paí […]",
+      "aptoDiscapacitado": false,
+      "idEmpresa": 514438,
+      "empresa": "Grupo Financiero ST",
+      "confidencial": false,
+      "logoURL": "https://imgzj.jobscdn.com/portal/img/empresas/1/static/logoMainPic_514438_bum_v96394e94.jpg",
+      "validada": false,
+      "empresaPro": false,
+      "fechaHoraPublicacion": "25-09-2026 16:10:35",
+      "fechaPublicacion": "25-09-2026",
+      "fechaModificado": "25-09-2026 16:10:35",
+      "planPublicacion": {
+        "id": 70,
+        "nombre": "Avisos Classic"
+      },
+      "portal": "zonajobs",
+      "tipoTrabajo": "Full-time",
+      "idPais": 1,
+      "idArea": 19,
+      "idSubarea": 2621,
+      "leido": null,
+      "visitadoPorPostulante": null,
+      "localizacion": "Capital Federal, Buenos Aires",
+      "cantidadVacantes": 1,
+      "guardado": null,
+      "gptwUrl": null,
+      "promedioEmpresa": null,
+      "modalidadTrabajo": "Híbrido",
+      "tienePreguntas": false,
+      "salarioObligatorio": false,
+      "altaRevisionPerfiles": false,
+      "postulacionRapida": true,
+      "tipoAviso": "simple"
+    },
+    {
+      "id": 2190721,
+      "titulo": ".NET Software Engineer (Angular) - Remoto - 1827",
+      "detalle": "¿Qué hace la compañía?Compañía nativa digital con presencia global de gran escala de ingeniería, diseño e innovación, con sedes ubicadas en diferentes países de […]",
+      "aptoDiscapacitado": false,
+      "idEmpresa": 570364,
+      "empresa": "Aliantec",
+      "confidencial": false,
+      "logoURL": "https://imgzj.jobscdn.com/portal/img/empresas/1/static/logoMainPic_570364_bum_v183b0a04.jpg",
+      "validada": false,
+      "empresaPro": false,
+      "fechaHoraPublicacion": "24-09-2026 12:22:20",
+      "fechaPublicacion": "24-09-2026",
+      "fechaModificado": "24-09-2026 12:22:20",
+      "planPublicacion": {
+        "id": 1020,
+        "nombre": "Aviso Select"
+      },
+      "portal": "zonajobs",
+      "tipoTrabajo": "Full-time",
+      "idPais": 1,
+      "idArea": 19,
+      "idSubarea": 2621,
+      "leido": null,
+      "visitadoPorPostulante": null,
+      "localizacion": "Capital Federal, Buenos Aires",
+      "cantidadVacantes": 1,
+      "guardado": null,
+      "gptwUrl": null,
+      "promedioEmpresa": null,
+      "modalidadTrabajo": "Híbrido",
+      "tienePreguntas": false,
+      "salarioObligatorio": false,
+      "altaRevisionPerfiles": false,
+      "postulacionRapida": true,
+      "tipoAviso": "talento"
+    },
+    {
+      "id": 2190515,
+      "titulo": "Desarrollador Backend Ssr",
+      "detalle": "Desarrollador Backend / FullstackDesde Bridge Partners acompañamos a una compañía especializada en logística y combustibles en la búsqueda de un/a Desarrollador […]",
+      "aptoDiscapacitado": true,
+      "idEmpresa": 680455,
+      "empresa": "Bridge Partners",
+      "confidencial": false,
+      "logoURL": "https://imgzj.jobscdn.com/portal/img/empresas/1/static/logoMainPic_680455_bum_va42447cc.jpg",
+      "validada": null,
+      "empresaPro": null,
+      "fechaHoraPublicacion": "21-09-2026 22:25:41",
+      "fechaPublicacion": "21-09-2026",
+      "fechaModificado": "30-09-2026 09:29:30",
+      "planPublicacion": {
+        "id": 1020,
+        "nombre": "Aviso Select"
+      },
+      "portal": "zonajobs",
+      "tipoTrabajo": "Full-time",
+      "idPais": 1,
+      "idArea": 19,
+      "idSubarea": 2621,
+      "leido": null,
+      "visitadoPorPostulante": null,
+      "localizacion": "Florencio Varela, Buenos Aires",
+      "cantidadVacantes": 2,
+      "guardado": null,
+      "gptwUrl": null,
+      "promedioEmpresa": null,
+      "modalidadTrabajo": "Híbrido",
+      "tienePreguntas": false,
+      "salarioObligatorio": false,
+      "altaRevisionPerfiles": false,
+      "postulacionRapida": true,
+      "tipoAviso": "talento"
+    },
+    {
+      "id": 2190185,
+      "titulo": "Desarrollador de Negocios - Empresa de Servicios Petroleros - Neuquén",
+      "detalle": "DetalleEmpresa líder en Neuquén, con 35 años brindando servicios especializados en el rubro Gas y Petróleo, seleccionará un Desarrollador de negocios para Neuqu […]",
+      "aptoDiscapacitado": false,
+      "idEmpresa": 565021,
+      "empresa": "Estudio Sánchez Salas &amp; Asociados ",
+      "confidencial": false,
+      "logoURL": "https://imgzj.jobscdn.com/portal/img/empresas/1/static/logoMainPic_565021_bum_ve350d92b.jpg",
+      "validada": false,
+      "empresaPro": false,
+      "fechaHoraPublicacion": "16-09-2026 13:19:42",
+      "fechaPublicacion": "16-09-2026",
+      "fechaModificado": "28-09-2026 11:16:15",
+      "planPublicacion": {
+        "id": 1020,
+        "nombre": "Aviso Select"
+      },
+      "portal": "zonajobs",
+      "tipoTrabajo": "Full-time",
+      "idPais": 1,
+      "idArea": 6,
+      "idSubarea": 35,
+      "leido": null,
+      "visitadoPorPostulante": null,
+      "localizacion": "Neuquén, Neuquén",
+      "cantidadVacantes": 1,
+      "guardado": null,
+      "gptwUrl": null,
+      "promedioEmpresa": null,
+      "modalidadTrabajo": "Presencial",
+      "tienePreguntas": false,
+      "salarioObligatorio": false,
+      "altaRevisionPerfiles": false,
+      "postulacionRapida": true,
+      "tipoAviso": "talento"
+    },
+    {
+      "id": 2190175,
+      "titulo": "Desarrollador/a Full Stack",
+      "detalle": "Empresa PyME líder en la importación y comercialización de máquinas para el mantenimiento de espacios verdes, ubicada en CABA, se encuentra en la búsqueda de un […]",
+      "aptoDiscapacitado": false,
+      "idEmpresa": null,
+      "empresa": "IMPORTANTE EMPRESA COMERCIAL",
+      "confidencial": false,
+      "logoURL": null,
+      "validada": null,
+      "empresaPro": null,
+      "fechaHoraPublicacion": "16-09-2026 12:04:40",
+      "fechaPublicacion": "16-09-2026",
+      "fechaModificado": "02-10-2026 09:46:37",
+      "planPublicacion": {
+        "id": 70,
+        "nombre": "Avisos Classic"
+      },
+      "portal": "zonajobs",
+      "tipoTrabajo": "Full-time",
+      "idPais": 1,
+      "idArea": 19,
+      "idSubarea": 2621,
+      "leido": null,
+      "visitadoPorPostulante": null,
+      "localizacion": "Capital Federal, Buenos Aires",
+      "cantidadVacantes": 1,
+      "guardado": null,
+      "gptwUrl": null,
+      "promedioEmpresa": null,
+      "modalidadTrabajo": "Presencial",
+      "tienePreguntas": true,
+      "salarioObligatorio": true,
+      "altaRevisionPerfiles": false,
+      "postulacionRapida": false,
+      "tipoAviso": "simple"
+    },
+    {
+      "id": 2190120,
+      "titulo": "Desarrollador/a Backend Ssr.",
+      "detalle": "Importante consultora de software de amplia trayectoria que brinda soluciones informáticas desarrolladas a medida para mejorar los procesos de sus clientes. En […]",
+      "aptoDiscapacitado": false,
+      "idEmpresa": 580607,
+      "empresa": "Netkel Consulting",
+      "confidencial": false,
+      "logoURL": null,
+      "validada": false,
+      "empresaPro": false,
+      "fechaHoraPublicacion": "15-09-2026 17:19:17",
+      "fechaPublicacion": "15-09-2026",
+      "fechaModificado": "15-09-2026 17:19:17",
+      "planPublicacion": {
+        "id": 2006,
+        "nombre": "Simples Hiring Room"
+      },
+      "portal": "zonajobs",
+      "tipoTrabajo": "Full-time",
+      "idPais": 1,
+      "idArea": 19,
+      "idSubarea": 34,
+      "leido": null,
+      "visitadoPorPostulante": null,
+      "localizacion": "Capital Federal, Buenos Aires",
+      "cantidadVacantes": 1,
+      "guardado": null,
+      "gptwUrl": null,
+      "promedioEmpresa": null,
+      "modalidadTrabajo": "Híbrido",
+      "tienePreguntas": false,
+      "salarioObligatorio": false,
+      "altaRevisionPerfiles": false,
+      "postulacionRapida": true,
+      "tipoAviso": "simple"
+    },
+    {
+      "id": 2190030,
+      "titulo": "Lider comercial y Desarrollador B2B - Seguros Corporativos PyMEs",
+      "detalle": "Reconocida empresa de seguros con más de 45 años de trayectoria en zona oeste. Nos encontramos en la búsqueda de un Líder Comercial y Desarrollador B2B (Hunter) […]",
+      "aptoDiscapacitado": false,
+      "idEmpresa": 10649,
+      "empresa": "de Elizalde - Desarrollo del Talento",
+      "confidencial": false,
+      "logoURL": "https://imgzj.jobscdn.com/portal/img/empresas/1/static/logoMainPic_10649_bum_v86d7800c.jpg",
+      "validada": true,
+      "empresaPro": false,
+      "fechaHoraPublicacion": "15-09-2026 10:04:35",
+      "fechaPublicacion": "15-09-2026",
+      "fechaModificado": "07-10-2026 17:59:17",
+      "planPublicacion": {
+        "id": 1020,
+        "nombre": "Aviso Select"
+      },
+      "portal": "zonajobs",
+      "tipoTrabajo": "Full-time",
+      "idPais": 1,
+      "idArea": 6,
+      "idSubarea": 2628,
+      "leido": null,
+      "visitadoPorPostulante": null,
+      "localizacion": "Hurlingham, Buenos Aires",
+      "cantidadVacantes": 1,
+      "guardado": null,
+      "gptwUrl": null,
+      "promedioEmpresa": null,
+      "modalidadTrabajo": "Híbrido",
+      "tienePreguntas": false,
+      "salarioObligatorio": false,
+      "altaRevisionPerfiles": false,
+      "postulacionRapida": true,
+      "tipoAviso": "talento"
+    },
+    {
+      "id": 2189859,
+      "titulo": "Software Engineer (Java/Kotlin)",
+      "detalle": "The company has an independent omnichannel advertising technology platform that enables marketers to create, deliver, measure, and optimize ad-supported experie […]",
+      "aptoDiscapacitado": false,
+      "idEmpresa": 586864,
+      "empresa": "mindIT HR Agency",
+      "confidencial": false,
+      "logoURL": "https://imgzj.jobscdn.com/portal/img/empresas/1/static/logoMainPic_586864_bum_vaae72210.jpg",
+      "validada": false,
+      "empresaPro": false,
+      "fechaHoraPublicacion": "11-09-2026 15:22:06",
+      "fechaPublicacion": "11-09-2026",
+      "fechaModificado": "11-09-2026 15:22:06",
+      "planPublicacion": {
+        "id": 2006,
+        "nombre": "Simples Hiring Room"
+      },
+      "portal": "zonajobs",
+      "tipoTrabajo": "Full-time",
+      "idPais": 1,
+      "idArea": 19,
+      "idSubarea": 34,
+      "leido": null,
+      "visitadoPorPostulante": null,
+      "localizacion": "Capital Federal, Buenos Aires",
+      "cantidadVacantes": 1,
+      "guardado": null,
+      "gptwUrl": null,
+      "promedioEmpresa": null,
+      "modalidadTrabajo": "Híbrido",
+      "tienePreguntas": false,
+      "salarioObligatorio": false,
+      "altaRevisionPerfiles": false,
+      "postulacionRapida": true,
+      "tipoAviso": "simple"
+    },
+    {
+      "id": 2189752,
+      "titulo": "Desarrollador/a Remoto/a",
+      "detalle": "Desarrollador/a Remoto/aResumenBuscamos un/a Desarrollador/a Remoto/a para unirse a nuestro equipo y participar en el desarrollo y expansión de una plataforma i […]",
+      "aptoDiscapacitado": true,
+      "idEmpresa": 680378,
+      "empresa": "PADICAMA SOFTWARE SAC",
+      "confidencial": false,
+      "logoURL": null,
+      "validada": null,
+      "empresaPro": null,
+      "fechaHoraPublicacion": "10-09-2026 16:00:03",
+      "fechaPublicacion": "10-09-2026",
+      "fechaModificado": "11-09-2026 10:19:19",
+      "planPublicacion": {
+        "id": 2001,
+        "nombre": "Freemium"
+      },
+      "portal": "zonajobs",
+      "tipoTrabajo": "Full-time",
+      "idPais": 1,
+      "idArea": 19,
+      "idSubarea": 34,
+      "leido": null,
+      "visitadoPorPostulante": null,
+      "localizacion": "Capital Federal, Buenos Aires",
+      "cantidadVacantes": 1,
+      "guardado": null,
+      "gptwUrl": null,
+      "promedioEmpresa": null,
+      "modalidadTrabajo": "Presencial",
+      "tienePreguntas": false,
+      "salarioObligatorio": false,
+      "altaRevisionPerfiles": false,
+      "postulacionRapida": false,
+      "tipoAviso": "freemium"
+    },
+    {
+      "id": 2189415,
+      "titulo": "Desarrollador/a PL/SQL",
+      "detalle": "Con más de 1.800 empleados y 45 sucursales en todo el país, La Caja mantiene su posición de liderazgo en el mercado asegurador argentino general con una cuota d […]",
+      "aptoDiscapacitado": false,
+      "idEmpresa": 646279,
+      "empresa": "La Caja de Ahorro y Seguros S.A.",
+      "confidencial": false,
+      "logoURL": "https://imgzj.jobscdn.com/portal/img/empresas/1/static/logoMainPic_646279_bum_v780d0f7.jpg",
+      "validada": true,
+      "empresaPro": false,
+      "fechaHoraPublicacion": "04-09-2026 13:21:43",
+      "fechaPublicacion": "04-09-2026",
+      "fechaModificado": "04-09-2026 13:21:43",
+      "planPublicacion": {
+        "id": 40,
+        "nombre": "Avisos Gold"
+      },
+      "portal": "zonajobs",
+      "tipoTrabajo": "Full-time",
+      "idPais": 1,
+      "idArea": 28,
+      "idSubarea": 2410,
+      "leido": null,
+      "visitadoPorPostulante": null,
+      "localizacion": "Capital Federal, Buenos Aires",
+      "cantidadVacantes": 1,
+      "guardado": null,
+      "gptwUrl": null,
+      "promedioEmpresa": null,
+      "modalidadTrabajo": "Híbrido",
+      "tienePreguntas": false,
+      "salarioObligatorio": false,
+      "altaRevisionPerfiles": false,
+      "postulacionRapida": true,
+      "tipoAviso": "destacado"
+    },
+    {
+      "id": 2189209,
+      "titulo": "Programador/a Genexus",
+      "detalle": " ¡Atención Rosario!Para nuestro cliente GLM, compañía referente del sector tecnológico, seleccionamos Programadores/as GeneXus para sumarse a su equipo. Rosario […]",
+      "aptoDiscapacitado": false,
+      "idEmpresa": 628677,
+      "empresa": "B&B Consultores",
+      "confidencial": false,
+      "logoURL": "https://imgzj.jobscdn.com/portal/img/empresas/1/static/logoMainPic_628677_bum_ve98665c.jpg",
+      "validada": false,
+      "empresaPro": false,
+      "fechaHoraPublicacion": "02-09-2026 12:05:12",
+      "fechaPublicacion": "02-09-2026",
+      "fechaModificado": "02-09-2026 12:05:12",
+      "planPublicacion": {
+        "id": 1020,
+        "nombre": "Aviso Select"
+      },
+      "portal": "zonajobs",
+      "tipoTrabajo": "Full-time",
+      "idPais": 1,
+      "idArea": 19,
+      "idSubarea": 2621,
+      "leido": null,
+      "visitadoPorPostulante": null,
+      "localizacion": "Rosario, Santa Fe",
+      "cantidadVacantes": 1,
+      "guardado": null,
+      "gptwUrl": null,
+      "promedioEmpresa": null,
+      "modalidadTrabajo": "Híbrido",
+      "tienePreguntas": false,
+      "salarioObligatorio": false,
+      "altaRevisionPerfiles": false,
+      "postulacionRapida": true,
+      "tipoAviso": "talento"
+    }
+  ],
+  "filters": [
+    {
+      "type": "provincia",
+      "facets": [
+        {
+          "id": "29",
+          "idSemantico": "argentina|buenos-aires",
+          "name": "Buenos Aires",
+          "quantity": 74
+        },
+        {
+          "id": "14725",
+          "idSemantico": "argentina|neuquen",
+          "name": "Neuquen",
+          "quantity": 3
+        },
+        {
+          "id": "146949",
+          "idSemantico": "argentina|santa-fe",
+          "name": "Santa Fe",
+          "quantity": 5
+        },
+        {
+          "id": "103872",
+          "idSemantico": "argentina|cordoba",
+          "name": "Cordoba",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "type": "area",
+      "facets": [
+        {
+          "id": "19",
+          "idSemantico": "tecnologia-sistemas-y-telecomunicaciones",
+          "name": "Tecnología, Sistemas y Telecomunicaciones",
+          "quantity": 59
+        },
+        {
+          "id": "6",
+          "idSemantico": "comercial-ventas-y-negocios",
+          "name": "Comercial, Ventas y Negocios",
+          "quantity": 11
+        },
+        {
+          "id": "16",
+          "idSemantico": "produccion-y-manufactura",
+          "name": "Producción y Manufactura",
+          "quantity": 8
+        },
+        {
+          "id": "11",
+          "idSemantico": "gerencia-y-direccion-general",
+          "name": "Gerencia y Dirección General",
+          "quantity": 2
+        },
+        {
+          "id": "22",
+          "idSemantico": "oficios-y-otros",
+          "name": "Oficios y Otros",
+          "quantity": 1
+        },
+        {
+          "id": "28",
+          "idSemantico": "seguros",
+          "name": "Seguros",
+          "quantity": 1
+        },
+        {
+          "id": "36",
+          "idSemantico": "departamento-tecnico",
+          "name": "Departamento Tecnico",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "type": "apto_discapacitado",
+      "facets": [
+        {
+          "id": "true",
+          "idSemantico": "discapacitados-apto",
+          "name": "Apto discapacitados",
+          "quantity": 4
+        }
+      ]
+    },
+    {
+      "type": "segmentacion_collar",
+      "facets": [
+        {
+          "id": "1",
+          "idSemantico": "white",
+          "name": "White Collar",
+          "quantity": 69
+        },
+        {
+          "id": "2",
+          "idSemantico": "blue",
+          "name": "Blue Collar",
+          "quantity": 8
+        },
+        {
+          "id": "3",
+          "idSemantico": "grey",
+          "name": "Grey Collar",
+          "quantity": 6
+        }
+      ]
+    },
+    {
+      "type": "tipo_trabajo",
+      "facets": [
+        {
+          "id": "2",
+          "idSemantico": "full-time",
+          "name": "Full-time",
+          "quantity": 83
+        }
+      ]
+    },
+    {
+      "type": "tipo_contratacion",
+      "facets": [
+        {
+          "id": "1",
+          "idSemantico": "indeterminado",
+          "name": "Indeterminado",
+          "quantity": 46
+        },
+        {
+          "id": "5",
+          "idSemantico": "autonomo",
+          "name": "Autónomo",
+          "quantity": 2
+        },
+        {
+          "id": "2",
+          "idSemantico": "temporal",
+          "name": "Temporal",
+          "quantity": 2
+        }
+      ]
+    },
+    {
+      "type": "nivel_laboral",
+      "facets": [
+        {
+          "id": "1",
+          "idSemantico": "senior-semi-senior",
+          "name": "Senior / Semi-Senior",
+          "quantity": 24
+        },
+        {
+          "id": "8",
+          "idSemantico": "semi-sr",
+          "name": "Semi Sr",
+          "quantity": 25
+        },
+        {
+          "id": "7",
+          "idSemantico": "senior",
+          "name": "Senior",
+          "quantity": 18
+        },
+        {
+          "id": "5",
+          "idSemantico": "otro",
+          "name": "Otro",
+          "quantity": 2
+        },
+        {
+          "id": "2",
+          "idSemantico": "junior",
+          "name": "Junior",
+          "quantity": 8
+        }
+      ]
+    },
+    {
+      "type": "postulacion_rapida",
+      "facets": [
+        {
+          "id": "true",
+          "idSemantico": "postulacion-rapida",
+          "name": "Postulación rápida",
+          "quantity": 61
+        }
+      ]
+    },
+    {
+      "type": "modalidad_trabajo",
+      "facets": [
+        {
+          "id": "3",
+          "idSemantico": "hibrido",
+          "name": "Híbrido",
+          "quantity": 37
+        },
+        {
+          "id": "1",
+          "idSemantico": "presencial",
+          "name": "Presencial",
+          "quantity": 37
+        },
+        {
+          "id": "2",
+          "idSemantico": "remoto",
+          "name": "Remoto",
+          "quantity": 9
+        }
+      ]
+    },
+    {
+      "type": "dias_fecha_publicacion",
+      "facets": [
+        {
+          "id": "now-3d/d",
+          "idSemantico": "publicacion-menor-a-3-dias",
+          "name": "Menor a 3 días",
+          "quantity": 7
+        },
+        {
+          "id": "now-4d/d",
+          "idSemantico": "publicacion-menor-a-4-dias",
+          "name": "Menor a 4 días",
+          "quantity": 7
+        },
+        {
+          "id": "now-5d/d",
+          "idSemantico": "publicacion-menor-a-5-dias",
+          "name": "Menor a 5 días",
+          "quantity": 7
+        },
+        {
+          "id": "now-6d/d",
+          "idSemantico": "publicacion-menor-a-6-dias",
+          "name": "Menor a 6 días",
+          "quantity": 7
+        },
+        {
+          "id": "now-7d/d",
+          "idSemantico": "publicacion-menor-a-7-dias",
+          "name": "Menor a 1 semana",
+          "quantity": 13
+        },
+        {
+          "id": "now-15d/d",
+          "idSemantico": "publicacion-menor-a-15-dias",
+          "name": "Menor a 15 días",
+          "quantity": 26
+        },
+        {
+          "id": "now-31d/d",
+          "idSemantico": "publicacion-menor-a-1-mes",
+          "name": "Menor a 1 mes",
+          "quantity": 46
+        },
+        {
+          "id": "now/d",
+          "idSemantico": "publicacion-hoy",
+          "name": "Hoy",
+          "quantity": 1
+        },
+        {
+          "id": "now-1d/d",
+          "idSemantico": "publicacion-menor-a-2-dias",
+          "name": "Menor a 2 días",
+          "quantity": 1
+        }
+      ]
+    }
+  ],
+  "filtersApplied": [
+    {
+      "id": "query",
+      "value": "programador"
+    }
+  ],
+  "totalSearched": 83,
+  "homeList": null
+}
