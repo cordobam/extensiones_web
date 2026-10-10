@@ -756,6 +756,10 @@ def datos_para_la_extension(
     `perfil` es opcional: sin él va el primer perfil activo, igual que en
     `/ofertas`. Con varias pestañas de la extensión abierta, cada una puede
     apuntar a un perfil distinto, así que el parámetro tiene que servir.
+
+    `perfiles` lista todos los cargados con su `activo`. Es lo que llena el
+    selector de la página de opciones: sin ese listado la extensión tendría
+    que adivinar ids o limitarse a un solo perfil.
     """
     if not _es_la_extension(request):
         return _rechazar_si_no_es_extension(request)
@@ -798,6 +802,10 @@ def datos_para_la_extension(
             "perfil": elegido.id,
             "nombre": elegido.nombre,
             "activo": elegido.id in activos,
+            "perfiles": [
+                {"id": p.id, "nombre": p.nombre, "activo": p.id in activos}
+                for p in perfiles
+            ],
             "cv": {
                 "contacto": elegido.cv.contacto.model_dump(mode="json"),
                 "presentacion": elegido.cv.presentacion,

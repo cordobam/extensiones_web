@@ -1,0 +1,218 @@
+/* El panel monta sus nodos adentro de #radar-raiz y cada regla lleva el ID:
+   así las reglas ganan contra los estilos genéricos del portal (button, div,
+   a, p), que son los que ensucian un elemento inyectado desde afuera.
+   El primer bloque hace `all: unset` en todo lo que el panel crea, para que
+   ni la tipografía ni los colores heredados de la página lleguen acá. */
+
+#radar-raiz {
+  all: initial;
+  display: block;
+  position: static;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 1.45;
+  color: #1f2328;
+}
+
+#radar-raiz[hidden] {
+  display: none;
+}
+
+#radar-raiz :is(
+  .radar-boton, .radar-tarjeta, .radar-cabecera, .radar-titulo, .radar-portal,
+  .radar-cerrar, .radar-cuerpo, .radar-dato, .radar-clave, .radar-valor,
+  .radar-seccion, .radar-estado, .radar-nota, .radar-carta, .radar-carta-texto,
+  .radar-accion, .radar-error, .radar-app
+) {
+  all: unset;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+}
+
+#radar-raiz .radar-boton {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 2147483647;
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: #1f2328;
+  color: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+
+#radar-raiz .radar-boton:hover,
+#radar-raiz .radar-boton:focus-visible {
+  background: #30363d;
+}
+
+#radar-raiz .radar-boton.radar-abierto {
+  background: #0b6bcb;
+}
+
+#radar-raiz .radar-tarjeta {
+  position: fixed;
+  right: 18px;
+  bottom: 66px;
+  z-index: 2147483647;
+  display: flex;
+  flex-direction: column;
+  width: 320px;
+  max-height: 72vh;
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid #d0d7de;
+  border-radius: 10px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+}
+
+#radar-raiz .radar-tarjeta[hidden] {
+  display: none;
+}
+
+#radar-raiz .radar-cabecera {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: #f6f8fa;
+  border-bottom: 1px solid #d0d7de;
+}
+
+#radar-raiz .radar-titulo {
+  font-weight: 700;
+}
+
+#radar-raiz .radar-portal {
+  font-size: 12px;
+  color: #57606a;
+}
+
+#radar-raiz .radar-cerrar {
+  margin-left: auto;
+  padding: 0 4px;
+  font-size: 18px;
+  color: #57606a;
+  cursor: pointer;
+}
+
+#radar-raiz .radar-cerrar:hover {
+  color: #1f2328;
+}
+
+#radar-raiz .radar-cuerpo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  overflow-y: auto;
+}
+
+#radar-raiz .radar-dato {
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+
+#radar-raiz .radar-clave {
+  color: #57606a;
+  font-size: 13px;
+}
+
+#radar-raiz .radar-valor {
+  font-weight: 600;
+}
+
+#radar-raiz .radar-seccion {
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #57606a;
+}
+
+#radar-raiz .radar-estado strong {
+  font-weight: 700;
+  color: #0b6bcb;
+}
+
+#radar-raiz .radar-nota {
+  color: #57606a;
+}
+
+#radar-raiz .radar-error {
+  padding: 8px 10px;
+  background: #ffebe9;
+  border: 1px solid #ffcecb;
+  border-radius: 6px;
+  color: #a40e26;
+  white-space: pre-wrap;
+}
+
+#radar-raiz .radar-carta {
+  padding: 8px 10px;
+  background: #fbfcfd;
+  border: 1px dashed #d0d7de;
+  border-radius: 8px;
+}
+
+#radar-raiz .radar-carta-texto {
+  max-height: 170px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+}
+
+#radar-raiz .radar-accion {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 7px 12px;
+  background: #f6f8fa;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+}
+
+#radar-raiz .radar-accion:hover,
+#radar-raiz .radar-accion:focus-visible {
+  background: #eef1f4;
+}
+
+#radar-raiz .radar-accion[disabled] {
+  opacity: 0.6;
+  cursor: default;
+}
+
+#radar-raiz .radar-principal {
+  width: 100%;
+  margin-top: 4px;
+  background: #0b6bcb;
+  border-color: #0b6bcb;
+  color: #ffffff;
+}
+
+#radar-raiz .radar-principal:hover,
+#radar-raiz .radar-principal:focus-visible {
+  background: #0a5cae;
+}
+
+#radar-raiz .radar-app {
+  display: block;
+  padding: 10px 12px;
+  border-top: 1px solid #d0d7de;
+  font-size: 13px;
+  text-align: center;
+  color: #0b6bcb;
+  text-decoration: underline;
+  cursor: pointer;
+}

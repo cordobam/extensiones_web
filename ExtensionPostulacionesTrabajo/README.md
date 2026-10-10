@@ -1,14 +1,14 @@
 # PostulacionesTrabajo
 
 Un lugar para llevar el seguimiento de las postulaciones a ofertas de empleo, y
-una extensión de Firefox para no volver a cargar los mismos datos en cada
-formulario.
+una extensión de Firefox que, cuando mandás el formulario, te pega la carta y
+registra la postulación en el embudo.
 
 Son dos mitades y viven separadas a propósito:
 
 ```
 aplicacion_web/    la app Python: ingesta, matching, perfiles y el embudo
-extension_web/     la extensión de Firefox: prellena los formularios
+extension_web/     la extensión de Firefox: panel con la carta y el registro
 ROADMAP.txt        el plan de las fases que faltan
 ```
 
@@ -18,11 +18,11 @@ ROADMAP.txt        el plan de las fases que faltan
 |---|---|---|
 | Qué es | FastAPI + scraping + PostgreSQL | extensión MV3 de Firefox |
 | Se corre con | `uvicorn radar.api:app` | se carga en `about:debugging` |
-| Docs | su [`README.md`](aplicacion_web/README.md) | (se escribe con la Fase 13) |
+| Docs | su [`README.md`](aplicacion_web/README.md) | su [`README.md`](extension_web/README.md) |
 
 El plan de las fases está en [`ROADMAP.txt`](ROADMAP.txt). Las fases 1 a 12 están
-terminadas; la 13 es la extensión, que es justamente lo que va en
-`extension_web/`.
+terminadas, y el código de la 13 (la extensión) está escrito en
+`extension_web/`; falta sólo la prueba manual en el navegador.
 
 ## Cómo se levanta hoy
 
@@ -55,7 +55,8 @@ uno protege lo que tiene debajo:
 
 - `aplicacion_web/.env` — la URL de la base.
 - `aplicacion_web/perfiles/*.yml` — nombre, email, teléfono y experiencia.
-- `extension_web/datos.json` — el volcado del CV para la extensión.
+- `extension_web/datos.json` — reservado para un volcado del CV con datos
+  personales. Hoy nada lo genera: la extensión pide los datos a la app.
 
 Los patrones de un `.gitignore` se resuelven relativos a la carpeta donde está
 el archivo. Por eso `perfiles/*.yml` está en el de `aplicacion_web/`: puesto en

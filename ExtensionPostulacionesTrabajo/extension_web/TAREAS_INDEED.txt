@@ -1,0 +1,188 @@
+TAREAS: SOPORTE DE INDEED (solo-extensión, manual)
+==================================================
+
+Objetivo
+--------
+Soportar Indeed como portal en la extensión Firefox "Radar Laboral", de forma
+manual (la app NO ingiere Indeed: robots.txt lo prohíbe y hay bot-detection).
+
+Decisiones confirmadas con el usuario
+-------------------------------------
+- Alcance: Fase A + Fase B (carta + registrar envío en el embudo).
+- Metadata de la oferta: JSON-LD JobPosting, con fallback a Open Graph / <title>.
+- Dominios: solo Argentina (ar.indeed.com, incluye /m/viewjob).
+
+Hallazgo clave
+--------------
+La carta del panel es datos.cv.presentacion (texto fijo del perfil, panel.js:130),
+NO de la oferta. Por eso "copiar carta" no necesita la base: alcanza con detectar
+el id. "Registrar envío" sí: POST /api/extension/enviada exige que la oferta exista
+(api.py:868). Por eso Fase B importa la oferta desde la página antes de registrar.
+
+-----------------------------------------------------------------------
+PASO 0 - CHEQUEO JSON-LD (PENDIENTE, bloquea la Fase B)
+-----------------------------------------------------------------------
+No se pudo verificar desde afuera: fetch anonimo a indeed.com/viewjob -> 401
+bot-detection. Confirmar en el navegador con sesion.
+
+[ ] Abrir una oferta real en ar.indeed.com/viewjob?jk=... (con sesion normal).
+[ ] F12 -> Console -> pegar el snippet de extraccion y correr.
+[ ] Repetir en 2 o 3 ofertas distintas y en ar.indeed.com/m/viewjob?jk=...
+[ ] Pegar la salida para decidir la fuente de metadata.
+
+Snippet:
+
+(() => {
+  const scripts = [...document.querySelectorAll('script[type="application/ld+json"]')];
+  const parsed = scripts.map(s => { try { return JSON.parse(s.textContent); } catch { return null; } });
+  const flat = [];
+  const walk = v => {
+    if (!v || typeof v !== 'object') return;
+    if (Array.isArray(v)) return v.forEach(walk);
+    if (Array.isArray(v['@graph'])) v['@graph'].forEach(walk);
+    flat.push(v);
+    Object.values(v).forEach(x => { if (x && typeof x === 'object') walk(x); });
+  };
+  parsed.forEach(walk);
+  const jobs = flat.filter(o => {
+    const t = o['@type'];
+    return t === 'JobPosting' || (Array.isArray(t) && t.includes('JobPosting'));
+  });
+  const j = jobs[0];
+  console.log(JSON.stringify({
+    url: location.href,
+    ld_json_scripts: scripts.length,
+    jobposting_encontrados: jobs.length,
+    title: j?.title ?? j?.name ?? null,
+    empresa: j?.hiringOrganization?.name ?? (typeof j?.hiringOrganization === 'string' ? j.hiringOrganization : null),
+    datePosted: j?.datePosted ?? null,
+    employmentType: j?.employmentType ?? null,
+    jobLocation: j?.jobLocation ?? null,
+    descripcion_largo: (j?.description || '').length,
+    initialData: typeof window._initialData !== 'undefined',
+    mosaic_providerData: !!(window.mosaic && window.mosaic.providerData),
+  }, null, 2));
+  if (j) console.log('--- JobPosting crudo ---', JSON.stringify(j, null, 2));
+})();
+
+Resultado -> decision:
+- jobposting_encontrados >= 1            -> JSON-LD como fuente primaria.
+- 0 pero initialData/mosaic_providerData -> usar window._initialData / mosaic.providerData.
+- 0 y ambos false                        -> fallback Open Graph / <title>
+  (y evaluar "que el usuario confirme titulo/empresa" en el panel).
+
+Evidencia indirecta: openweb-org/openweb documenta que Indeed embebe
+window._initialData, window.mosaic.providerData, __NEXT_DATA__ y
+application/ld+json (JobPosting).
+
+-----------------------------------------------------------------------
+FASE A - PANEL + CARTA (solo extension)
+-----------------------------------------------------------------------
+[ ] extension_web/registro.js
+    - Agregar adaptador `indeed` al array `portales` (registro.js:46).
+      * nombre: "Indeed"
+      * dominios: ["ar.indeed.com"]
+      * detectar(loc): devolver `jk` de loc.search
+        (cubre viewjob?jk= y /m/viewjob?jk=).
+[ ] extension_web/manifest.json
+    - Agregar "https://ar.indeed.com/*" a content_scripts.matches (manifest.json:18).
+    - Subir version 0.1.1 -> 0.2.0.
+    - NO hace falta host_permissions (el fetch sigue en fondo.js).
+[ ] Verificar en Firefox: cargar temporal, abrir una oferta de Indeed y
+    comprobar que aparece el panel y que "Copiar" copia la carta.
+
+Resultado esperado Fase A: panel + copiar carta funcionando en Indeed.
+(El boton "Registrar envío" todavia fallara hasta la Fase B.)
+
+-----------------------------------------------------------------------
+FASE B - IMPORTAR OFERTA + REGISTRAR ENVIO
+-----------------------------------------------------------------------
+Extension:
+[ ] extension_web/registro.js
+    - Agregar metodo opcional `datos(doc)` al adaptador indeed.
+      * Recorrer script[type="application/ld+json"], buscar @type === "JobPosting"
+        (soportar array y @graph). Sacar: title, hiringOrganization.name,
+        description (HTML -> texto con DOMParser), datePosted, url.
+      * Fallback: og:title / og:description, despues <title>.
+      * url cae a location.href si no hay.
+      * Devolver null/titulo minimo si no hay nada.
+    - (Segun PASO 0) si no hay JSON-LD, usar _initialData/mosaic.providerData
+      o el fallback OG/title.
+[ ] extension_web/fondo.js
+    - enviar(external_id, oferta): incluir `oferta` en el body cuando venga.
+    - Pasar el nuevo parametro desde el listener de mensajes.
+[ ] extension_web/panel.js
+    - En registrarEnvio(): si !postulacionActual() y portal.datos existe,
+      adjuntar portal.datos(document) al mensaje `enviada`.
+    - Manejar en el panel el caso de oferta recien importada (ya se hace con
+      datos.postulaciones.push).
+
+App:
+[ ] aplicacion_web/radar/ingesta.py
+    - Funcion publica guardar_manual(sesion, fuente_id, external_id, titulo,
+      empresa, url, descripcion, fecha_publicacion=None) -> Oferta.
+      * Detecta skills con catalogo.detectar(titulo + " " + descripcion).
+      * Reusa _clave / _guardar (mismo modulo, siguen privados).
+      * Idempotente por external_id (upsert).
+[ ] aplicacion_web/radar/matching.py
+    - Funcion publica evaluar_una(sesion, perfil, oferta, cat=None) -> Resultado.
+      * evaluar_oferta + _guardar + commit (puntua solo esa oferta).
+[ ] aplicacion_web/radar/api.py
+    - Extender EnvioExtension (api.py:737) con:
+        oferta: OfertaExtension | None = None
+      donde OfertaExtension = { fuente, titulo, empresa, url, descripcion,
+      fecha_publicacion }.
+    - En registrar_enviado_por_extension (api.py:868): si la oferta no se
+      encontro y vino cuerpo.oferta:
+        * ingesta.guardar_manual(...) con fuente="indeed", external_id raw (jk).
+        * matching.evaluar_una(sesion, perfil, oferta).
+        * Re-seguir el flujo normal de registrar_envio.
+      Si no vino metadata, mantener el 404 oferta-desconocida actual.
+    - external_id guardado = "indeed:<jk>"; _id_del_portal ya devuelve el jk pelado.
+
+NO TOCAR (Indeed no es fuente de ingesta):
+    - aplicacion_web/radar/fuentes/__init__.py
+    - aplicacion_web/radar/config.py (FUENTES_ACTIVAS)
+    - aplicacion_web/tests/test_fuentes.py
+    - No hace falta migracion (fuente y external_id ya son genericos).
+
+-----------------------------------------------------------------------
+TESTS
+-----------------------------------------------------------------------
+[ ] aplicacion_web/tests/test_api_extension.py
+    - Nueva clase TestOfertaImportada:
+      * Envio con `oferta` de oferta desconocida -> se crea fuente="indeed",
+        detecta skills, crea Match y registra la postulacion en "enviada".
+      * Idempotencia: segundo envio no duplica la oferta.
+      * La oferta importada aparece en /api/extension/datos (external_id crudo).
+      * Sin `oferta` en el body -> sigue el 404 oferta-desconocida.
+[ ] Correr la suite de la app (pytest) y verificar que no rompe lo existente.
+[ ] Verificacion manual de la extension en Firefox (no hay framework JS).
+
+-----------------------------------------------------------------------
+DOCS + RELEASE
+-----------------------------------------------------------------------
+[ ] extension_web/README.md (tabla :50 y descripcion; seccion Indeed).
+[ ] extension_web/manifest.json -> description (mencionar Indeed).
+[ ] README.md (app, seccion portales :241) y ROADMAP.txt:591.
+[ ] Bump de version y re-firma:
+    npx web-ext sign --source-dir . --channel=unlisted \
+      --artifacts-dir web-ext-artifacts --ignore-files README.md
+    (creds por env WEB_EXT_API_KEY / WEB_EXT_API_SECRET).
+
+-----------------------------------------------------------------------
+REFERENCIAS DE CODIGO
+-----------------------------------------------------------------------
+- extension_web/registro.js:46       adaptadores por portal
+- extension_web/panel.js:130         carta = datos.cv.presentacion
+- extension_web/panel.js:176         registrarEnvio()
+- extension_web/fondo.js:56          enviar()
+- extension_web/manifest.json:18     content_scripts.matches
+- aplicacion_web/radar/api.py:737    EnvioExtension
+- aplicacion_web/radar/api.py:868    404 oferta-desconocida
+- aplicacion_web/radar/api.py:706    _id_del_portal
+- aplicacion_web/radar/ingesta.py:103 _clave
+- aplicacion_web/radar/ingesta.py:142 _guardar
+- aplicacion_web/radar/matching.py:210 evaluar_oferta
+- aplicacion_web/radar/matching.py:268 _guardar (Match)
+- aplicacion_web/radar/models.py:24   Oferta (fuente, external_id genericos)
