@@ -265,6 +265,27 @@ class TestDatos:
         assert respuesta.status_code == 404
         assert respuesta.json()["error"] == "sin-perfiles"
 
+    def test_lista_los_perfiles_para_el_selector_de_opciones(self, cliente) -> None:
+        """La página de opciones elige contra qué perfil registrar.
+
+        Sin este listado tendría que recibir ids a mano, y con varios
+        perfiles cargados una elección equivocada registra el envío contra
+        un CV que no es el que usaste.
+        """
+        _guardar_perfil("soporte-it")
+        _guardar_perfil("data-engineer")
+        with SessionLocal() as sesion:
+            perfiles.desactivar(sesion, "data-engineer")
+
+        datos = cliente.get("/api/extension/datos", headers=_headers()).json()
+
+        assert datos["perfiles"] == [
+            {"id": "data-engineer", "nombre": "Perfil data-engineer", "activo": False},
+            {"id": "soporte-it", "nombre": "Perfil soporte-it", "activo": True},
+        ]
+        # El elegido sin parámetro sigue siendo el primero activo.
+        assert datos["perfil"] == "soporte-it"
+
 
 # --------------------------------------------------------------- el envío
 

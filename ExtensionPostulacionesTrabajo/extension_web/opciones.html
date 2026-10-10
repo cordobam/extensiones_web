@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <title>Radar Laboral — opciones</title>
+    <link rel="stylesheet" href="opciones.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Radar Laboral</h1>
+      <p class="entradilla">
+        La extensión habla con la app que corre en tu máquina. Acá se dice en
+        qué URL está y con qué perfil se registran las postulaciones.
+      </p>
+
+      <label for="base">URL de la app</label>
+      <input
+        id="base"
+        type="url"
+        placeholder="http://127.0.0.1:8000"
+        spellcheck="false"
+      />
+      <p class="ayuda">
+        La misma con la que la dejás correr:
+        <code>uvicorn radar.api:app</code>.
+      </p>
+
+      <label for="perfil">Perfil con el que postulás</label>
+      <select id="perfil" disabled>
+        <option value="">Primera activa (por defecto)</option>
+      </select>
+      <p class="ayuda">
+        Con un perfil elegido, los envíos se registran contra ese. Sin elegir,
+        va el primero activo, igual que en la pantalla de ofertas.
+      </p>
+
+      <div class="acciones">
+        <button id="guardar" type="button">Guardar</button>
+        <button id="consultar" type="button">Guardar y probar conexión</button>
+      </div>
+
+      <div id="estado" class="estado" hidden></div>
+    </main>
+    <script src="opciones.js"></script>
+  </body>
+</html>

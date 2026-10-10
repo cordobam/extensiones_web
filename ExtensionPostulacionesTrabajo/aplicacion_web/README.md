@@ -446,7 +446,10 @@ POST /api/extension/enviada        {"perfil": "...", "external_id": "..."}
 junto a propósito. La extensión necesita las dos cosas para funcionar, y si
 fueran dos requests podría terminar rellenando un formulario con los datos de
 una versión y el embudo de otra. `perfil` es opcional: sin él va el primer
-perfil activo, igual que en `/ofertas`.
+perfil activo, igual que en `/ofertas`. La respuesta trae también `perfiles`,
+la lista de los cargados con su `activo`, que es lo que llena el selector de
+la página de opciones de la extensión: sin ese listado tendría que adivinar
+ids.
 
 `/api/extension/enviada` reporta que mandaste la postulación. La extensión
 manda el `external_id` de la oferta, que es lo que viaja en la URL del

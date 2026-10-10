@@ -5,11 +5,12 @@ RADAR LABORAL — HOJA DE RUTA
 Objetivo del proyecto
 ---------------------
 Un radar que busca ofertas de empleo en portales, las filtra contra tu CV, te
-las ordena por relevancia, te ayuda a redactar la postulación y termina
-completando los formularios por vos. Todo con tu CV en tu propia máquina.
+las ordena por relevancia, te deja la carta lista para pegar y registra la
+postulación cuando la mandás. Todo con tu CV en tu propia máquina.
 
 Estado al escribir este documento: fases 1 a 3 completas, 96 tests en verde.
-Al día de hoy: fases 1 a 12 completas, 481 tests en verde. La 13 empezado.
+Al día de hoy: fases 1 a 12 completas, 536 tests en verde. La 13 con el código
+escrito y lint limpio; falta sólo la prueba manual en el navegador.
 
 Dónde vive cada cosa
 --------------------
@@ -404,10 +405,12 @@ Qué quedó fuera, a propósito
       entrevista en llegar", y se agrega después sobre filas que ya existen.
 
 
-FASE 13 — Extensión web — EN CURSO (hecha la parte de la app)
+FASE 13 — Extensión web — CÓDIGO COMPLETO (falta la prueba manual)
 ------------------------------------------------------
 Qué es
-    Extensión MV3 que abre la oferta y precarga tus datos en el formulario.
+    Extensión MV3 que, sobre la oferta abierta en el portal, muestra tu carta
+    con un botón para copiarla y registra la postulación en el embudo cuando
+    la mandaste.
 
 Precedente útil que ya tenés
     Tu ExtensionBloquearPaginas usa browser.* (el mismo código corre en Chrome
@@ -418,35 +421,65 @@ Decisión tomada:Firefox solamente
     Se descarta el manifest de Chrome. Tu ExtensionBloquearPaginas ya es
     Firefox, y mantener dos manifests para una herramienta personal no paga.
 
+Decisión tomada: sin prellenado de formularios
+    El alcance de la fase se achicó respecto de la idea original, y vale la
+    pena anotar por qué, porque "prellenar el formulario" sonaba a lo más
+    valioso de la extensión y no lo es:
+    - El autofill de Firefox ya cubre nombre, email, teléfono y ciudad, que
+      es lo único que se cargaba a mano en cada portal. Reescribirlo en una
+      extensión era duplicar una ferramenta del navegador.
+    - "Dejar el CV cargado" no se puede automatizar: la app no guarda ningún
+      archivo, sólo texto en YAML. En los portales con cuenta el CV ya está;
+      donde no lo está, hay que subirlo a mano igual. El selector más difícil
+      de la fase no tenía solución.
+    - Los selectores de formulario son lo único que se rompe con cada
+      rediseño del sitio. Sin prellenado, lo que queda de la extensión no se
+      rompe: detecta la oferta por URL y habla con la app.
+    El panel se queda igual, porque su valor no era el prellenado: es el
+    lugar donde la fase 11 va a pegar la carta generada, y ninguna ferramenta
+    del navegador te pega un párrafo personalizado al lado del botón de enviar.
+
 Decisión tomada:un adaptador por portal desde el día uno
-    La extensión se construye contra un portal: sus selectores y sus permisos
-    son específicos. Si se hace contra Computrabajo sola, hay que reescribirla
-    por cada portal que se agregue. La estructura que lo evita:
+    La extensión se construye contra un portal: sus permisos y su forma de
+    encontrar la oferta son específicos. Si se hace contra Computrabajo sola,
+    hay que reescribirla por cada portal que se agregue. La estructura que lo
+    evita:
 
         extension_web/
-          fondo.js                  sincroniza los datos con la app
-          portales/computrabajo.js  sólo selectores
-          portales/indeed.js  registro.js          elige por location.hostname
+          fondo.js        el único que hace HTTP con la app
+          registro.js     adaptadores por portal: sólo detectan el id en la URL
+          panel.js/css    el panel sobre la oferta
+          opciones.*      URL de la app y perfil elegido
 
-    Son veinte líneas más hoy y salvan la reescritura después. Es la razón por
-    la que la fase de portales (16) va después y no antes.
+    Detectar el id es por URL, no por selectores: el `?oi=` de la página de
+    postulación de Computrabajo, el hex de 32 al final de su URL de detalle,
+    el id numérico al final de `/empleos/…-{id}.html` de ZonaJobs. Es la parte
+    que no se rompe con un rediseño del portal, y es todo lo que un adaptador
+    tiene que saber.
 
 Tres advertencias técnicas
-    - Esta fase necesita permisos que hoy no pedís: scripting y acceso a los
-      dominios de empleo.
-    - La extensión necesita saber contra qué perfil completar. Hay un perfil
-      activo por defecto; cuando quieras varios, hay que elegir.
-    - Prellenar un formulario de Computrabajo es un SELECTOR, pero enviado es
-      la parte delicada: mandar currículum es una acción irreversible y con
-      consentimiento. La extensión no debería mandar sola; debería dejar el
-      formulario listo y que la persona apriete enviar. La postulación se
+    - Esta fase pide permisos que en la app no se piden: los dominios de los
+      portales (para montar el panel) y `127.0.0.1:8000`, que sólo lo usa el
+      background. Un content script no llegaría a la app: corre con las
+      restricciones CORS de la página, y la app no contesta CORS porque ese
+      es justamente el candado.
+    - La extensión necesita saber contra qué perfil registrar. Resuelto: la
+      respuesta de `/api/extension/datos` lista los perfiles con su `activo`,
+      la página de opciones deja elegir, y sin elegir va la primera activa.
+    - `enviada` es la parte delicada: mandar currículum es una acción
+      irreversible y con consentimiento. La extensión no manda sola: el
+      registro lo dispara un botón que apreta la persona, y la postulación se
       registra como "enviada" recién después.
 
 Criterio de terminado
-    La extensión abre una oferta de tu lista y deja los campos de contacto y
-    CV cargados.
+    Cargarla en about:debugging, abrir una oferta de la lista, ver el panel
+    con el perfil activo y la carta, apretar Registrar envío y encontrar la
+    postulación en /postulaciones como enviada y con fecha. En los dos
+    portales, y con la app caída un aviso claro en vez de un error mudo.
+    PENDIENTE: falta sólo la prueba manual, con la checklist de
+    extension_web/README.md.
 
-Lo que ya está (la mitad de la app)
+Lo que ya está (la app)
     - `cv.presentacion` en el esquema del perfil, con la migración 0004 y un
       textarea en el editor. Es texto fijo, escrito a mano: la versión que se
       arma según cada oferta es la fase 14 y depende de la 11, que sigue
@@ -462,18 +495,29 @@ Lo que ya está (la mitad de la app)
       autenticación: es para que ninguna página web pueda pegarle un POST a la
       app del localhost. Una cabecera propia obliga a un preflight que la app no
       contesta, así que la petición nunca sale.
+    - `perfiles` en la respuesta de `/datos` (nuevo en esta tanda, con test):
+      la lista de los perfiles cargados con su `activo`, que es lo que llena
+      el selector de la página de opciones.
 
-Lo que falta (la mitad de la extensión)
-    - `manifest.json`, `fondo.js`, el panel sobre el formulario y la página de
-      opciones, en `extension_web/`.
-    - `scripts/generar_datos_extension.py`, para el `datos.json` que permite
-      autocompletar con la app caída. Va gitignored: trae nombre, email y
-      teléfono.
-    - Los selectores de Computrabajo, que necesitan mirar el formulario real.
-      El plan es en dos pasadas: primero un panel que reporte qué campos
-      encuentra, y con ese resultado escribir el mapa por defecto. Adivinar los
-      selectores a ciegas es la forma más rápida de hacer una extensión que no
-      funciona.
+Lo que quedó hecho (la extensión, esta tanda)
+    - Toda la carpeta `extension_web/`: `manifest.json` (MV3, sólo Firefox,
+      permisos de almacenamiento y de los dominios), `fondo.js` (el único que
+      hace HTTP con la app: responde "datos" y "enviada", y resuelve contra
+      qué perfil se registra), `registro.js` (adaptadores de Computrabajo y
+      ZonaJobs: el id sale de la URL), `panel.js`/`panel.css` (perfil, estado
+      en el embudo, carta con botón Copiar, Registrar envío, aviso de app
+      caída con reintento) y `opciones.*` (URL base, perfil, guardar y probar
+      conexión).
+    - `extension_web/README.md`: cómo se carga, de qué archivo es cada cosa,
+      por qué el HTTP vive en el background, y la checklist de prueba manual.
+    - 536 tests en verde y `web-ext lint` sin errores ni avisos.
+
+Lo que queda
+    - La prueba manual en el navegador con esa checklist: detalle y página de
+      postulación de Computrabajo, ZonaJobs, doble registro, oferta que no
+      está en el radar, app caída y cambio de perfil en Opciones.
+    - Cuando exista la fase 11, el texto que genere reemplaza al
+      `presentacion` fijo dentro del panel.
 
 
 ================================================================================
@@ -667,8 +711,9 @@ DECISIONES PENDIENTES
       versionados.
    d. Los datos reales quedaron en el historial (commit d501aa2). Si querés
       sacarlos de la historia, hay que reescribirla; es una decisión aparte.
-6. Perfil que usa la extensión. PENDIENTE para cuando haya N activos (fase 13):
-   hoy la extensión usa uno.
+6. ~~Perfil que usa la extensión~~ RESUELTO en la fase 13: la respuesta de
+   `/api/extension/datos` lista los perfiles con su `activo`, la página de
+   opciones de la extensión deja elegir, y sin elegir va la primera activa.
 
 
 ================================================================================

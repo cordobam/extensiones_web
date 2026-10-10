@@ -1,0 +1,119 @@
+:root {
+  color-scheme: light;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #f6f8fa;
+  color: #1f2328;
+}
+
+main {
+  max-width: 560px;
+  margin: 48px auto;
+  padding: 28px 32px;
+  background: #ffffff;
+  border: 1px solid #d0d7de;
+  border-radius: 10px;
+}
+
+h1 {
+  margin: 0 0 8px;
+  font-size: 22px;
+}
+
+.entradilla {
+  margin: 0 0 24px;
+  color: #57606a;
+}
+
+label {
+  display: block;
+  margin: 16px 0 6px;
+  font-weight: 600;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 8px 10px;
+  font: inherit;
+  color: inherit;
+  background: #ffffff;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+}
+
+input:disabled,
+select:disabled {
+  background: #f6f8fa;
+  color: #57606a;
+}
+
+.ayuda {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: #57606a;
+}
+
+.ayuda code {
+  padding: 1px 5px;
+  background: #f6f8fa;
+  border-radius: 4px;
+}
+
+.acciones {
+  display: flex;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+button {
+  padding: 8px 14px;
+  font: inherit;
+  font-weight: 600;
+  color: #1f2328;
+  background: #f6f8fa;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #eef1f4;
+}
+
+button[disabled] {
+  opacity: 0.6;
+  cursor: default;
+}
+
+#consultar {
+  color: #ffffff;
+  background: #0b6bcb;
+  border-color: #0b6bcb;
+}
+
+#consultar:hover {
+  background: #0a5cae;
+}
+
+.estado {
+  margin-top: 20px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.estado.ok {
+  background: #dafbe1;
+  border: 1px solid #aceebb;
+  color: #116329;
+}
+
+.estado.fallo {
+  background: #ffebe9;
+  border: 1px solid #ffcecb;
+  color: #a40e26;
+}

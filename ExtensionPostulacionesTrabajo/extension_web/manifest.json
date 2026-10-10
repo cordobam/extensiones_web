@@ -1,0 +1,41 @@
+{
+  "manifest_version": 3,
+  "name": "Radar Laboral",
+  "version": "0.1.1",
+  "description": "Muestra tu carta y el estado de la oferta en el portal, y registra la postulación en Radar Laboral cuando la mandás.",
+  "permissions": ["storage"],
+  "host_permissions": [
+    "http://127.0.0.1/*",
+    "https://localhost/*",
+    "https://candidato.ar.computrabajo.com/*",
+    "https://www.zonajobs.com.ar/*"
+  ],
+  "background": {
+    "scripts": ["fondo.js"]
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://ar.computrabajo.com/*",
+        "https://candidato.ar.computrabajo.com/*",
+        "https://www.zonajobs.com.ar/*"
+      ],
+      "js": ["registro.js", "panel.js"],
+      "css": ["panel.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "options_ui": {
+    "page": "opciones.html",
+    "open_in_tab": true
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "radar-laboral@tucorreo.com",
+      "strict_min_version": "142.0",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
+    }
+  }
+}
